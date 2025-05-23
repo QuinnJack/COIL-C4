@@ -1,0 +1,105 @@
+:: StoryTitle
+new 1
+
+
+:: StoryData
+{
+  "ifid": "c484ef4a-ee83-4f2a-96ff-d20164c21e49",
+  "format": "SugarCube",
+  "format-version": "2.37.3",
+  "start": "Start",
+  "zoom": 1
+}
+
+
+:: Engagement {"position":"787.5,425","size":"100,100"}
+
+
+<p>You bring together people with lived experience, service providers, and city departments for co-design. It doesn't look flashy on the surface, but over time, plans get smarter and more targeted.</p>
+
+<p>You now have $budget M left.</p>
+<p>
+	•	[[Continue to next quarter|QuarterTwo]]
+
+
+:: HousingFirst {"position":"537.5,425","size":"100,100"}
+
+<p>You launch 150 units of permanent supportive housing. It takes months to complete and costs more per person—but it works. Local media criticize the slow pace, but service providers report long-term stability.</p>
+
+<p>You now have **$budget million** left.</p>
+
+<p>
+* [[Continue to next quarter|QuarterTwo]]
+</p>
+
+
+:: MentalHealth {"position":"662.5,425","size":"100,100"}
+
+
+<p>You fund new mobile teams and open a low-barrier detox centre. Fewer people cycle through ERs and jails. Frontline morale improves, but critics say you're not "solving" homelessness fast enough.</p>
+
+<p>You now have $<<print $budget>>M left.</p>
+<p>
+	•	[[Continue to next quarter|QuarterTwo]]
+</p>
+
+
+:: QuarterTwo {"position":"600,650","size":"100,100"}
+
+
+
+:: ShelterFunding {"position":"400,425","size":"100,100"}
+
+
+<p>You open 300 temporary beds and clear two major encampments. Headlines celebrate "swift action." But service providers are stretched thinner than ever, and many unhoused return after 30 days.</p>
+
+<p>You now have **$budget million** left.</p>
+
+<p>
+* [[Continue to next quarter|QuarterTwo]]
+</p>
+
+
+:: Start {"position":"600,300","size":"100,100"}
+In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
+
+Despite these goals, the nation's capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city's history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what's working, what's missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
+
+You've been brought into the city halls at a pivotal moment, right before the next phase of the 10-Year Plan is finalized. Your task is to explore how different decisions, funding priorities, and policy trade-offs change outcomes over time. You can't solve everything at once. But you can change the direction we're heading — starting now.
+
+* [[Emergency Shelter Expansion ($30M)|ShelterFunding]]
+* [[Housing First Pilot ($50M)|HousingFirst]]
+* [[Frontline Mental Health + Addiction Support ($40M)|MentalHealth]]
+* [[Lived Experience Consultation & Strategic Planning ($10M)|Engagement]]
+
+
+:: StoryStylesheet [stylesheet]
+/* Hide UI elements */
+#ui-bar {
+  display: none;
+}
+
+#debug-bar {
+  display: none;
+}
+
+/* Reset margins */
+#story {
+  margin: 0;
+}
+
+/* Global styles */
+body,
+html {
+  margin: 0;
+  padding: 0 !important;
+  position: relative;
+}
+
+body * {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+}
