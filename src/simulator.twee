@@ -1,15 +1,161 @@
 :: StoryTitle
-main
+simulator
 
 
 :: StoryData
 {
-  "ifid": "26f4de76-acd0-49d0-88d7-d40f80a597f8",
+  "ifid": "f2594c19-2b1a-436c-a749-c92e439252f0",
   "format": "SugarCube",
   "format-version": "2.37.3",
-  "start": "Start",
+  "start": "Untitled Passage 1",
   "zoom": 1
 }
+
+
+:: Bill 1 {"position":"300,400","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Emergency Shelter Expansion",
+  costUpfront: 10,
+  costPerTurn: 0,
+  duration: 3, // heavy up-front push
+
+  immediate(v) {
+    v.unsheltered        -= 500;
+    v.sheltered        += 500;
+    v.staffMorale        -= 10;
+    v.publicOpinion      += 1;
+  },
+
+  tick(v, Util, age) {
+    // One-quarter later, about 30% return
+    if (age === 2) {
+      const reenter = Math.round(500 * 0.3);
+      v.sheltered        -= reenter;
+      v.unsheltered += reenter;
+      v.homelessTotal += reenter;
+    }
+  }
+});
+<</script>>
+
+<div class="passageContent"> 
+<p>You open 300 beds and clear two major encampments. The media love the “huge action,” but by Quarter 3 about 150 people have cycled back out.</p>
+
+[[Continue|ChooseProposal]]
+</div>
+
+
+
+:: Bill 2 {"position":"500,400","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Build City Affordable Housing",
+  costUpfront: 10,
+  duration: 999999,
+
+  immediate(v) {
+    v.publicOpinion -= 15;
+    // initial setup already deducts costUpfront
+  },
+
+  tick(v, Util, age) {
+    // Decreasing operational cost over time, then net revenue
+    let cost = 8;
+
+    if (age >= 2)  cost = .42;
+    if (age >= 5) cost = .12;
+    if (age >= 7) cost = -.5; // begins generating surplus
+
+    v.budget -= cost;
+
+    // Exit people: housing units become available over time
+    if (age >= 2) {
+      const exits = 100 + Math.floor(25 * (age - 2)); // gradual ramp-up
+      window.Util.exitPeople(exits);
+    }
+
+    // Service coordination stabilizes and improves after age 10
+    if (age >= 10 && age < 30) {
+      v.serviceCoordination += 2;
+    }
+  }
+});
+<</script>>
+
+<div class="passageContent"> 
+<div class="animated-box">
+  <p>Building is complete</p>
+</div>
+
+[[Continue|ChooseProposal]]
+</div>
+
+
+
+:: Bill 3 {"position":"700,400","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Frontline Mental Health & Addiction Support",
+  costUpfront: 4,
+  costPerTurn: 2,
+  duration: 20,
+
+  immediate(v) {
+    v.staffMorale        += 10;
+    v.unsheltered        -= 300;
+    v.publicOpinion  -= 50;
+    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
+  },
+
+  tick(v, Util, age) {
+    // Each quarter, 3% of chronic population exit through wrap-around care
+    const chronicPop = v.pop.chronic;
+        v.publicOpinion  += 20;
+    const exits     = Math.round(chronicPop * 0.03);
+    window.Util.exitPeople(exits, { chronic: 1 });
+  }
+});
+<</script>>
+<div class="passageContent"> 
+<p>You fund mobile response teams and a low-barrier detox centre. ER visits drop immediately, and by year’s end the chronically homeless count is noticeably down.</p>
+
+[[Continue|ChooseProposal]]
+</div>
+
+
+
+:: Bill 4 {"position":"900,400","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Lived Experience Consultation",
+  costUpfront: 10,
+  costPerTurn: 2,
+  duration: 20, // lasts 4 turns (1 year)
+
+  immediate(v) {
+    v.systemCoordination += 5;
+    v.publicOpinion    += 15;
+  },
+
+  tick(v, Util, age) {
+    // After two quarters, you start to see people move out:
+    if (age >= 2) {
+     v.systemCoordination += 1;
+     v.publicOpinion += 1;
+      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
+      window.Util.exitPeople(exits);
+    }
+  }
+});
+<</script>>
+<div class="passageContent"> 
+<p>You bring together people with lived experience, service providers, and city departments for co-design. It doesn’t look flashy, but by mid-year your plans have become smarter and more targeted. </p>
+
+[[Continue|ChooseProposal]]
+
+</div>
+
 
 
 :: ChooseProposal {"position":"600,550","size":"100,100"}
@@ -104,197 +250,244 @@ $(document).on(':passagedisplay', function () {
 <</script>>
 
 
-:: Emergency Shelter Expansion {"position":"300,400","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Emergency Shelter Expansion",
-  costUpfront: 10,
-  costPerTurn: 0,
-  duration: 3, // heavy up-front push
-
-  immediate(v) {
-    v.unsheltered        -= 500;
-    v.sheltered        += 500;
-    v.staffMorale        -= 10;
-    v.publicOpinion      += 1;
-  },
-
-  tick(v, Util, age) {
-    // One-quarter later, about 30% return
-    if (age === 2) {
-      const reenter = Math.round(500 * 0.3);
-      v.sheltered        -= reenter;
-      v.unsheltered += reenter;
-      v.homelessTotal += reenter;
-    }
-  }
-});
-<</script>>
-
-<div class="passageContent"> 
-<p>You open 300 beds and clear two major encampments. The media love the “huge action,” but by Quarter 3 about 150 people have cycled back out.</p>
-
-[[Continue|ChooseProposal]]
-</div>
-
-
-
-:: Engagement {"position":"900,400","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Lived Experience Consultation",
-  costUpfront: 10,
-  costPerTurn: 2,
-  duration: 20, // lasts 4 turns (1 year)
-
-  immediate(v) {
-    v.systemCoordination += 5;
-    v.publicOpinion    += 15;
-  },
-
-  tick(v, Util, age) {
-    // After two quarters, you start to see people move out:
-    if (age >= 2) {
-     v.systemCoordination += 1;
-     v.publicOpinion += 1;
-      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
-      window.Util.exitPeople(exits);
-    }
-  }
-});
-<</script>>
-<div class="passageContent"> 
-<p>You bring together people with lived experience, service providers, and city departments for co-design. It doesn’t look flashy, but by mid-year your plans have become smarter and more targeted.
-
-[[Continue|ChooseProposal]]
-
-</div>
-
-
-
 :: Event1 {"position":"600,950","size":"100,100"}
 <<set $turn += 1>>
-<<script>>window.PolicyManager.tick();<</script>>
-
-<div class="passageContent">
-  <h2>!!!</h2>
-  <p>
-    It's mid-July and your city is experiencing an extreme heat wave. Temperatures are topping 40°C with high humidity. Shelters are over capacity, cooling centers are limited, and unhoused residents are reporting heat-related illness.
-  </p>
-
-  <p><strong>Select all the actions you want to take:</strong></p>
-
-  <form id="heatwave-form">
-    <ul>
-      <li>
-        <label>
-          <input type="checkbox" name="response" value="cooling_centres">
-          Open temporary cooling centres
-        </label>
-      </li>
-      <li>
-        <label>
-          <input type="checkbox" name="response" value="water_kits">
-          Distribute water & hygiene kits via outreach
-        </label>
-      </li>
-      <li>
-        <label>
-          <input type="checkbox" name="response" value="transport_passes">
-          Provide transit passes for access to indoor spaces
-        </label>
-      </li>
-      <li>
-        <label>
-          <input type="checkbox" name="response" value="hotel_vouchers">
-          Issue hotel vouchers to medically vulnerable people
-        </label>
-      </li>
-    </ul>
-  </form>
-
-
-  <p id="error-msg" style="color: red; display: none;">Please select at least one option before continuing.</p>
-  <p>* [[Continue|PIT]]</p>
-
-</div>
-
-
-
-:: HousingFirst {"position":"500,400","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Build City Affordable Housing",
-  costUpfront: 10,
-  duration: 999999,
-
-  immediate(v) {
-    v.publicOpinion -= 15;
-    // initial setup already deducts costUpfront
-  },
-
-  tick(v, Util, age) {
-    // Decreasing operational cost over time, then net revenue
-    let cost = 8;
-
-    if (age >= 2)  cost = 6;
-    if (age >= 5) cost = 3;
-    if (age >= 7) cost = -1; // begins generating surplus
-
-    v.budget -= cost;
-
-    // Exit people: housing units become available over time
-    if (age >= 2) {
-      const exits = 100 + Math.floor(25 * (age - 2)); // gradual ramp-up
-      window.Util.exitPeople(exits);
+  <<script>>window.PolicyManager.tick();<</script>>
+  
+  <style>
+  $font-header: "Pirata One", cursive;
+  $font-body: "Merriweather", serif;
+  $col-black: #2a2d2f;
+  
+  
+  
+  @keyframes roller {
+    from {
+      background-position: 0 0;
     }
-
-    // Service coordination stabilizes and improves after age 10
-    if (age >= 10 && age < 30) {
-      v.serviceCoordination += 2;
+    to {
+      background-position: 0 200vh;
     }
   }
-});
-<</script>>
-
-
-
-<div class="passageContent"> 
-<p>building</p>
-
-[[Continue|ChooseProposal]]
-</div>
-
-
-
-:: MentalHealth {"position":"700,400","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Frontline Mental Health & Addiction Support",
-  costUpfront: 4,
-  costPerTurn: 2,
-  duration: 10,
-
-  immediate(v) {
-    v.staffMorale        += 10;
-    v.unsheltered        -= 300;
-    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
-  },
-
-  tick(v, Util, age) {
-    // Each quarter, 3% of chronic population exit through wrap-around care
-    const chronicPop = v.pop.chronic;
-    const exits     = Math.round(chronicPop * 0.03);
-    window.Util.exitPeople(exits, { chronic: 1 });
+  
+  @keyframes paper-spin {
+    from {
+      transform: rotate(-360deg) scale(0.3) translateZ(0);
+      filter: blur(3px);
+    }
+    to {
+      transform: rotate(8deg) scale(1) translateZ(0);
+    }
   }
-});
-<</script>>
-<div class="passageContent"> 
-<p>You fund mobile response teams and a low-barrier detox centre. ER visits drop immediately, and by year’s end the chronically homeless count is noticeably down.</p>
-
-[[Continue|ChooseProposal]]
-</div>
-
+  
+  .paper-stack {
+    position: relative;
+    width: 58.5vw;
+    height: 45vw;
+    margin-left: auto;
+    margin-right: auto;
+    transform-origin: center center;
+    animation: paper-spin cubic-bezier(0.86, 0, 0.07, 1)s linear forwards;
+    transform: rotate(8deg); /* final position */
+  }
+  
+  .page,
+  .newspaper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 4px;
+    height: 100%;
+    background: white;
+    border: 1.5px solid rgba(0, 0, 0, 0.48);
+    backface-visibility: hidden;
+  }
+  
+  /* Background blank pages */
+  .page-1 {
+    z-index: 1;
+    transform: translate(-12px, -12px);
+  }
+  
+  .page-2 {
+    z-index: 2;
+    transform: translate(-6px, -6px);
+  }
+  
+  /* Main newspaper layout */
+  .newspaper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 15% 24% auto;
+    z-index: 3;
+    //display: none; // optional
+  }
+  
+  .title {
+    grid-column: 1 / 5;
+    grid-row: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 4px solid $col-black;
+  }
+  
+  .headline {
+    grid-column: 1 / 5;
+    grid-row: 2;
+  }
+  
+  .coverimage {
+    grid-column: 3 / 5;
+    grid-row: 3 / 5;
+    padding: 0 0.5rem;
+  
+    img {
+      width: 100%;
+      height: 28vw;
+      object-fit: cover;
+    }
+  }
+  
+  .copy {
+    grid-column: 1 / 3;
+    grid-row: 3 / 5;
+    column-count: 2;
+    padding: 1vw;
+    font-family: "Domine", serif;
+    font-weight: 400;
+  }
+  
+  h1 {
+    font-family: "Domine", serif;
+    font-weight: 700;
+    font-size: 4.8vw;
+    margin: 0;
+  }
+  
+  h2 {
+    font-family: "Domine", serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 4vw;
+    margin: 0;
+    text-align: center;
+    line-height: 1.1;
+  }
+  
+  p {
+    font-family: "Domine", serif;
+    font-weight: 400;
+    font-size: 1vw;
+    line-height: 1.2;
+    margin: 0;
+  }
+  
+  .pullquote {
+    font-family: "Domine", serif;
+    font-weight: 400;
+    font-size: 1.2vw;
+    border-top: 0.2vw solid $col-black;
+    border-bottom: 0.2vw solid $col-black;
+    margin: 1vw 0;
+    padding: 1vw 0;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    position: absolute;
+    bottom: 1em;
+    right: 1rem;
+    z-index: 4;
+    background: #0b310a;
+    color: white;
+    border: 1px solid white;
+    font-size: 1.2rem;
+    font-family: $font-body;
+  }
+  </style>
+  <div class="passageContent">
+  
+  <div class="paper-stack playing">
+    <!-- Blank pages behind -->
+    <div class="page page-1"></div>
+    <div class="page page-2"></div>
+  
+    <!-- Actual front page -->
+    <div class="newspaper">
+      <div class="title">
+        <h1>The Daily Sun</h1>
+      </div>
+  
+      <div class="headline">
+        <h2>Local Paperboy Swept-Up By Mini Tornado</h2>
+      </div>
+  
+      <div class="coverimage">
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/96252/bike.jpg" alt="Paperboy on bike">
+      </div>
+  
+      <div class="copy">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+  
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+  
+        <p class="pullquote">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.</p>
+  
+        <p>Adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam?</p>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+    <h2>!!!</h2>
+    <p>
+      It's mid-July and your city is experiencing an extreme heat wave. Temperatures are topping 40°C with high humidity. Shelters are over capacity, cooling centers are limited, and unhoused residents are reporting heat-related illness.
+    </p>
+  
+    <p><strong>Select all the actions you want to take:</strong></p>
+  
+    <form id="heatwave-form">
+      <ul>
+        <li>
+          <label>
+            <input type="checkbox" name="response" value="cooling_centres">
+            Open temporary cooling centres
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="response" value="water_kits">
+            Distribute water & hygiene kits via outreach
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="response" value="transport_passes">
+            Provide transit passes for access to indoor spaces
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="response" value="hotel_vouchers">
+            Issue hotel vouchers to medically vulnerable people
+          </label>
+        </li>
+      </ul>
+    </form>
+  
+  
+    <p id="error-msg" style="color: red; display: none;">Please select at least one option before continuing.</p>
+    <p>* [[Continue|PIT]]</p>
+  
+  </div>
+  
 
 
 :: NewArrivalKits {"position":"700,700","size":"100,100"}
@@ -387,7 +580,118 @@ PolicyManager.register({
   <p><em>This snapshot will help guide your next set of decisions in the evolving response. </em></p>
 
   <p>📌 [[Continue|NextYear]]</p>
+    <p>📌 [[PIT1|PIT1]]</p>
+
 </div>
+
+
+:: PIT1 {"position":"725,1225","size":"100,100"}
+\:: Point in Time Report
+<div class="passageContent">
+	<h2>Point in Time Report</h2>
+
+	<p>
+		Displaying data for the end of
+		<strong>
+			Year <<= $year - 1 >>
+			(<<= $currentYear + $year - 2 >>)
+		</strong>,
+		compared to
+		<strong>
+			Year <<= $year - 2 >>
+			(<<= $currentYear + $year - 3 >>)
+		</strong>.
+	</p>
+
+	<div class="chart-section">
+		<h3>Overall Homelessness Trend</h3>
+		<div class="chart-container" style="height:300px;">
+			<canvas id="homelessTotalTrendChart"></canvas>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="chart-section">
+		<h3>Current Housing Status (Year <<= $year - 1 >>)</h3>
+		<div class="chart-container" style="height:300px;">
+			<canvas id="currentHousingStatusDoughnut"></canvas>
+		</div>
+	</div>
+
+	<div class="chart-section">
+		<h3>Housing Status: Year <<= $year - 2 >> vs Year <<= $year - 1 >></h3>
+		<div class="chart-container" style="height:350px;">
+			<canvas id="compareHousingStatusBar"></canvas>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="chart-section">
+		<h3>Current Identity Demographics (Gender – Year <<= $year - 1 >>)</h3>
+		<div class="chart-container" style="height:300px;">
+			<canvas id="currentIdentityGenderDoughnut"></canvas>
+		</div>
+	</div>
+
+	<div class="chart-section">
+		<h3>Other Identity Demographics: Year <<= $year - 2 >> vs Year <<= $year - 1 >></h3>
+		<p class="small-note">(Indigenous, Racialized, Veteran, Immigrant)</p>
+		<div class="chart-container" style="height:350px;">
+			<canvas id="compareIdentityOtherBar"></canvas>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="chart-section">
+		<h3>Detailed Demographic Comparison</h3>
+		<label for="demographicSelector">Select Demographic Group:</label>
+		<select id="demographicSelector">
+			<option value="housingDetail">Housing Sub‑Types (Chronic, Children, Foster Care)</option>
+			<option value="identityDetail">Identity Sub‑Types (LGBQ, LGBTQ Youth)</option>
+			<!-- add more groups as needed -->
+		</select>
+		<div class="chart-container" style="height:350px; margin-top:10px;">
+			<canvas id="detailedCompareBarChart"></canvas>
+		</div>
+	</div>
+
+	<p style="margin-top:20px;">[[Continue gameplay|YourNextPassageAfterReport]]</p>
+</div>
+
+<style role="stylesheet">
+	.chart-section   { margin-bottom: 30px; }
+	.chart-container { position: relative; width: 90%; max-width: 700px; margin: auto; }
+	.small-note      { font-size: 0.9em; color: #666; text-align: center; }
+</style>
+
+<<script>>
+/*  SugarCube macro: all the JS below runs only when this passage shows  */
+$(document).one(':passagedisplay', function (ev) {
+	/*  make sure we’re actually in this passage  */
+	if (ev.passage.title !== 'Point in Time Report') { return; }
+
+	const V        = State.variables;
+	const history  = V.history || [];
+
+	/* ——— helper: last snapshot for a given year ——— */
+	function lastSnapshotForYear (yr) {
+		const sameYear = history.filter(h => h.year === yr);
+		if (!sameYear.length) { return null; }
+		return sameYear.sort((a, b) => b.turn - a.turn)[0];
+	}
+
+	const curYearIdx = V.year - 1;   /* reporting on the year that just finished   */
+	const prevYearIdx = V.year - 2;
+
+	const curData  = lastSnapshotForYear(curYearIdx);
+	const prevData = lastSnapshotForYear(prevYearIdx);
+
+	/*  … everything else in your original script is unchanged …  */
+});
+<</script>>
 
 
 :: QuarterFour {"position":"200,1300","size":"100,100"}
@@ -489,81 +793,395 @@ PolicyManager.register({
 
 
 :: Start {"position":"600,200","size":"100,100"}
-<div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
+<<script>>
+// 1) Inject Swiper’s CSS if it isn’t already in <head>
+if (!$('head').find('link[href*="swiper-bundle.min.css"]').length) {
+  $('head').append(
+    '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">'
+  );
+}
 
-Despite these goals, the nation's capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city's history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what's working, what's missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
+// 2) Dynamically load Swiper JS, then initialize when it’s ready
+$.getScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
+  .done(function(){
+    // now Swiper is defined
+    window.mySwiper = new Swiper(".mySwiper", {
+      effect: "cards",
+      grabCursor: true,
+    });
+  })
+  .fail(function(){
+    console.error("Failed to load Swiper.");
+  });
+<</script>>
+<div class="passageContent"> 
 
-You've been brought into the city halls at a pivotal moment, right before the next phase of the 10-Year Plan is finalized. Your task is to explore how different decisions, funding priorities, and policy trade-offs change outcomes over time. You can't solve everything at once. But you can change the direction we're heading — starting now.
 
-* [[Emergency Shelter Expansion ($30M)|Emergency Shelter Expansion]]
-* [[Housing First Pilot ($50M)|HousingFirst]]
-* [[Frontline Mental Health + Addiction Support ($40M)|MentalHealth]]
-* [[Lived Experience Consultation & Strategic Planning ($10M)|Engagement]]
+
+
+    <!-- Demo styles -->
+    <style>
+
+:root {
+zoom: 1.1;
+}
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #fff;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .swiper {
+        width: 25em !important;
+        max-width: 900px;
+        height: 40em !important;
+        max-height: 1000px;
+      }
+  .swiper-slide-shadow {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+      .swiper-slide {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px;
+        font-size: 14px;
+        background-color: #fff;
+         font-family: Georgia, serif !important;
+          border-radius: 14.130435% / 10.483871%;
+                      border-color: rgba(156, 162, 166, 0.32);
+       border-left-width: 1.5px;
+      border-right-width: 1.5px;
+      border-style: solid;
+      border-top-width: 1.5px;
+      border-bottom-width: 1.5px;
+
+      }
+      .swiper-slide {
+        pointer-events: none;
+      }
+
+      .swiper-slide.swiper-slide-active {
+        pointer-events: auto;
+            border-color: rgba(156, 162, 166, 0.18);
+       border-left-width: 1.5px;
+      border-right-width: 1.5px;
+      border-style: solid;
+      border-top-width: 1.5px;
+            border-bottom-width: 1.5px;
+
+      }
+      .bill-header {
+        text-align: center;
+        margin-bottom: 20px;
+        line-height: 1.2;
+          border-bottom: 1px solid #ccc;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+      }
+      .bill-header div {
+        font-variant: small-caps;
+        letter-spacing: 1px;
+        font-size: 0.85em;
+      }
+      .bill-header .bill-number {
+        font-size: 1.2em;
+        margin-top: 6px;
+      }
+      .swiper-slide h2 {
+        margin: 0 0 16px;
+        font-size: 1.3em;
+        text-align: center;
+        font-variant: small-caps;
+        letter-spacing: 0.5px;
+      }
+      .swiper-slide p {
+        line-height: 1.5;
+        font-size: 0.95em;
+        flex: 1;
+      }
+     button {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  margin: 0.3rem !important;
+  position: relative !important;
+  top: -0.25rem !important;
+  text-align: center !important;
+  margin-left: 5rem !important;
+}
+      .meta {
+        text-align: right;
+        font-size: 0.8em;
+        color: #555;
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+      }
+      
+@font-face{font-family:swiper-icons;src:url('data:application/font-woff;charset=utf-8;base64, d09GRgABAAAAAAZgABAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAAGRAAAABoAAAAci6qHkUdERUYAAAWgAAAAIwAAACQAYABXR1BPUwAABhQAAAAuAAAANuAY7+xHU1VCAAAFxAAAAFAAAABm2fPczU9TLzIAAAHcAAAASgAAAGBP9V5RY21hcAAAAkQAAACIAAABYt6F0cBjdnQgAAACzAAAAAQAAAAEABEBRGdhc3AAAAWYAAAACAAAAAj//wADZ2x5ZgAAAywAAADMAAAD2MHtryVoZWFkAAABbAAAADAAAAA2E2+eoWhoZWEAAAGcAAAAHwAAACQC9gDzaG10eAAAAigAAAAZAAAArgJkABFsb2NhAAAC0AAAAFoAAABaFQAUGG1heHAAAAG8AAAAHwAAACAAcABAbmFtZQAAA/gAAAE5AAACXvFdBwlwb3N0AAAFNAAAAGIAAACE5s74hXjaY2BkYGAAYpf5Hu/j+W2+MnAzMYDAzaX6QjD6/4//Bxj5GA8AuRwMYGkAPywL13jaY2BkYGA88P8Agx4j+/8fQDYfA1AEBWgDAIB2BOoAeNpjYGRgYNBh4GdgYgABEMnIABJzYNADCQAACWgAsQB42mNgYfzCOIGBlYGB0YcxjYGBwR1Kf2WQZGhhYGBiYGVmgAFGBiQQkOaawtDAoMBQxXjg/wEGPcYDDA4wNUA2CCgwsAAAO4EL6gAAeNpj2M0gyAACqxgGNWBkZ2D4/wMA+xkDdgAAAHjaY2BgYGaAYBkGRgYQiAHyGMF8FgYHIM3DwMHABGQrMOgyWDLEM1T9/w8UBfEMgLzE////P/5//f/V/xv+r4eaAAeMbAxwIUYmIMHEgKYAYjUcsDAwsLKxc3BycfPw8jEQA/gZBASFhEVExcQlJKWkZWTl5BUUlZRVVNXUNTQZBgMAAMR+E+gAEQFEAAAAKgAqACoANAA+AEgAUgBcAGYAcAB6AIQAjgCYAKIArAC2AMAAygDUAN4A6ADyAPwBBgEQARoBJAEuATgBQgFMAVYBYAFqAXQBfgGIAZIBnAGmAbIBzgHsAAB42u2NMQ6CUAyGW568x9AneYYgm4MJbhKFaExIOAVX8ApewSt4Bic4AfeAid3VOBixDxfPYEza5O+Xfi04YADggiUIULCuEJK8VhO4bSvpdnktHI5QCYtdi2sl8ZnXaHlqUrNKzdKcT8cjlq+rwZSvIVczNiezsfnP/uznmfPFBNODM2K7MTQ45YEAZqGP81AmGGcF3iPqOop0r1SPTaTbVkfUe4HXj97wYE+yNwWYxwWu4v1ugWHgo3S1XdZEVqWM7ET0cfnLGxWfkgR42o2PvWrDMBSFj/IHLaF0zKjRgdiVMwScNRAoWUoH78Y2icB/yIY09An6AH2Bdu/UB+yxopYshQiEvnvu0dURgDt8QeC8PDw7Fpji3fEA4z/PEJ6YOB5hKh4dj3EvXhxPqH/SKUY3rJ7srZ4FZnh1PMAtPhwP6fl2PMJMPDgeQ4rY8YT6Gzao0eAEA409DuggmTnFnOcSCiEiLMgxCiTI6Cq5DZUd3Qmp10vO0LaLTd2cjN4fOumlc7lUYbSQcZFkutRG7g6JKZKy0RmdLY680CDnEJ+UMkpFFe1RN7nxdVpXrC4aTtnaurOnYercZg2YVmLN/d/gczfEimrE/fs/bOuq29Zmn8tloORaXgZgGa78yO9/cnXm2BpaGvq25Dv9S4E9+5SIc9PqupJKhYFSSl47+Qcr1mYNAAAAeNptw0cKwkAAAMDZJA8Q7OUJvkLsPfZ6zFVERPy8qHh2YER+3i/BP83vIBLLySsoKimrqKqpa2hp6+jq6RsYGhmbmJqZSy0sraxtbO3sHRydnEMU4uR6yx7JJXveP7WrDycAAAAAAAH//wACeNpjYGRgYOABYhkgZgJCZgZNBkYGLQZtIJsFLMYAAAw3ALgAeNolizEKgDAQBCchRbC2sFER0YD6qVQiBCv/H9ezGI6Z5XBAw8CBK/m5iQQVauVbXLnOrMZv2oLdKFa8Pjuru2hJzGabmOSLzNMzvutpB3N42mNgZGBg4GKQYzBhYMxJLMlj4GBgAYow/P/PAJJhLM6sSoWKfWCAAwDAjgbRAAB42mNgYGBkAIIbCZo5IPrmUn0hGA0AO8EFTQAA');font-weight:400;font-style:normal}:root{--swiper-theme-color:#007aff}:host{position:relative;display:block;margin-left:auto;margin-right:auto;z-index:1}.swiper{margin-left:auto;margin-right:auto;position:relative;overflow:hidden;list-style:none;padding:0;z-index:1;display:block}.swiper-vertical>.swiper-wrapper{flex-direction:column}.swiper-wrapper{position:relative;width:100%;height:100%;z-index:1;display:flex;transition-property:transform;transition-timing-function:var(--swiper-wrapper-transition-timing-function,initial);box-sizing:content-box}.swiper-android .swiper-slide,.swiper-ios .swiper-slide,.swiper-wrapper{transform:translate3d(0px,0,0)}.swiper-horizontal{touch-action:pan-y}.swiper-vertical{touch-action:pan-x}.swiper-slide{flex-shrink:0;width:100%;height:100%;position:relative;transition-property:transform;display:block}.swiper-slide-invisible-blank{visibility:hidden}.swiper-autoheight,.swiper-autoheight .swiper-slide{height:auto}.swiper-autoheight .swiper-wrapper{align-items:flex-start;transition-property:transform,height}.swiper-backface-hidden .swiper-slide{transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-3d.swiper-css-mode .swiper-wrapper{perspective:1200px}.swiper-3d .swiper-wrapper{transform-style:preserve-3d}.swiper-3d{perspective:1200px}.swiper-3d .swiper-cube-shadow,.swiper-3d .swiper-slide{transform-style:preserve-3d}.swiper-css-mode>.swiper-wrapper{overflow:auto;scrollbar-width:none;-ms-overflow-style:none}.swiper-css-mode>.swiper-wrapper::-webkit-scrollbar{display:none}.swiper-css-mode>.swiper-wrapper>.swiper-slide{scroll-snap-align:start start}.swiper-css-mode.swiper-horizontal>.swiper-wrapper{scroll-snap-type:x mandatory}.swiper-css-mode.swiper-vertical>.swiper-wrapper{scroll-snap-type:y mandatory}.swiper-css-mode.swiper-free-mode>.swiper-wrapper{scroll-snap-type:none}.swiper-css-mode.swiper-free-mode>.swiper-wrapper>.swiper-slide{scroll-snap-align:none}.swiper-css-mode.swiper-centered>.swiper-wrapper::before{content:'';flex-shrink:0;order:9999}.swiper-css-mode.swiper-centered>.swiper-wrapper>.swiper-slide{scroll-snap-align:center center;scroll-snap-stop:always}.swiper-css-mode.swiper-centered.swiper-horizontal>.swiper-wrapper>.swiper-slide:first-child{margin-inline-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-horizontal>.swiper-wrapper::before{height:100%;min-height:1px;width:var(--swiper-centered-offset-after)}.swiper-css-mode.swiper-centered.swiper-vertical>.swiper-wrapper>.swiper-slide:first-child{margin-block-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-vertical>.swiper-wrapper::before{width:100%;min-width:1px;height:var(--swiper-centered-offset-after)}.swiper-3d .swiper-slide-shadow,.swiper-3d .swiper-slide-shadow-bottom,.swiper-3d .swiper-slide-shadow-left,.swiper-3d .swiper-slide-shadow-right,.swiper-3d .swiper-slide-shadow-top{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:10}.swiper-3d .swiper-slide-shadow{background:rgba(0,0,0,.15)}.swiper-3d .swiper-slide-shadow-left{background-image:linear-gradient(to left,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-right{background-image:linear-gradient(to right,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-top{background-image:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-bottom{background-image:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-lazy-preloader{width:42px;height:42px;position:absolute;left:50%;top:50%;margin-left:-21px;margin-top:-21px;z-index:10;transform-origin:50%;box-sizing:border-box;border:4px solid var(--swiper-preloader-color,var(--swiper-theme-color));border-radius:50%;border-top-color:transparent}.swiper-watch-progress .swiper-slide-visible .swiper-lazy-preloader,.swiper:not(.swiper-watch-progress) .swiper-lazy-preloader{animation:swiper-preloader-spin 1s infinite linear}.swiper-lazy-preloader-white{--swiper-preloader-color:#fff}.swiper-lazy-preloader-black{--swiper-preloader-color:#000}@keyframes swiper-preloader-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.swiper-virtual .swiper-slide{-webkit-backface-visibility:hidden;transform:translateZ(0)}.swiper-virtual.swiper-css-mode .swiper-wrapper::after{content:'';position:absolute;left:0;top:0;pointer-events:none}.swiper-virtual.swiper-css-mode.swiper-horizontal .swiper-wrapper::after{height:1px;width:var(--swiper-virtual-size)}.swiper-virtual.swiper-css-mode.swiper-vertical .swiper-wrapper::after{width:1px;height:var(--swiper-virtual-size)}:root{--swiper-navigation-size:44px}.swiper-button-next,.swiper-button-prev{position:absolute;top:var(--swiper-navigation-top-offset,50%);width:calc(var(--swiper-navigation-size)/ 44 * 27);height:var(--swiper-navigation-size);margin-top:calc(0px - (var(--swiper-navigation-size)/ 2));z-index:10;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--swiper-navigation-color,var(--swiper-theme-color))}.swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{opacity:.35;cursor:auto;pointer-events:none}.swiper-button-next.swiper-button-hidden,.swiper-button-prev.swiper-button-hidden{opacity:0;cursor:auto;pointer-events:none}.swiper-navigation-disabled .swiper-button-next,.swiper-navigation-disabled .swiper-button-prev{display:none!important}.swiper-button-next svg,.swiper-button-prev svg{width:100%;height:100%;object-fit:contain;transform-origin:center}.swiper-rtl .swiper-button-next svg,.swiper-rtl .swiper-button-prev svg{transform:rotate(180deg)}.swiper-button-prev,.swiper-rtl .swiper-button-next{left:var(--swiper-navigation-sides-offset,10px);right:auto}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-lock{display:none}.swiper-button-next:after,.swiper-button-prev:after{font-family:swiper-icons;font-size:var(--swiper-navigation-size);text-transform:none!important;letter-spacing:0;font-variant:initial;line-height:1}.swiper-button-prev:after,.swiper-rtl .swiper-button-next:after{content:'prev'}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-next:after,.swiper-rtl .swiper-button-prev:after{content:'next'}.swiper-pagination{position:absolute;text-align:center;transition:.3s opacity;transform:translate3d(0,0,0);z-index:10}.swiper-pagination.swiper-pagination-hidden{opacity:0}.swiper-pagination-disabled>.swiper-pagination,.swiper-pagination.swiper-pagination-disabled{display:none!important}.swiper-horizontal>.swiper-pagination-bullets,.swiper-pagination-bullets.swiper-pagination-horizontal,.swiper-pagination-custom,.swiper-pagination-fraction{bottom:var(--swiper-pagination-bottom,8px);top:var(--swiper-pagination-top,auto);left:0;width:100%}.swiper-pagination-bullets-dynamic{overflow:hidden;font-size:0}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transform:scale(.33);position:relative}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-main{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev-prev{transform:scale(.33)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next-next{transform:scale(.33)}.swiper-pagination-bullet{width:var(--swiper-pagination-bullet-width,var(--swiper-pagination-bullet-size,8px));height:var(--swiper-pagination-bullet-height,var(--swiper-pagination-bullet-size,8px));display:inline-block;border-radius:var(--swiper-pagination-bullet-border-radius,50%);background:var(--swiper-pagination-bullet-inactive-color,#000);opacity:var(--swiper-pagination-bullet-inactive-opacity, .2)}button.swiper-pagination-bullet{border:none;margin:0;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none}.swiper-pagination-clickable .swiper-pagination-bullet{cursor:pointer}.swiper-pagination-bullet:only-child{display:none!important}.swiper-pagination-bullet-active{opacity:var(--swiper-pagination-bullet-opacity, 1);background:var(--swiper-pagination-color,var(--swiper-theme-color))}.swiper-pagination-vertical.swiper-pagination-bullets,.swiper-vertical>.swiper-pagination-bullets{right:var(--swiper-pagination-right,8px);left:var(--swiper-pagination-left,auto);top:50%;transform:translate3d(0px,-50%,0)}.swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets .swiper-pagination-bullet{margin:var(--swiper-pagination-bullet-vertical-gap,6px) 0;display:block}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{top:50%;transform:translateY(-50%);width:8px}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{display:inline-block;transition:.2s transform,.2s top}.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{margin:0 var(--swiper-pagination-bullet-horizontal-gap,4px)}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{left:50%;transform:translateX(-50%);white-space:nowrap}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s left}.swiper-horizontal.swiper-rtl>.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s right}.swiper-pagination-fraction{color:var(--swiper-pagination-fraction-color,inherit)}.swiper-pagination-progressbar{background:var(--swiper-pagination-progressbar-bg-color,rgba(0,0,0,.25));position:absolute}.swiper-pagination-progressbar .swiper-pagination-progressbar-fill{background:var(--swiper-pagination-color,var(--swiper-theme-color));position:absolute;left:0;top:0;width:100%;height:100%;transform:scale(0);transform-origin:left top}.swiper-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{transform-origin:right top}.swiper-horizontal>.swiper-pagination-progressbar,.swiper-pagination-progressbar.swiper-pagination-horizontal,.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,.swiper-vertical>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite{width:100%;height:var(--swiper-pagination-progressbar-size,4px);left:0;top:0}.swiper-horizontal>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-vertical,.swiper-vertical>.swiper-pagination-progressbar{width:var(--swiper-pagination-progressbar-size,4px);height:100%;left:0;top:0}.swiper-pagination-lock{display:none}.swiper-scrollbar{border-radius:var(--swiper-scrollbar-border-radius,10px);position:relative;touch-action:none;background:var(--swiper-scrollbar-bg-color,rgba(0,0,0,.1))}.swiper-scrollbar-disabled>.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-disabled{display:none!important}.swiper-horizontal>.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-horizontal{position:absolute;left:var(--swiper-scrollbar-sides-offset,1%);bottom:var(--swiper-scrollbar-bottom,4px);top:var(--swiper-scrollbar-top,auto);z-index:50;height:var(--swiper-scrollbar-size,4px);width:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar.swiper-scrollbar-vertical,.swiper-vertical>.swiper-scrollbar{position:absolute;left:var(--swiper-scrollbar-left,auto);right:var(--swiper-scrollbar-right,4px);top:var(--swiper-scrollbar-sides-offset,1%);z-index:50;width:var(--swiper-scrollbar-size,4px);height:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar-drag{height:100%;width:100%;position:relative;background:var(--swiper-scrollbar-drag-bg-color,rgba(0,0,0,.5));border-radius:var(--swiper-scrollbar-border-radius,10px);left:0;top:0}.swiper-scrollbar-cursor-drag{cursor:move}.swiper-scrollbar-lock{display:none}.swiper-zoom-container{width:100%;height:100%;display:flex;justify-content:center;align-items:center;text-align:center}.swiper-zoom-container>canvas,.swiper-zoom-container>img,.swiper-zoom-container>svg{max-width:100%;max-height:100%;object-fit:contain}.swiper-slide-zoomed{cursor:move;touch-action:none}.swiper .swiper-notification{position:absolute;left:0;top:0;pointer-events:none;opacity:0;z-index:-1000}.swiper-free-mode>.swiper-wrapper{transition-timing-function:ease-out;margin:0 auto}.swiper-grid>.swiper-wrapper{flex-wrap:wrap}.swiper-grid-column>.swiper-wrapper{flex-wrap:wrap;flex-direction:column}.swiper-fade.swiper-free-mode .swiper-slide{transition-timing-function:ease-out}.swiper-fade .swiper-slide{pointer-events:none;transition-property:opacity}.swiper-fade .swiper-slide .swiper-slide{pointer-events:none}.swiper-fade .swiper-slide-active{pointer-events:auto}.swiper-fade .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper.swiper-cube{overflow:visible}.swiper-cube .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1;visibility:hidden;transform-origin:0 0;width:100%;height:100%}.swiper-cube .swiper-slide .swiper-slide{pointer-events:none}.swiper-cube.swiper-rtl .swiper-slide{transform-origin:100% 0}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-next,.swiper-cube .swiper-slide-prev{pointer-events:auto;visibility:visible}.swiper-cube .swiper-cube-shadow{position:absolute;left:0;bottom:0px;width:100%;height:100%;opacity:.6;z-index:0}.swiper-cube .swiper-cube-shadow:before{content:'';background:#000;position:absolute;left:0;top:0;bottom:0;right:0;filter:blur(50px)}.swiper-cube .swiper-slide-next+.swiper-slide{pointer-events:auto;visibility:visible}.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-bottom,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-left,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-right,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper.swiper-flip{overflow:visible}.swiper-flip .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1}.swiper-flip .swiper-slide .swiper-slide{pointer-events:none}.swiper-flip .swiper-slide-active,.swiper-flip .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-bottom,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-left,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-right,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-creative .swiper-slide{-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden;transition-property:transform,opacity,height}.swiper.swiper-cards{overflow:visible}.swiper-cards .swiper-slide{transform-origin:center bottom;-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden}
+    </style>
+
+
+
+
+<div style="display: flex; flex-direction: column; align-items: center; margin-left: 1rem;">
+
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 5501</div>
+          </div>
+          <h2>Bill 1</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Environmental Justice Act of 2025.”<br /><br />
+            <strong>Section 2. Findings.</strong><br />
+            (1) Communities of color and low-income communities face
+            disproportionate environmental burdens.<br />
+            (2) <em>Additional findings to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Jane Doe | Introduced: March 5, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">S. 2202</div>
+          </div>
+          <h2>Bill 2</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Clean Water for All Act.”<br /><br />
+            <strong>Section 2. Purpose.</strong><br />
+            (1) To ensure access to safe and affordable drinking water for all
+            Americans.<br />
+            (2) <em>Further provisions to follow…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Sen. John Smith | Introduced: February 12, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 3305</div>
+          </div>
+          <h2>Bill 3</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Affordable Housing Expansion Act.”<br /><br />
+            <strong>Section 2. Findings.</strong><br />
+            (1) There is a national shortage of affordable housing.<br />
+            (2) <em>Additional findings to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Maria Lee | Introduced: January 20, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">S. 1457</div>
+          </div>
+          <h2>Bill 4</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “National Broadband Expansion Act.”<br /><br />
+            <strong>Section 2. Findings.</strong><br />
+            (1) Universal broadband access is essential for economic
+            opportunity.<br />
+            (2) <em>Further findings to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Sen. Alex Kim | Introduced: March 10, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 2077</div>
+          </div>
+          <h2>Bill 5</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Student Debt Relief Act.”<br /><br />
+            <strong>Section 2. Purpose.</strong><br />
+            (1) To provide relief for federal student loan borrowers.<br />
+            (2) <em>Additional provisions to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Linda Tran | Introduced: February 28, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">S. 3890</div>
+          </div>
+          <h2>Bill 6</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Climate Resilience Infrastructure
+            Act.”<br /><br />
+            <strong>Section 2. Findings.</strong><br />
+            (1) Infrastructure must be modernized to withstand climate
+            change.<br />
+            (2) <em>Further findings to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Sen. Priya Patel | Introduced: January 30, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 9999</div>
+          </div>
+          <h2>Bill 7</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Universal Childcare Access Act.”<br /><br />
+            <strong>Section 2. Purpose.</strong><br />
+            (1) To expand access to affordable childcare services.<br />
+            (2) <em>Further provisions to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Samuel Green | Introduced: March 2, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">S. 1010</div>
+          </div>
+          <h2>Bill 8</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Healthcare Equity Advancement Act.”<br /><br />
+            <strong>Section 2. Findings.</strong><br />
+            (1) Persistent disparities exist in healthcare access and
+            outcomes.<br />
+            (2) <em>Additional findings to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Sen. Emily Carter | Introduced: January 15, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 8888</div>
+          </div>
+          <h2>Bill 9</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <strong>Section 1. Short title.</strong><br />
+            This Act may be cited as the “Small Business Recovery Act.”<br /><br />
+            <strong>Section 2. Purpose.</strong><br />
+            (1) To support small businesses in recovering from economic
+            downturns.<br />
+            (2) <em>Further provisions to follow…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Olivia Brown | Introduced: February 10, 2025
+          </div>
+        </div>
+      </div>
+     
+    </div>
+
+<div style="text-align:center; margin-top:2em; margin-left:2em;">
+  <<button "OK">>
+    <<run (()=>{
+      // map swiper‐slide indices to your policy‐passage names
+      const map = [
+        "Bill 1",
+        "Bill 2",
+        "Bill 3",
+        "Bill 4"
+      ];
+      // get the active slide index
+      const idx = window.mySwiper.activeIndex;
+      // play the corresponding passage
+      Engine.play(map[idx]);
+    })()>>
+  <</button>>
 </div>
-<<set $turn = 1>>
-<<set $year= 1>>
-<<set $currentYear= 2024>>
-<<set $budget = 100>>
+    </div>
+* [[Emergency Shelter Expansion ($30M)|Bill 1]]
+* [[Housing First Pilot ($50M)|Bill 2]]
+* [[Frontline Mental Health + Addiction Support ($40M)|Bill 3]]
+* [[Lived Experience Consultation & Strategic Planning ($10M)|Bill 4]]
+</div>
 
-<<set $homelessTotal = 2952>>
-
-<!-- Demographic breakdown of CURRENT homeless population -->
-<<set $pop = {
-  // Housing status
-  unsheltered: 472,      // 16% of 2952
-  sheltered: 1269,       // 43%
-  transitional: 708,     // 24%
-  institutional: 59,     // 2%
-  chronic: 1446,         // 49%
-  withChildren: 295,     // 10%
-  fosterCareHistory: 561, // 19%
-
-  // Identity demographics
-  male: Math.round(2952 * 0.56),
-  female: Math.round(2952 * 0.36),
-  transNB: Math.round(2952 * 0.02),
-  age25to49: Math.round(2952 * 0.58),
-  lgbq: Math.round(2952 * 0.11),
-  lgbtqYouth: Math.round(2952 * 0.21),
-  racialized: Math.round(2952 * 0.56),
-  indigenous: 479,           // exact number provided
-  veteran: Math.round(2952 * 0.04),
-  immigrant: Math.round(2952 * 0.42)
-}>>
-
-<!-- INFLOW system -->
-<<set $inflowBase = 0>> <!-- Number of new homeless per turn -->
-
-<!-- Percentage distribution of INCOMING new homelessness cases -->
-<<set $inflowShare = {
-  // Housing status (default to unsheltered for new arrivals)
-  unsheltered: 0.16,
-  sheltered: 0.43,
-  transitional: 0.24,
-  institutional: 0.02,
-  chronic: 0.49,
-  withChildren: 0.10,
-  fosterCareHistory: 0.19,
-
-  // Identity demographics
-  male: 0.56,
-  female: 0.36,
-  transNB: 0.02,
-  lgbtqYouth: 0.21,
-  age25to49: 0.58,
-  lgbq: 0.11,
-  racialized: 0.56,
-  indigenous: 479 / 2952,    // ~16.2%
-  veteran: 0.04,
-  immigrant: 0.42
-}>>
-
-
-<!-- System + policy levers -->
-<<set $publicOpinion = 50>>
-<<set $serviceCoordination = 20>>
-<<set $systemCapacity = 100>>
-<<set $politicalCapital = 3>>
 
 
 :: StoryInterface {"position":"800,200","size":"100,100"}
@@ -647,6 +1265,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
     <div class="balance">
       <span class="dollar-sign">$</span>
       <span class="digits" id="budget-val">100</span>
+            <span class="million">M</span>
     </div>
   </div>
 
@@ -654,8 +1273,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
   <div class="balance-meter" id="balance-meter"  data-unit="currency"  style="top: 100px">
     <div class="title">Public Opinion</div>
     <div class="balance">
-      <span class="dollar-sign">$</span>
-      <span class="digits" id="public-opinion-val">50</span>
+      <span class="emoji" id="public-opinion-emoji">•_•</span>
     </div>
   </div>
 
@@ -692,8 +1310,2021 @@ You've been brought into the city halls at a pivotal moment, right before the ne
   <!--  =====  END UI  =====  -->
 
 
+:: Tetris {"position":"700,0","size":"100,100"}
+<div class="puzzle-layout">
+    <div id="game-area">
+      <!-- The plugin will create its canvas inside this div -->
+    </div>
+    <div class="controls-panel">
+      <!-- Budget Meter -->
+      <div
+        class="balance-meter"
+        id="budget-meter"
+        data-unit="currency"
+        style="top: 0px"
+      >
+        <div class="title">Budget Allocated</div>
+        <div
+          style="
+            border-top: 1px dashed #cccccc;
+            margin-top: 8px;
+            padding-top: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+          "
+        >
+          <div>
+            <button
+              id="inner-square-decrease"
+              class="control-btn"
+              title="Decrease Size"
+            >
+              -
+            </button>
+            <span class="dollar-sign">$</span>
+            <span class="digits2" id="budget-val">100</span>M
+            <button
+              id="inner-square-increase"
+              class="control-btn"
+              title="Increase Size"
+            >
+              +
+            </button>
+          </div>
+          <button id="submit-button" class="submit-btn" disabled>
+            Submit
+          </button>
+        </div>
+      </div>
+      <div id="selected-piece-controls-group">
+        <div class="title" id="selected-piece-id">
+          Click a piece on the grid to select it.
+        </div>
+        <div
+          style="
+            border-top: 1px dashed #cccccc;
+            margin-top: 8px;
+            padding-top: 5px;
+          "
+        >
+          <div id="selected-piece-info" style="display: none">
+            <div class="control-group">
+              <button
+                id="piece-transform-prev"
+                class="control-btn"
+                title="Previous Shape"
+              >
+                -
+              </button>
+              <span
+                class="dollar-sign"
+                id="piece-value-symbol"
+                style="font-weight: 600; font-size: 32px"
+                >¢</span
+              >
+              <button
+                id="piece-transform-next"
+                class="control-btn"
+                title="Next Shape"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <p style="font-size: 0.8em; margin-top: 10px">
+            Press 'R' to rotate the selected piece.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <<script>>
+    // jQuery Widget (no changes needed, include as is from iteration 1)
+    (function (e) {
+      "function" == typeof define && define.amd
+        ? define(["jquery"], e)
+        : e(jQuery);
+    })(function (e) {
+      var t = 0,
+        i = Array.prototype.slice;
+      (e.cleanData = (function (t) {
+        return function (i) {
+          var s, n, a;
+          for (a = 0; null != (n = i[a]); a++)
+            try {
+              (s = e._data(n, "events")),
+                s && s.remove && e(n).triggerHandler("remove");
+            } catch (o) {}
+          t(i);
+        };
+      })(e.cleanData)),
+        (e.widget = function (t, i, s) {
+          var n,
+            a,
+            o,
+            r,
+            h = {},
+            l = t.split(".")[0];
+          return (
+            (t = t.split(".")[1]),
+            (n = l + "-" + t),
+            s || ((s = i), (i = e.Widget)),
+            (e.expr[":"][n.toLowerCase()] = function (t) {
+              return !!e.data(t, n);
+            }),
+            (e[l] = e[l] || {}),
+            (a = e[l][t]),
+            (o = e[l][t] =
+              function (e, t) {
+                return this._createWidget
+                  ? (arguments.length && this._createWidget(e, t), void 0)
+                  : new o(e, t);
+              }),
+            e.extend(o, a, {
+              version: s.version,
+              _proto: e.extend({}, s),
+              _childConstructors: [],
+            }),
+            (r = new i()),
+            (r.options = e.widget.extend({}, r.options)),
+            e.each(s, function (t, s) {
+              return e.isFunction(s)
+                ? ((h[t] = (function () {
+                    var e = function () {
+                        return i.prototype[t].apply(this, arguments);
+                      },
+                      n = function (e) {
+                        return i.prototype[t].apply(this, e);
+                      };
+                    return function () {
+                      var t,
+                        i = this._super,
+                        a = this._superApply;
+                      return (
+                        (this._super = e),
+                        (this._superApply = n),
+                        (t = s.apply(this, arguments)),
+                        (this._super = i),
+                        (this._superApply = a),
+                        t
+                      );
+                    };
+                  })()),
+                  void 0)
+                : ((h[t] = s), void 0);
+            }),
+            (o.prototype = e.widget.extend(
+              r,
+              { widgetEventPrefix: a ? r.widgetEventPrefix || t : t },
+              h,
+              {
+                constructor: o,
+                namespace: l,
+                widgetName: t,
+                widgetFullName: n,
+              }
+            )),
+            a
+              ? (e.each(a._childConstructors, function (t, i) {
+                  var s = i.prototype;
+                  e.widget(s.namespace + "." + s.widgetName, o, i._proto);
+                }),
+                delete a._childConstructors)
+              : i._childConstructors.push(o),
+            e.widget.bridge(t, o),
+            o
+          );
+        }),
+        (e.widget.extend = function (t) {
+          for (
+            var s, n, a = i.call(arguments, 1), o = 0, r = a.length;
+            r > o;
+            o++
+          )
+            for (s in a[o])
+              (n = a[o][s]),
+                a[o].hasOwnProperty(s) &&
+                  void 0 !== n &&
+                  (t[s] = e.isPlainObject(n)
+                    ? e.isPlainObject(t[s])
+                      ? e.widget.extend({}, t[s], n)
+                      : e.widget.extend({}, n)
+                    : n);
+          return t;
+        }),
+        (e.widget.bridge = function (t, s) {
+          var n = s.prototype.widgetFullName || t;
+          e.fn[t] = function (a) {
+            var o = "string" == typeof a,
+              r = i.call(arguments, 1),
+              h = this;
+            return (
+              (a =
+                !o && r.length
+                  ? e.widget.extend.apply(null, [a].concat(r))
+                  : a),
+              o
+                ? this.each(function () {
+                    var i,
+                      s = e.data(this, n);
+                    return "instance" === a
+                      ? ((h = s), !1)
+                      : s
+                      ? e.isFunction(s[a]) && "_" !== a.charAt(0)
+                        ? ((i = s[a].apply(s, r)),
+                          i !== s && void 0 !== i
+                            ? ((h = i && i.jquery ? h.pushStack(i.get()) : i),
+                              !1)
+                            : void 0)
+                        : e.error(
+                            "no such method '" +
+                              a +
+                              "' for " +
+                              t +
+                              " widget instance"
+                          )
+                      : e.error(
+                          "cannot call methods on " +
+                            t +
+                            " prior to initialization; " +
+                            "attempted to call method '" +
+                            a +
+                            "'"
+                        );
+                  })
+                : this.each(function () {
+                    var t = e.data(this, n);
+                    t
+                      ? (t.option(a || {}), t._init && t._init())
+                      : e.data(this, n, new s(a, this));
+                  }),
+              h
+            );
+          };
+        }),
+        (e.Widget = function () {}),
+        (e.Widget._childConstructors = []),
+        (e.Widget.prototype = {
+          widgetName: "widget",
+          widgetEventPrefix: "",
+          defaultElement: "<div>",
+          options: { disabled: !1, create: null },
+          _createWidget: function (i, s) {
+            (s = e(s || this.defaultElement || this)[0]),
+              (this.element = e(s)),
+              (this.uuid = t++),
+              (this.eventNamespace = "." + this.widgetName + this.uuid),
+              (this.bindings = e()),
+              (this.hoverable = e()),
+              (this.focusable = e()),
+              s !== this &&
+                (e.data(s, this.widgetFullName, this),
+                this._on(!0, this.element, {
+                  remove: function (e) {
+                    e.target === s && this.destroy();
+                  },
+                }),
+                (this.document = e(
+                  s.style ? s.ownerDocument : s.document || s
+                )),
+                (this.window = e(
+                  this.document[0].defaultView ||
+                    this.document[0].parentWindow
+                ))),
+              (this.options = e.widget.extend(
+                {},
+                this.options,
+                this._getCreateOptions(),
+                i
+              )),
+              this._create(),
+              this._trigger("create", null, this._getCreateEventData()),
+              this._init();
+          },
+          _getCreateOptions: e.noop,
+          _getCreateEventData: e.noop,
+          _create: e.noop,
+          _init: e.noop,
+          destroy: function () {
+            this._destroy(),
+              this.element
+                .unbind(this.eventNamespace)
+                .removeData(this.widgetFullName)
+                .removeData(e.camelCase(this.widgetFullName)),
+              this.widget()
+                .unbind(this.eventNamespace)
+                .removeAttr("aria-disabled")
+                .removeClass(
+                  this.widgetFullName + "-disabled " + "ui-state-disabled"
+                ),
+              this.bindings.unbind(this.eventNamespace),
+              this.hoverable.removeClass("ui-state-hover"),
+              this.focusable.removeClass("ui-state-focus");
+          },
+          _destroy: e.noop,
+          widget: function () {
+            return this.element;
+          },
+          option: function (t, i) {
+            var s,
+              n,
+              a,
+              o = t;
+            if (0 === arguments.length)
+              return e.widget.extend({}, this.options);
+            if ("string" == typeof t)
+              if (((o = {}), (s = t.split(".")), (t = s.shift()), s.length)) {
+                for (
+                  n = o[t] = e.widget.extend({}, this.options[t]), a = 0;
+                  s.length - 1 > a;
+                  a++
+                )
+                  (n[s[a]] = n[s[a]] || {}), (n = n[s[a]]);
+                if (((t = s.pop()), 1 === arguments.length))
+                  return void 0 === n[t] ? null : n[t];
+                n[t] = i;
+              } else {
+                if (1 === arguments.length)
+                  return void 0 === this.options[t] ? null : this.options[t];
+                o[t] = i;
+              }
+            return this._setOptions(o), this;
+          },
+          _setOptions: function (e) {
+            var t;
+            for (t in e) this._setOption(t, e[t]);
+            return this;
+          },
+          _setOption: function (e, t) {
+            return (
+              (this.options[e] = t),
+              "disabled" === e &&
+                (this.widget().toggleClass(
+                  this.widgetFullName + "-disabled",
+                  !!t
+                ),
+                t &&
+                  (this.hoverable.removeClass("ui-state-hover"),
+                  this.focusable.removeClass("ui-state-focus"))),
+              this
+            );
+          },
+          enable: function () {
+            return this._setOptions({ disabled: !1 });
+          },
+          disable: function () {
+            return this._setOptions({ disabled: !0 });
+          },
+          _on: function (t, i, s) {
+            var n,
+              a = this;
+            "boolean" != typeof t && ((s = i), (i = t), (t = !1)),
+              s
+                ? ((i = n = e(i)), (this.bindings = this.bindings.add(i)))
+                : ((s = i), (i = this.element), (n = this.widget())),
+              e.each(s, function (s, o) {
+                function r() {
+                  return t ||
+                    (a.options.disabled !== !0 &&
+                      !e(this).hasClass("ui-state-disabled"))
+                    ? ("string" == typeof o ? a[o] : o).apply(a, arguments)
+                    : void 0;
+                }
+                "string" != typeof o &&
+                  (r.guid = o.guid = o.guid || r.guid || e.guid++);
+                var h = s.match(/^([\w:-]*)\s*(.*)$/),
+                  l = h[1] + a.eventNamespace,
+                  u = h[2];
+                u ? n.delegate(u, l, r) : i.bind(l, r);
+              });
+          },
+          _off: function (t, i) {
+            (i =
+              (i || "").split(" ").join(this.eventNamespace + " ") +
+              this.eventNamespace),
+              t.unbind(i).undelegate(i),
+              (this.bindings = e(this.bindings.not(t).get())),
+              (this.focusable = e(this.focusable.not(t).get())),
+              (this.hoverable = e(this.hoverable.not(t).get()));
+          },
+          _delay: function (e, t) {
+            function i() {
+              return ("string" == typeof e ? s[e] : e).apply(s, arguments);
+            }
+            var s = this;
+            return setTimeout(i, t || 0);
+          },
+          _hoverable: function (t) {
+            (this.hoverable = this.hoverable.add(t)),
+              this._on(t, {
+                mouseenter: function (t) {
+                  e(t.currentTarget).addClass("ui-state-hover");
+                },
+                mouseleave: function (t) {
+                  e(t.currentTarget).removeClass("ui-state-hover");
+                },
+              });
+          },
+          _focusable: function (t) {
+            (this.focusable = this.focusable.add(t)),
+              this._on(t, {
+                focusin: function (t) {
+                  e(t.currentTarget).addClass("ui-state-focus");
+                },
+                focusout: function (t) {
+                  e(t.currentTarget).removeClass("ui-state-focus");
+                },
+              });
+          },
+          _trigger: function (t, i, s) {
+            var n,
+              a,
+              o = this.options[t];
+            if (
+              ((s = s || {}),
+              (i = e.Event(i)),
+              (i.type = (
+                t === this.widgetEventPrefix ? t : this.widgetEventPrefix + t
+              ).toLowerCase()),
+              (i.target = this.element[0]),
+              (a = i.originalEvent))
+            )
+              for (n in a) n in i || (i[n] = a[n]);
+            return (
+              this.element.trigger(i, s),
+              !(
+                (e.isFunction(o) &&
+                  o.apply(this.element[0], [i].concat(s)) === !1) ||
+                i.isDefaultPrevented()
+              )
+            );
+          },
+        }),
+        e.each({ show: "fadeIn", hide: "fadeOut" }, function (t, i) {
+          e.Widget.prototype["_" + t] = function (s, n, a) {
+            "string" == typeof n && (n = { effect: n });
+            var o,
+              r = n
+                ? n === !0 || "number" == typeof n
+                  ? i
+                  : n.effect || i
+                : t;
+            (n = n || {}),
+              "number" == typeof n && (n = { duration: n }),
+              (o = !e.isEmptyObject(n)),
+              (n.complete = a),
+              n.delay && s.delay(n.delay),
+              o && e.effects && e.effects.effect[r]
+                ? s[t](n)
+                : r !== t && s[r]
+                ? s[r](n.duration, n.easing, a)
+                : s.queue(function (i) {
+                    e(this)[t](), a && a.call(s[0]), i();
+                  });
+          };
+        }),
+        e.widget;
+    });
+
+    // --- Dynamic Block Puzzle Plugin ---
+    (function ($) {
+      "use strict";
+
+      // --- Default Themes (can be expanded) ---
+      const DynamicBlockThemes = {
+        default: {
+          background: "#ffffff", // Outer grid background
+          gridLineColor: "#cfcfcf", // Thin grid lines
+          innerSquareBorderColor: "rgba(0, 0, 0, 0.7)", // Bright border for target
+          pieceColors: {
+            typeA: "#E53E3E", // Red → var(--uchu-red)
+            typeB: "#3182CE", // Blue → var(--uchu-blue)
+            typeC: "#37A169", // Green → var(--uchu-green)
+            typeD: "#ECC94A", // Yellow → var(--uchu-yellow)
+            typeE: "#9F7AEA", // Purple → var(--uchu-purple)
+            typeF: "#38B2AC", // Teal → Close to green in Uchū
+            typeG: "#ED8936", // Orange → var(--uchu-orange)
+            typeH: "#D53F8C",
+          },
+          pieceStrokeColor: "rgba(255, 255, 255, 10.0)", // Darker stroke for pieces
+          pieceStrokeWidth: 1,
+          selectedPieceStrokeColor: "rgba(255, 255, 255, 10.0)", // Bright white for selected
+          selectedPieceStrokeWidth: 1,
+          ghostFillColorValid: "rgba(0, 0, 0, 0.10)", // Semi-transparent light
+          ghostFillColorInvalid: "rgba(231, 76, 60, 0.35)", // Semi-transparent red
+          ghostStrokeColor: "rgba(0, 0, 0, 0.4)",
+        },
+      };
+
+      // --- Shape Definitions for Piece Transformation ---
+      // Helper to create simple rotated versions. For complex shapes, define all 4 rotations manually.
+      // This simplified rotation works by swapping and negating coordinates, assuming rotation around (0,0) of the piece's local blocks.
+      function _sR(blocks) {
+        // simpleRotate90
+        const rotated = [];
+        for (let i = 0; i < blocks.length; i += 2) {
+          rotated.push(-blocks[i + 1], blocks[i]);
+        }
+        return rotated;
+      }
+
+      const PieceShapeRepository = {
+        // --- Basic & Tetris-like ---
+        dot: {
+          name: "Dot 1x1",
+          rotations: [
+            [0, 0],
+            [0, 0],
+            [0, 0],
+            [0, 0],
+          ],
+        }, // Alias for 1x1
+        line2: {
+          name: "Line I2",
+          rotations: (() => {
+            const b = [0, 0, 0, -1];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+
+        line3: {
+          name: "Line I3",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, 0, -2];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        line4: {
+          name: "Line I4",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, 0, -2, 0, -3];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        line5: {
+          name: "Line I5",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, 0, -2, 0, -3, 0, -4];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        lShape3: {
+          name: "L-Shape 3",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, 1, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        lShape4: {
+          name: "L-Shape L4",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, 0, -2, 1, -2];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        jShape3: {
+          name: "J-Shape 3",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, -1, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        jShape4: {
+          name: "J-Shape J4",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, 0, -2, -1, -2];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        tShape4: {
+          name: "T-Shape T4",
+          rotations: (() => {
+            const b = [-1, 0, 0, 0, 1, 0, 0, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        square2x2: {
+          name: "Square O4",
+          rotations: (() => {
+            const b = [0, 0, 1, 0, 0, -1, 1, -1];
+            return [b, b, b, b];
+          })(),
+        },
+        sShape4: {
+          name: "S-Shape S4",
+          rotations: (() => {
+            const b = [0, 0, -1, 0, 0, -1, 1, -1];
+            const r1 = _sR(b);
+            return [b, r1, b, r1];
+          })(),
+        },
+        zShape4: {
+          name: "Z-Shape Z4",
+          rotations: (() => {
+            const b = [0, 0, 1, 0, 0, -1, -1, -1];
+            const r1 = _sR(b);
+            return [b, r1, b, r1];
+          })(),
+        },
+        diagonal2: {
+          name: "Diagonal 2",
+          rotations: (() => {
+            const b = [0, 0, 1, -1];
+            const r1 = _sR(b);
+            return [b, r1, b, r1];
+          })(),
+        },
+        corner3: {
+          name: "Corner L3",
+          rotations: (() => {
+            const b = [0, 0, 1, 0, 0, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        }, // Small L
+        stubbyT3: {
+          name: "Stubby T3",
+          rotations: (() => {
+            const b = [-1, 0, 0, 0, 0, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+
+        // --- More Complex Shapes ---
+        plus5: {
+          name: "Plus 5",
+          rotations: (() => {
+            const b = [0, 0, -1, 0, 1, 0, 0, -1, 0, 1];
+            return [b, b, b, b];
+          })(),
+        }, // Symmetrical
+        uShape5: {
+          name: "U-Shape 5",
+          rotations: (() => {
+            const b = [-1, 0, 1, 0, -1, -1, 0, -1, 1, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        wideT5: {
+          name: "Wide T5",
+          rotations: (() => {
+            const b = [-1, 0, 0, 0, 1, 0, 2, 0, 0, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        longL5: {
+          name: "Long L5",
+          rotations: (() => {
+            const b = [0, 0, 0, -1, 0, -2, 0, -3, 1, -3];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        stairs4: {
+          name: "Stairs 4",
+          rotations: (() => {
+            const b = [0, 0, 1, 0, 1, -1, 2, -1];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        }, // More like a skewed Z
+        cShape6: {
+          name: "C-Shape 6",
+          rotations: (() => {
+            const b = [-1, 1, 0, 1, 1, 1, -1, 0, -1, -1, 0, -1, 1, -1, 1, 0];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        }, // 3x3 with middle column removed
+        hollowBox8: {
+          name: "Hollow Box 3x3",
+          rotations: (() => {
+            const b = [-1, 1, 0, 1, 1, 1, -1, 0, 1, 0, -1, -1, 0, -1, 1, -1];
+            return [b, b, b, b];
+          })(),
+        },
+        bigCross9: {
+          name: "Big Cross 9",
+          rotations: (() => {
+            const b = [
+              0, 2, -2, 0, 0, -2, -1, 0, 0, 1, -3, 0, 0, 3, 0, 0, 1, 0, 0, -3,
+              3, 0, 2, 0, 0, -1,
+            ];
+            return [b, b, b, b];
+          })(),
+        }, // 5x5 cross
+
+        // --- Huge & Complex End Stages ---
+        frame12_4x4: {
+          name: "Frame 4x4",
+          rotations: (() => {
+            const b = [
+              -1, 1, 0, 1, 1, 1, 2, 1, -1, 0, 2, 0, -1, -1, 2, -1, -1, -2, 0,
+              -2, 1, -2, 2, -2,
+            ];
+            return [b, b, b, b];
+          })(),
+        }, // Hollow 4x4
+        capitalH11: {
+          name: "Capital H 11",
+          rotations: (() => {
+            const b = [
+              -1, 2, -1, 1, -1, 0, -1, -1, -1, -2, 0, 0, 1, 2, 1, 1, 1, 0, 1,
+              -1, 1, -2,
+            ];
+            const r1 = _sR(b);
+            return [b, r1, b, r1];
+          })(),
+        },
+        gridLock9: {
+          name: "Pyramid 10",
+          rotations: (() => {
+            const b = [
+              -1.5,
+              0,
+              -0.5,
+              0,
+              0.5,
+              0,
+              1.5,
+              0, // base of 4 blocks
+              -1,
+              -1,
+              0,
+              -1,
+              1,
+              -1, // 2nd level
+              -0.5,
+              -2,
+              0.5,
+              -2, // 3rd level
+              0,
+              -3, // top
+            ].map((n) => Math.round(n)); // Round to integer grid coordinates
+            return [b, b, b, b]; // Symmetrical, so all rotations identical
+          })(),
+        },
+        propeller9: {
+          name: "Propeller 9",
+          rotations: (() => {
+            const b = [
+              0, 0, 0, 1, 0, 2, 0, -1, 0, -2, 1, 1, 2, 2, -1, -1, -2, -2,
+            ];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        chevronArrow7: {
+          name: "Chevron Arrow 7",
+          rotations: (() => {
+            const b = [
+              -3, -3, 1, 1, -2, -2, 0, 0, 3, -3, -1, 1, 2, -2, 1, -1, -1, -1,
+            ];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        starFort13: {
+          name: "Star Fort 13",
+          rotations: (() => {
+            const b = [
+              0, 0, 1, 0, -1, 0, 0, 1, 0, -1, 2, 1, 2, -1, -2, 1, -2, -1, 1,
+              2, -1, 2, 1, -2, -1, -2,
+            ];
+            return [b, b, b, b];
+          })(),
+        }, // Complex symmetrical
+        doubleStairs8: {
+          name: "Double Stairs 8",
+          rotations: (() => {
+            const b = [-1, 1, 0, 1, 0, 0, 1, 0, 1, -1, 2, -1, 2, -2, 3, -2];
+            const r1 = _sR(b);
+            const r2 = _sR(r1);
+            const r3 = _sR(r2);
+            return [b, r1, r2, r3];
+          })(),
+        },
+        branchingCross13: {
+          name: "Branching Cross 13",
+          rotations: (() => {
+            const b = [
+              0, 0, 0, 1, 1, 1, 0, -1, -1, -1, 1, 0, 1, -1, -1, 0, -1, 1, 2,
+              0, -2, 0, 0, 2, 0, -2,
+            ];
+            return [b, b, b, b];
+          })(),
+        },
+        Shape_1: {
+          name: "Shape 1",
+          rotations: (() => {
+            const b = [
+              1, 3, 0, 0, -1, -1, -1, 0, 0, 1, 1, 1, -1, 1, 0, 2, 1, 2,
+            ];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_2: {
+          name: "Shape 2",
+          rotations: (() => {
+            const b = [0, 2, 0, 1, 0, 0, -1, -1, 0, -1, 1, 2];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_3: {
+          name: "Shape 3",
+          rotations: (() => {
+            const b = [
+              1, -2, 2, -1, 1, 1, 0, 0, 0, -3, -1, -1, -3, -1, -2, -2, 1, -1,
+              3, -1, 0, -2, -1, 0, 0, 1, -1, -3, 2, -2, 1, 0, -2, -1, 1, -3,
+              -1, 1, 0, -4, -1, -2, 0, -1,
+            ];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_4: {
+          name: "Shape 4",
+          rotations: (() => {
+            const b = [
+              1, -1, 4, 0, 3, -1, -4, 0, -3, 1, -1, 3, 0, 4, -1, 0, 2, 2, 0,
+              1, 3, 1, -1, -3, 1, 1, -2, 2, 1, 3, 2, -2, 1, 0, -1, -1, 1, -3,
+              -3, -1, -1, 1, -2, -2, 0, -4, 0, -1,
+            ];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_5: {
+          name: "Shape 5",
+          rotations: (() => {
+            const b = [1, -1, 0, 0, -1, -1, 1, 1, -1, 1];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_6: {
+          name: "Shape 6",
+          rotations: (() => {
+            const b = [
+              -2, -3, -3, -1, -2, 0, 2, -2, 3, -1, 1, -1, 0, 0, -1, -2, -1, 1,
+              -3, -2, -2, -1, 2, 0, 1, -2, 2, -3, 1, 1, 3, -2, -1, -3, 0, 2,
+              -1, 0, 0, -1, -2, -2, 1, -3, 1, 0, 2, -1, -1, -1, 0, -2, 0, 1,
+            ];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_7: {
+          name: "Shape 7",
+          rotations: (() => {
+            const b = [
+              2, -2, 1, 2, 2, 1, 1, -1, 3, -4, 0, 0, -1, 4, 0, 3, 2, 0, 1, -2,
+              2, -3, 1, 1, 0, 2, -1, 0, 0, -1, -1, 3, -2, 4, 1, 0, 3, -3, 4,
+              -4, 3, 0,
+            ];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+
+        Shape_8: {
+          name: "Shape 8",
+          rotations: (() => {
+            const b = [1, -1, 0, 0, 1, 0, -1, 1, 2, -1, -2, 2, -1, 2, 0, 1];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_9: {
+          name: "Shape 9",
+          rotations: (() => {
+            const b = [0, 0, 1, 0, -1, 0, 1, -1, -1, -1];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+        Shape_10: {
+          name: "Shape 10",
+          rotations: (() => {
+            const b = [0, 0, 1, 0, -1, 1, -1, 0, 1, -1];
+            return [b, _sR(b), b, _sR(b)];
+          })(),
+        },
+      };
+
+      const PieceTypeProgressions = {
+        typeA: ["dot", "Shape_9", "Shape_5", "Shape_1", "bigCross9"], // Red
+        typeB: ["dot", "sShape4", "jShape4", "capitalH11", "Shape_3"], // Blue
+        typeC: ["dot", "tShape4", "uShape5", "frame12_4x4", "Shape_4"], // Green
+        typeD: ["dot", "diagonal2", "stairs4", "gridLock9", "Shape_6"], // Yellow
+        typeE: ["dot", "line4", "plus5", "propeller9", "Shape_7"], // Purple
+        typeF: ["dot", "lShape3", "wideT5", "Shape_8", "chevronArrow7"], // Dark Gray
+        typeG: ["dot", "jShape3", "sShape4", "hollowBox8", "starFort13"], // Purple (alt)
+        typeH: [
+          "dot",
+          "Shape_10",
+          "longL5",
+          "doubleStairs8",
+          "branchingCross13",
+        ],
+      };
+
+      $.widget("custom.dynamicBlockPuzzle", {
+        options: {
+          outerGridWidth: 30,
+          outerGridHeight: 25,
+          blockSize: 20, // pixels
+          initialInnerSquareSize: 8,
+          minInnerSquareSize: 3,
+          maxInnerSquareSize: 15,
+          numPieces: 8,
+          theme: "default",
+          onPieceSelect: function (piece) {},
+          onPieceTransform: function (piece) {},
+          onInnerSquareResize: function (newSize) {},
+        },
+
+        _canvas: null,
+        _ctx: null,
+        _theme: {},
+        _allPieces: [],
+        _selectedPiece: null,
+        _draggingPiece: null,
+        _isDragging: false,
+        _dragStartX: 0,
+        _dragStartY: 0,
+        _pieceDragOffsetBlocksX: 0,
+        _pieceDragOffsetBlocksY: 0, // Offset from piece's reference block to clicked block
+        _innerSquare: { x: 0, y: 0, size: 0 },
+        _pieceIdCounter: 0,
+
+        _create: function () {
+          this.element.addClass("dynamic-puzzle-holder");
+          this.theme(this.options.theme); // Load theme colors
+
+          this._canvas = $("<canvas></canvas>").appendTo(this.element);
+          this._ctx = this._canvas[0].getContext("2d");
+          this._updateCanvasSize();
+
+          this._initInnerSquare();
+          this._generateInitialPieces(); // Creates Piece instances
+          this._bindEvents();
+          this._updateSelectedPieceUI();
+          this._render();
+        },
+
+        _updateCanvasSize: function () {
+          const w = this.options.outerGridWidth * this.options.blockSize;
+          const h = this.options.outerGridHeight * this.options.blockSize;
+
+          const dpr = window.devicePixelRatio || 1;
+
+          // Set canvas size in physical pixels
+          this._canvas[0].width = w * dpr;
+          this._canvas[0].height = h * dpr;
+
+          // Set canvas size in CSS pixels
+          this._canvas.css({ width: w + "px", height: h + "px" });
+
+          // Scale the context to match device pixel ratio
+          this._ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        },
+
+        _initInnerSquare: function () {
+          this._innerSquare.size = this.options.initialInnerSquareSize;
+          this._innerSquare.x = Math.floor(
+            (this.options.outerGridWidth - this._innerSquare.size) / 2
+          );
+          this._innerSquare.y = Math.floor(
+            (this.options.outerGridHeight - this._innerSquare.size) / 2
+          );
+          $("#inner-square-size-display").text(this._innerSquare.size);
+          this._updateBudgetValue();
+        },
+
+        // --- Piece Class Definition (Constructor within the plugin) ---
+        Piece: function (pluginInstance, id, typeKey, x, y) {
+          this.plugin = pluginInstance; // Reference to the plugin
+          this.id = id;
+          this.typeKey = typeKey; // e.g., "typeA"
+          this.x = x; // grid units for piece's reference point
+          this.y = y;
+
+          this.progressionKeys = PieceTypeProgressions[typeKey];
+          if (!this.progressionKeys) {
+            console.error("Undefined piece type progression:", typeKey);
+            this.progressionKeys = PieceTypeProgressions.typeA; // Fallback
+          }
+          this.currentShapeKeyIndex = 0; // Index in this.progressionKeys
+
+          this.orientation = 0; // 0, 1, 2, 3
+          this.color = this.plugin._theme.pieceColors[typeKey] || "#CCCCCC"; // Get color from theme
+        },
+        _updateBudgetValue: function () {
+          const baseSize = 10;
+          const baseBudget = 100;
+          const currentSize = this._innerSquare.size;
+
+          // Assuming every 2 blocks = +/- 20M
+          const delta = currentSize - baseSize;
+          const value = baseBudget + delta * 10;
+
+          $("#budget-val").text(value);
+        },
+        _setupPiecePrototype: function () {
+          var self = this; // 'self' is the plugin instance for use in prototype methods
+
+          this.Piece.prototype.getCurrentShapeDefinition = function () {
+            const shapeKey = this.progressionKeys[this.currentShapeKeyIndex];
+            return PieceShapeRepository[shapeKey];
+          };
+
+          this.Piece.prototype.getBlocks = function (orientationOverride) {
+            const shapeDef = this.getCurrentShapeDefinition();
+            if (!shapeDef) return []; // Should not happen if progressions are correct
+            const effectiveOrientation =
+              orientationOverride !== undefined
+                ? orientationOverride
+                : this.orientation;
+            return shapeDef.rotations[
+              effectiveOrientation % shapeDef.rotations.length
+            ];
+          };
+
+          this.Piece.prototype.getBounds = function (orientationOverride) {
+            const blocks = this.getBlocks(orientationOverride);
+            if (!blocks || blocks.length === 0)
+              return {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: 0,
+                height: 0,
+              };
+            let minX = Infinity,
+              maxX = -Infinity,
+              minY = Infinity,
+              maxY = -Infinity;
+            for (let i = 0; i < blocks.length; i += 2) {
+              if (blocks[i] < minX) minX = blocks[i];
+              if (blocks[i] > maxX) maxX = blocks[i];
+              if (blocks[i + 1] < minY) minY = blocks[i + 1];
+              if (blocks[i + 1] > maxY) maxY = blocks[i + 1];
+            }
+            return {
+              left: minX,
+              right: maxX,
+              top: minY,
+              bottom: maxY,
+              width: maxX - minX,
+              height: maxY - minY,
+            };
+          };
+
+          this.Piece.prototype.rotate = function (direction) {
+            const oldOrientation = this.orientation;
+            const shapeDef = this.getCurrentShapeDefinition();
+            const numOrientations = shapeDef.rotations.length;
+            this.orientation =
+              (this.orientation +
+                (direction === "left" ? -1 : 1) +
+                numOrientations) %
+              numOrientations;
+
+            if (
+              self._isOutOfBounds(this) ||
+              self._checkPieceToPieceCollision(this, this.x, this.y, this)
+            ) {
+              this.orientation = oldOrientation;
+              return false;
+            }
+            return true;
+          };
+
+          this.Piece.prototype.transformShape = function (direction) {
+            const oldShapeKeyIndex = this.currentShapeKeyIndex;
+            const numShapesInProgression = this.progressionKeys.length;
+            this.currentShapeKeyIndex =
+              (this.currentShapeKeyIndex +
+                (direction === "prev" ? -1 : 1) +
+                numShapesInProgression) %
+              numShapesInProgression;
+            this.orientation = 0; // Reset orientation
+
+            if (
+              self._isOutOfBounds(this) ||
+              self._checkPieceToPieceCollision(this, this.x, this.y, this)
+            ) {
+              this.currentShapeKeyIndex = oldShapeKeyIndex; // Revert
+              this.orientation = 0; // Also revert orientation reset if transform fails
+              return false;
+            }
+            self.options.onPieceTransform.call(self.element, this);
+            return true;
+          };
+
+          this.Piece.prototype.isBlockAt = function (checkGridX, checkGridY) {
+            const blocks = this.getBlocks();
+            for (let i = 0; i < blocks.length; i += 2) {
+              if (
+                this.x + blocks[i] === checkGridX &&
+                this.y + blocks[i + 1] === checkGridY
+              ) {
+                return true;
+              }
+            }
+            return false;
+          };
+        },
+        _shuffleArray: function (array) {
+          const a = array.slice();
+          for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+          }
+          return a;
+        },
+        _generateInitialPieces: function () {
+          this._setupPiecePrototype(); // Ensure Piece methods are available
+          this._allPieces = [];
+          this._pieceIdCounter = 0;
+          const pieceTypeKeys = this._shuffleArray(
+            Object.keys(PieceTypeProgressions)
+          ).slice(0, this.options.numPieces);
+
+          for (let i = 0; i < pieceTypeKeys.length; i++) {
+            const typeKey = pieceTypeKeys[i];
+            let pX, pY, newPiece;
+            let attempts = 0;
+            const maxAttempts = 100;
+
+            do {
+              const shapeKey = PieceTypeProgressions[typeKey][1]; // Stage 2
+              const tempPiece = new this.Piece(this, -1, typeKey, 0, 0);
+              tempPiece.currentShapeKeyIndex = 1;
+              const bounds = tempPiece.getBounds();
+
+              // Calculate safe placement bounds based on piece dimensions
+              const minX = -bounds.left + 1;
+              const maxX = this.options.outerGridWidth - bounds.right - 2;
+              const minY = -bounds.top + 1;
+              const maxY = this.options.outerGridHeight - bounds.bottom - 2;
+
+              // If piece is too large to fit even once, skip
+              if (minX > maxX || minY > maxY) {
+                console.warn(`Piece too large to place: ${typeKey}`);
+                break;
+              }
+
+              pX = this._randInt(minX, maxX);
+              pY = this._randInt(minY, maxY);
+
+              newPiece = new this.Piece(
+                this,
+                this._pieceIdCounter++,
+                typeKey,
+                pX,
+                pY
+              );
+              newPiece.currentShapeKeyIndex = 1; // Start at stage 2
+
+              attempts++;
+              if (attempts > maxAttempts) {
+                newPiece = null;
+                break;
+              }
+            } while (
+              this._isOutOfBounds(newPiece) ||
+              this._checkPieceToPieceCollision(
+                newPiece,
+                newPiece.x,
+                newPiece.y,
+                null
+              )
+            );
+
+            if (newPiece) {
+              this._allPieces.push(newPiece);
+            } else {
+              console.warn(
+                "Could not place a piece after " + maxAttempts + " attempts."
+              );
+            }
+          }
+        },
+
+        _bindEvents: function () {
+          const self = this;
+          this._canvas.on("mousedown.dynPuzzle", function (e) {
+            self._handleMouseDown(e);
+          });
+
+          $(document).on("keydown.dynPuzzle", function (e) {
+            if (e.key.toLowerCase() === "r") {
+              e.preventDefault(); // Prevent default 'r' behavior like page reload
+              const targetPiece = self._draggingPiece || self._selectedPiece;
+              if (targetPiece && targetPiece.rotate("right")) {
+                self._render();
+              }
+            }
+          });
+
+          $("#inner-square-increase").on("click.dynPuzzle", function () {
+            self._resizeInnerSquare(1);
+          });
+          $("#inner-square-decrease").on("click.dynPuzzle", function () {
+            self._resizeInnerSquare(-1);
+          });
+          $("#piece-transform-next").on("click.dynPuzzle", function () {
+            self._transformSelectedPiece("next");
+          });
+          $("#piece-transform-prev").on("click.dynPuzzle", function () {
+            self._transformSelectedPiece("prev");
+          });
+        },
+
+        _isPieceInsideInnerSquare: function (piece) {
+          const blocks = piece.getBlocks();
+          for (let i = 0; i < blocks.length; i += 2) {
+            const bx = piece.x + blocks[i];
+            const by = piece.y + blocks[i + 1];
+            if (
+              bx < this._innerSquare.x ||
+              bx >= this._innerSquare.x + this._innerSquare.size ||
+              by < this._innerSquare.y ||
+              by >= this._innerSquare.y + this._innerSquare.size
+            ) {
+              return false;
+            }
+          }
+          return true;
+        },
+
+        _checkAllPiecesInsideInnerSquare: function () {
+          for (const piece of this._allPieces) {
+            if (!this._isPieceInsideInnerSquare(piece)) return false;
+          }
+          return true;
+        },
+
+        _handleMouseDown: function (e) {
+          const rect = this._canvas[0].getBoundingClientRect();
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+          const clickGridX = Math.floor(mouseX / this.options.blockSize);
+          const clickGridY = Math.floor(mouseY / this.options.blockSize);
+
+          let clickedPiece = null;
+          for (let i = this._allPieces.length - 1; i >= 0; i--) {
+            // Iterate backwards for Z-order
+            if (this._allPieces[i].isBlockAt(clickGridX, clickGridY)) {
+              clickedPiece = this._allPieces[i];
+              break;
+            }
+          }
+
+          if (clickedPiece) {
+            this._selectedPiece = clickedPiece;
+            this._draggingPiece = clickedPiece;
+            this._isDragging = true;
+
+            // Bring to front for rendering by moving to end of array
+            this._allPieces.splice(this._allPieces.indexOf(clickedPiece), 1);
+            this._allPieces.push(clickedPiece);
+
+            // Offset of the specific block clicked within the piece's local coordinate system
+            this._pieceDragOffsetBlocksX = clickGridX - clickedPiece.x;
+            this._pieceDragOffsetBlocksY = clickGridY - clickedPiece.y;
+
+            $(document).on(
+              "mousemove.dynPuzzle",
+              this._handleMouseMove.bind(this)
+            );
+            $(document).on(
+              "mouseup.dynPuzzle",
+              this._handleMouseUp.bind(this)
+            );
+            this.options.onPieceSelect.call(
+              this.element,
+              this._selectedPiece
+            );
+          } else {
+            this._selectedPiece = null;
+          }
+          this._updateSelectedPieceUI();
+          this._render();
+        },
+
+        _handleMouseMove: function (e) {
+          if (!this._isDragging || !this._draggingPiece) return;
+
+          const rect = this._canvas[0].getBoundingClientRect();
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+
+          // Target for the piece's reference point (0,0)
+          const targetPieceRefX =
+            Math.floor(mouseX / this.options.blockSize) -
+            this._pieceDragOffsetBlocksX;
+          const targetPieceRefY =
+            Math.floor(mouseY / this.options.blockSize) -
+            this._pieceDragOffsetBlocksY;
+
+          this._draggingPiece._ghostX = targetPieceRefX;
+          this._draggingPiece._ghostY = targetPieceRefY;
+          this._render();
+        },
+
+        _handleMouseUp: function (e) {
+          $(document).off("mousemove.dynPuzzle mouseup.dynPuzzle");
+          if (!this._isDragging || !this._draggingPiece) return;
+
+          const ghost = this._draggingPiece;
+          // only do anything if we actually set _ghostX/Y on mousemove
+          if (ghost._ghostX !== undefined && ghost._ghostY !== undefined) {
+            const targetX = ghost._ghostX;
+            const targetY = ghost._ghostY;
+
+            if (
+              !this._isOutOfBounds(ghost, targetX, targetY) &&
+              !this._checkPieceToPieceCollision(
+                ghost,
+                targetX,
+                targetY,
+                ghost
+              )
+            ) {
+              ghost.x = targetX;
+              ghost.y = targetY;
+            }
+          }
+
+          // clean up
+          delete ghost._ghostX;
+          delete ghost._ghostY;
+          this._isDragging = false;
+          this._draggingPiece = null;
+          this._render();
+        },
+        _resizeInnerSquare: function (delta) {
+          const newSize = this._innerSquare.size + delta * 2;
+          if (
+            newSize >= this.options.minInnerSquareSize &&
+            newSize <= this.options.maxInnerSquareSize
+          ) {
+            this._innerSquare.size = newSize;
+            this._innerSquare.x = Math.floor(
+              (this.options.outerGridWidth - this._innerSquare.size) / 2
+            );
+            this._innerSquare.y = Math.floor(
+              (this.options.outerGridHeight - this._innerSquare.size) / 2
+            );
+            $("#inner-square-size-display").text(this._innerSquare.size);
+            this.options.onInnerSquareResize.call(this.element, newSize);
+            this._updateBudgetValue();
+            this._render();
+          }
+        },
+
+        _transformSelectedPiece: function (direction) {
+          if (
+            this._selectedPiece &&
+            this._selectedPiece.transformShape(direction)
+          ) {
+            this._updateSelectedPieceUI();
+            this._render();
+          }
+        },
+
+        _updateSelectedPieceUI: function () {
+          if (this._selectedPiece) {
+            const idx = this._selectedPiece.currentShapeKeyIndex;
+            let symbol = "¢";
+            let weight = 600;
+
+            if (idx === 1) {
+              symbol = "$";
+              weight = 400;
+            } else if (idx === 2) {
+              symbol = "$";
+              weight = 600;
+            } else if (idx === 3) {
+              symbol = "$";
+              weight = 900;
+            } else if (idx >= 4) {
+              symbol = "$$";
+              weight = 1000;
+            }
+
+            $("#piece-value-symbol").text(symbol).css("font-weight", weight);
+            $("#selected-piece-id").text(this._selectedPiece.typeKey);
+            $("#selected-piece-shape-name").text(
+              this._selectedPiece.getCurrentShapeDefinition().name
+            );
+            $("#selected-piece-info").show();
+            $("#no-piece-selected-msg").hide();
+          } else {
+            $("#selected-piece-info").hide();
+            $("#no-piece-selected-msg").show();
+          }
+        },
+
+        _isOutOfBounds: function (piece, newX, newY) {
+          const x = newX !== undefined ? newX : piece.x;
+          const y = newY !== undefined ? newY : piece.y;
+          const blocks = piece.getBlocks();
+          if (!blocks || blocks.length === 0) return false; // No blocks, can't be out of bounds
+
+          for (let i = 0; i < blocks.length; i += 2) {
+            const bx = x + blocks[i];
+            const by = y + blocks[i + 1];
+            if (
+              bx < 0 ||
+              bx >= this.options.outerGridWidth ||
+              by < 0 ||
+              by >= this.options.outerGridHeight
+            ) {
+              return true;
+            }
+          }
+          return false;
+        },
+
+        _checkPieceToPieceCollision: function (
+          pieceToCheck,
+          newX,
+          newY,
+          ignorePieceInstance
+        ) {
+          const blocksToCheck = pieceToCheck.getBlocks();
+          if (!blocksToCheck || blocksToCheck.length === 0) return false;
+
+          for (let i = 0; i < blocksToCheck.length; i += 2) {
+            const checkGridX = newX + blocksToCheck[i];
+            const checkGridY = newY + blocksToCheck[i + 1];
+
+            for (const otherPiece of this._allPieces) {
+              if (otherPiece === ignorePieceInstance) continue;
+              if (otherPiece.isBlockAt(checkGridX, checkGridY)) {
+                return true;
+              }
+            }
+          }
+          return false;
+        },
+
+        _render: function () {
+          this._ctx.clearRect(
+            0,
+            0,
+            this._canvas.width(),
+            this._canvas.height()
+          );
+          this._drawOuterGrid();
+
+          for (const piece of this._allPieces) {
+            if (piece !== this._draggingPiece) {
+              // Don't draw the actual piece if it's being dragged (ghost will be drawn)
+              this._drawPiece(piece, piece === this._selectedPiece);
+            }
+          }
+
+          if (
+            this._isDragging &&
+            this._draggingPiece &&
+            this._draggingPiece._ghostX !== undefined
+          ) {
+            // Check if ghost position is set
+            this._drawPieceGhost(
+              this._draggingPiece,
+              this._draggingPiece._ghostX,
+              this._draggingPiece._ghostY
+            );
+          }
+          this._drawInnerSquare();
+          const allInside = this._checkAllPiecesInsideInnerSquare();
+          $("#submit-button").prop("disabled", !allInside);
+        },
+
+        _drawOuterGrid: function () {
+          this._ctx.fillStyle = this._theme.background;
+          this._ctx.fillRect(
+            0,
+            0,
+            this._canvas.width(),
+            this._canvas.height()
+          );
+          this._ctx.strokeStyle = this._theme.gridLineColor;
+          this._ctx.lineWidth = 0.5; // Thinner lines
+          for (let x = 0; x <= this.options.outerGridWidth; x++) {
+            this._ctx.beginPath();
+            this._ctx.moveTo(x * this.options.blockSize + 0.5, 0); // +0.5 for crisp lines
+            this._ctx.lineTo(
+              x * this.options.blockSize + 0.5,
+              this.options.outerGridHeight * this.options.blockSize
+            );
+            this._ctx.stroke();
+          }
+          for (let y = 0; y <= this.options.outerGridHeight; y++) {
+            this._ctx.beginPath();
+            this._ctx.moveTo(0, y * this.options.blockSize + 0.5);
+            this._ctx.lineTo(
+              this.options.outerGridWidth * this.options.blockSize,
+              y * this.options.blockSize + 0.5
+            );
+            this._ctx.stroke();
+          }
+        },
+
+        _drawInnerSquare: function () {
+          this._ctx.strokeStyle = this._theme.innerSquareBorderColor;
+          this._ctx.lineWidth = 2;
+          this._ctx.strokeRect(
+            this._innerSquare.x * this.options.blockSize,
+            this._innerSquare.y * this.options.blockSize,
+            this._innerSquare.size * this.options.blockSize,
+            this._innerSquare.size * this.options.blockSize
+          );
+        },
+
+        _drawPiece: function (piece, isSelected) {
+          const blocks = piece.getBlocks();
+          if (!blocks || blocks.length === 0) return;
+          this._ctx.fillStyle = piece.color;
+
+          this._ctx.strokeStyle = isSelected
+            ? this._theme.selectedPieceStrokeColor
+            : this._theme.pieceStrokeColor;
+          this._ctx.lineWidth = isSelected
+            ? this._theme.selectedPieceStrokeWidth
+            : this._theme.pieceStrokeWidth;
+
+          for (let i = 0; i < blocks.length; i += 2) {
+            // Adjust for crisp lines if lineWidth is odd
+            const strokeOffset = this._ctx.lineWidth % 2 === 1 ? 0.5 : 0;
+            const x =
+              (piece.x + blocks[i]) * this.options.blockSize + strokeOffset;
+            const y =
+              (piece.y + blocks[i + 1]) * this.options.blockSize +
+              strokeOffset;
+            const s = this.options.blockSize;
+
+            this._ctx.fillRect(x, y, s, s);
+            this._ctx.strokeRect(x, y, s, s);
+          }
+        },
+
+        _drawPieceGhost: function (piece, ghostX, ghostY) {
+          const blocks = piece.getBlocks();
+          if (!blocks || blocks.length === 0) return;
+          const isValidMove =
+            !this._isOutOfBounds(piece, ghostX, ghostY) &&
+            !this._checkPieceToPieceCollision(piece, ghostX, ghostY, piece);
+
+          this._ctx.fillStyle = isValidMove
+            ? this._theme.ghostFillColorValid
+            : this._theme.ghostFillColorInvalid;
+          this._ctx.strokeStyle = this._theme.ghostStrokeColor;
+          this._ctx.lineWidth = 1;
+
+          for (let i = 0; i < blocks.length; i += 2) {
+            const strokeOffset = 0.5; // For 1px line width
+            const x =
+              (ghostX + blocks[i]) * this.options.blockSize + strokeOffset;
+            const y =
+              (ghostY + blocks[i + 1]) * this.options.blockSize +
+              strokeOffset;
+            const s = this.options.blockSize;
+
+            this._ctx.fillRect(x, y, s, s);
+            this._ctx.strokeRect(x, y, s, s);
+          }
+        },
+
+        theme: function (newThemeNameOrObject) {
+          if (typeof newThemeNameOrObject === "undefined") {
+            return this.options.theme; // Return current theme name or null if custom object
+          }
+          let themeObj;
+          if (typeof newThemeNameOrObject === "string") {
+            this.options.theme = newThemeNameOrObject;
+            themeObj =
+              DynamicBlockThemes[newThemeNameOrObject] ||
+              DynamicBlockThemes.default;
+          } else {
+            this.options.theme = null; // Custom theme object
+            themeObj = newThemeNameOrObject;
+          }
+          this._theme = $.extend(
+            true,
+            {},
+            DynamicBlockThemes.default,
+            themeObj
+          ); // Deep merge with default
+
+          if (this._allPieces.length > 0) {
+            this._allPieces.forEach((p) => {
+              p.color = this._theme.pieceColors[p.typeKey] || "#BDC3C7"; // Fallback color
+            });
+          }
+          if (this._ctx) this._render(); // Re-render if canvas exists
+        },
+
+        _randInt: function (a, b) {
+          return a + Math.floor(Math.random() * (1 + b - a));
+        },
+
+        _destroy: function () {
+          this._canvas.off(".dynPuzzle");
+          $(document).off(".dynPuzzle");
+          $(
+            "#inner-square-increase, #inner-square-decrease, #piece-transform-next, #piece-transform-prev"
+          ).off(".dynPuzzle");
+          this.element.empty().removeClass("dynamic-puzzle-holder");
+        },
+      });
+    })(jQuery);
+    // --- Initialize ---
+    $(document).ready(function () {
+      $("#game-area").dynamicBlockPuzzle({
+        outerGridWidth: 15,
+        outerGridHeight: 15,
+        blockSize: 34,
+        initialInnerSquareSize: 7,
+        numPieces: 8,
+        theme: "candy",
+        onPieceSelect: function (p) {
+          console.log("Selected Piece ID:", p ? p.id : "None");
+        },
+      });
+    });
+
+
+$(document).on("click", "#submit-button", function () {
+    console.log("clicked");
+
+    const puzzle = $("#game-area").dynamicBlockPuzzle("instance");
+
+    puzzle._allPieces.forEach(piece => {
+      const idx = piece.currentShapeKeyIndex;
+      PolicyManager.register({
+        name: `Policy for ${piece.typeKey}`,
+        costUpfront: 0,
+        duration: Infinity,
+        immediate(v) {},
+        tick(v) {},
+      });
+    });
+
+    const allocated = parseInt($("#budget-val").text(), 10);
+    PolicyManager.register({
+      name: "Budget Allocation",
+      costUpfront: allocated,
+      duration: 1,
+    });
+
+    Engine.play("Event1");
+});
+
+  <</script>>
+  <style>
+  /* styles.css - Light Mode */
+
+body {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+
+}
+
+.puzzle-layout {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.dynamic-puzzle-holder {
+}
+
+#game-area canvas {
+  display: block;
+  background-color: #ffffff; /* Light canvas background */
+  border: 1px solid #dcdcdc; /* Subtle border for contrast */
+}
+.dollar-sign {
+  font-family: "Spectral", serif;
+  font-size: 30px;
+  font-weight: 400;
+  color: #0066cc;
+}
+
+.submit-btn {
+  background-color: #ffffff;
+  color: #111827; /* Tailwind slate-900 */
+  border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin: 0.3rem;
+  position: relative;
+  top: -0.25rem;
+}
+
+.submit-btn:disabled {
+  opacity: 0.35;
+  background-color: #f3f4f6; /* Tailwind gray-100 */
+  color: #9ca3af; /* Tailwind gray-400 */
+  border-color: #d1d5db; /* Tailwind gray-300 */
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.title {
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #383838;
+  text-transform: uppercase;
+}
+
+.digits2 {
+  font-family: "Spectral", serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #000000;
+}
+.controls-panel {
+  width: 510px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border-radius: 15px;
+  border-color: rgba(156, 162, 166, 0.32);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.controls-panel h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.1em;
+  color: #2980b9; /* Accent color for headings */
+  border-bottom: 1px solid #ecf0f1;
+  padding-bottom: 8px;
+}
+
+.controls-panel p {
+  margin-top: 5px;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  line-height: 1.4;
+  color: #2c3e50;
+}
+
+.control-group {
+  margin-bottom: 18px;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #555555;
+}
+
+.selected-piece-id {
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #383838;
+  text-transform: uppercase;
+}
+.control-btn,
+#inner-square-size-display,
+#selected-piece-shape-name {
+  background-color: #ffffff;
+  color: #4d4d4d;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin: 0.3rem;
+  position: relative;
+  top: -0.25rem;
+}
+
+.control-btn:hover {
+  background-color: #f9fafb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: scale(1.02);
+}
+
+.control-btn:active {
+  background-color: #f3f4f6;
+  transform: scale(0.96);
+}
+
+.control-btn:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+#inner-square-size-display,
+#selected-piece-shape-name {
+  cursor: default;
+  background-color: #e8e8e8;
+  padding: 8px;
+  display: inline-block;
+  min-width: 30px;
+  text-align: center;
+}
+
+#selected-piece-controls-group {
+  margin-top: 15px;
+}
+
+#no-piece-selected-msg {
+  font-style: italic;
+  color: #999999;
+  font-size: 0.85em;
+}
+.passage {
+  width: 100% !important;
+}
+
+  </style>
+
+
+:: Untitled Passage 1 {"position":"300,50","size":"100,100"}
+<<set $history = []>>
+<div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
+
+Despite these goals, the nation's capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city's history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what's working, what's missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
+
+You've been brought into the city halls at a pivotal moment, right before the next phase of the 10-Year Plan is finalized. Your task is to explore how different decisions, funding priorities, and policy trade-offs change outcomes over time. You can't solve everything at once. But you can change the direction we're heading — starting now.
+
+<<set $turn = 1>>
+<<set $year= 1>>
+<<set $currentYear= 2024>>
+<<set $budget = 215>>
+
+<<set $homelessTotal = 2952>>
+
+<!-- Demographic breakdown of CURRENT homeless population -->
+<<set $pop = {
+  // Housing status
+  unsheltered: 472,      // 16% of 2952
+  sheltered: 1269,       // 43%
+  transitional: 708,     // 24%
+  institutional: 59,     // 2%
+  chronic: 1446,         // 49%
+  withChildren: 295,     // 10%
+  fosterCareHistory: 561, // 19%
+
+  // Identity demographics
+  male: Math.round(2952 * 0.56),
+  female: Math.round(2952 * 0.36),
+  transNB: Math.round(2952 * 0.02),
+  age25to49: Math.round(2952 * 0.58),
+  lgbq: Math.round(2952 * 0.11),
+  lgbtqYouth: Math.round(2952 * 0.21),
+  racialized: Math.round(2952 * 0.56),
+  indigenous: 479,           // exact number provided
+  veteran: Math.round(2952 * 0.04),
+  immigrant: Math.round(2952 * 0.42)
+}>>
+
+<!-- INFLOW system -->
+<<set $inflowBase = 0>> <!-- Number of new homeless per turn -->
+
+<!-- Percentage distribution of INCOMING new homelessness cases -->
+<<set $inflowShare = {
+  // Housing status (default to unsheltered for new arrivals)
+  unsheltered: 0.16,
+  sheltered: 0.43,
+  transitional: 0.24,
+  institutional: 0.02,
+  chronic: 0.49,
+  withChildren: 0.10,
+  fosterCareHistory: 0.19,
+
+  // Identity demographics
+  male: 0.56,
+  female: 0.36,
+  transNB: 0.02,
+  lgbtqYouth: 0.21,
+  age25to49: 0.58,
+  lgbq: 0.11,
+  racialized: 0.56,
+  indigenous: 479 / 2952,    // ~16.2%
+  veteran: 0.04,
+  immigrant: 0.42
+}>>
+
+
+<!-- System + policy levers -->
+<<set $publicOpinion = 50>>
+<<set $serviceCoordination = 60>>
+<<set $systemCapacity = 100>>
+<<set $politicalCapital = 3>>
+
+<<script>>
+  // Create an initial snapshot representing the state *before* year 1 begins.
+  // This helps in comparing the first year's results against something.
+  const v = State.variables;
+  const initialPopSnapshot = {}; // Deep copy $pop
+  for (const key in v.pop) {
+      if (Object.prototype.hasOwnProperty.call(v.pop, key)) {
+          initialPopSnapshot[key] = v.pop[key];
+      }
+  }
+  const initialSnapshot = {
+    year: 0, // Conceptual "Year 0" or pre-game state
+    turn: 0, // Conceptual "Turn 0"
+    homelessTotal: v.homelessTotal,
+    pop: initialPopSnapshot,
+    budget: v.budget,
+    publicOpinion: v.publicOpinion,
+    serviceCoordination: v.serviceCoordination,
+    systemCapacity: v.systemCapacity,
+    politicalCapital: v.politicalCapital
+  };
+  v.history.push(initialSnapshot);
+<</script>>
+
+* [[Start|Start]]
+[[Tetris|Tetris]]
+</div>
+
+
+:: Untitled Passage 2 {"position":"725,1050","size":"100,100"}
+
+
+
+:: YourNextPassageAfterReport {"position":"725,1350","size":"100,100"}
+
+
+
 :: headAppend {"position":"1025,300","size":"100,100"}
-<script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>  <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css"
+    />
+
 
 
 :: headAppender [script] {"position":"1150,300","size":"100,100"}
@@ -766,7 +3397,32 @@ window.PolicyManager = {
       v.pop[demo] = (v.pop[demo] || 0) + num;
       v.homelessTotal += num;
     }
-
+    
+    if (!Array.isArray(v.history)) {
+      // console.warn("PolicyManager.tick(): Initializing v.history as it was not an array."); // Optional: for debugging
+      v.history = [];
+    }
+    
+// Deep copy $pop for the snapshot
+    const popSnapshot = {};
+    for (const key in v.pop) {
+        if (Object.prototype.hasOwnProperty.call(v.pop, key)) {
+            popSnapshot[key] = v.pop[key];
+        }
+    }
+    const snapshot = {
+      year: v.year, // Current year value after any increments for this period
+      turn: v.turn, // Current turn value
+      homelessTotal: v.homelessTotal,
+      pop: popSnapshot,
+      budget: v.budget,
+      publicOpinion: v.publicOpinion,
+      serviceCoordination: v.serviceCoordination,
+      systemCapacity: v.systemCapacity,
+      politicalCapital: v.politicalCapital
+    };
+    v.history.push(snapshot);
+    // === HISTORY SNAPSHOT END ===
     if (typeof updateUI === 'function') updateUI();
   }
 };
@@ -775,7 +3431,7 @@ function updateTimeline() {
 
   // 1️⃣ Map your logical year index → real year
   const yearIndex  = v.year || (v.year = 1);        // 1-based
-  const displayYear = 2024 + (yearIndex - 1);       // e.g. 1 → 2024
+  const displayYear = v.year;       // e.g. 1 → 2024
 
   // 2️⃣ Highlight the current year
   $('#timeline .year').removeClass('active');
@@ -819,6 +3475,15 @@ $(window).on('load', updateTimeline);
 $(document).on(':passagestart :passagedisplay', updateTimeline);
 updateTimeline();
 
+function pickOpinionFace(val) {
+  if (val < 20)      return 'ヽ(ಠ‸ಠ)ﾉ';   // super-mad
+  else if (val < 40) return '•`_´•';     // mad
+  else if (val < 60) return '•_•';       // neutral
+  else if (val < 80) return '^_^';       // happy
+  else               return 'ᕕ(ᐛ)ᕗ';  // very happy
+}
+
+
 
 /* === 📊 UI METRIC UPDATER (STATIC + ANIMATED) === */
 function staticUIUpdater() {
@@ -841,6 +3506,11 @@ function staticUIUpdater() {
     bar.style.height = '100%';
   }
 
+    const popVal = v.publicOpinion || 0;
+
+    document.getElementById('public-opinion-emoji').textContent = pickOpinionFace(popVal);
+
+  
   // 🟢 Political Capital Dots
   const pc = v.politicalCapital || 0;
   document.querySelectorAll('.balance-meter .circle').forEach(circle => {
@@ -891,6 +3561,10 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
         }
       });
 
+      const popVal = v.publicOpinion || 0;
+
+    document.getElementById('public-opinion-emoji').textContent = pickOpinionFace(popVal);
+      
       // 📊 Service Coordination Bar (responsive)
       const bar = document.getElementById('coordination-bar');
       const isMobile = window.innerWidth <= 979;
@@ -925,6 +3599,33 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
     console.warn('⚠️ Motion.js failed to load. Falling back to static UI updates.');
   });
 
+$.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
+  .done(() => {
+    $(document).on(':passagedisplay', () => {
+      document.querySelectorAll('.animated-box').forEach(box => {
+        // Initial style for animation
+        Object.assign(box.style, {
+          backgroundColor: '#3498db',
+          color:           '#fff',
+          borderRadius:    '12px',
+          padding:         '1em',
+          display:         'inline-block',
+          opacity:         '0',
+          transform:       'scale(0.8)',
+        });
+
+        // Animate in
+        Motion.animate(
+          box,
+          { opacity: [0, 1], scale: [0.8, 1] },
+          { duration: 0.6, easing: 'ease-in-out' }
+        );
+      });
+    });
+  })
+  .fail(() => {
+    console.warn('⚠️ Motion.js failed to load.');
+  });
 
 /* === 📱 MOBILE TOOLTIP SUPPORT === */
 $(function() {
@@ -945,6 +3646,19 @@ $(function() {
 :: StoryStylesheet [stylesheet]
 @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
 
+@import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
+
+.million {
+  font-size: 24px;
+  margin-left: -.5em;
+}
+#public-opinion-emoji {
+  font-family: Inter, sans-serif;
+  font-size: 1.1em;
+  line-height: 1;
+  display: inline-block;
+  margin-left: 8px;
+}
 
 
 /* ----------  MOBILE ≤640px  ---------- */
@@ -1255,6 +3969,7 @@ body .wrap {
   border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
   display: none;
   font-size: 1em;
+  color: #333;
   font-weight: 400;
   margin-bottom: 5px;
   padding-bottom: 5px;
