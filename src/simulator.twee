@@ -1,10 +1,10 @@
 :: StoryTitle
-new 2
+main
 
 
 :: StoryData
 {
-  "ifid": "a7f90e11-1b50-433c-ab4d-862befc609ec",
+  "ifid": "26f4de76-acd0-49d0-88d7-d40f80a597f8",
   "format": "SugarCube",
   "format-version": "2.37.3",
   "start": "Start",
@@ -12,168 +12,497 @@ new 2
 }
 
 
-:: Engagement {"position":"787.5,425","size":"100,100"}
-<<set $budget -= 10>>
-<<set $systemCoordination += 25>>
-<<set $publicTrust += 15>>
+:: ChooseProposal {"position":"600,550","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
 
-<p>You bring together people with lived experience, service providers, and city departments for co-design. It doesn't look flashy on the surface, but over time, plans get smarter and more targeted.</p>
-
-<p>You now have $<<print $budget>>M left.</p>
-<p>
-	•	[[Continue to next quarter|QuarterTwo]]
+<div class="passageContent"> Students in the C4 COIL has proposed solutions to homelessness. Pick one 
 
 
-:: HousingFirst {"position":"537.5,425","size":"100,100"}
+* [[New Arrival Kits|NewArrivalKits]]
+* [[Renoviction Awareness|RenovictionAwareness]]
+</div>
+
+
+:: Dish out funding {"position":"600,825","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
+<div class="passageContent">
+  <h2>Fund Local Services</h2>
+  <p>You have <strong>$<<= $budget >>M</strong> to distribute among the following Ottawa initiatives:</p>
+
+  <div>
+    <label for="salvation">The Salvation Army</label>
+    <input type="range" id="salvation" min="0" max="100" step="1" value="0">
+    <span id="salvation-val">0</span>M
+  </div>
+
+  <div>
+    <label for="shepherd">Good Shepherd Ministries</label>
+    <input type="range" id="shepherd" min="0" max="100" step="1" value="0">
+    <span id="shepherd-val">0</span>M
+  </div>
+
+  <div>
+    <label for="felix">St. Felix Centre</label>
+    <input type="range" id="felix" min="0" max="100" step="1" value="0">
+    <span id="felix-val">0</span>M
+  </div>
+
+  <hr>
+  <p><strong>Total Allocated:</strong> <span id="total">0</span>M of $<<= $budget >>M</p>
+  <p id="warning" style="color: red; display: none;">⚠️ You've reached your funding limit.</p>
+
+  <p>* [[Continue|Event1]]</p>
+</div>
+<<script>>
+$(document).on(':passagedisplay', function () {
+  setTimeout(() => {
+    const maxBudget = State.variables.budget;
+    const sliders = ['salvation', 'shepherd', 'felix'];
+
+    function updateFunding() {
+      let total = 0;
+
+      sliders.forEach(id => {
+        const val = parseInt(document.getElementById(id).value, 10);
+        total += val;
+      });
+
+      // Enforce budget cap
+      if (total > maxBudget) {
+        document.getElementById('warning').style.display = 'block';
+
+        const active = document.activeElement;
+        if (sliders.includes(active.id)) {
+          const overage = total - maxBudget;
+          const curVal = parseInt(active.value, 10);
+          const newVal = curVal - overage;
+          active.value = Math.max(newVal, 0);
+          total -= overage;
+        }
+      } else {
+        document.getElementById('warning').style.display = 'none';
+      }
+
+      // Update visuals
+      sliders.forEach(id => {
+        document.getElementById(id + '-val').textContent = document.getElementById(id).value;
+      });
+      document.getElementById('total').textContent = total;
+    }
+
+    sliders.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', updateFunding);
+      }
+    });
+  }, 0);
+});
+<</script>>
+
+
+:: Emergency Shelter Expansion {"position":"300,400","size":"100,100"}
 <<script>>
 PolicyManager.register({
-  name: "Housing First",
-  costUpfront: 50,
-  costPerTurn: 5,
-  duration: 500,
+  name: "Emergency Shelter Expansion",
+  costUpfront: 10,
+  costPerTurn: 0,
+  duration: 3, // heavy up-front push
 
   immediate(v) {
-    v.systemCoordination += 10;
-    v.publicOpinion -= 5;
+    v.unsheltered        -= 500;
+    v.sheltered        += 500;
+    v.staffMorale        -= 10;
+    v.publicOpinion      += 1;
   },
 
-  tick(v, _, age) {
-    if(age >= 2) {
-      const exits = 100 + 25*(age-2);
-      
-      // Example 1: Random exits across all demographics
-      // window.Util.exitPeople(exits);
-      
-      // Example 2: Target specific demographics with custom proportions
-      window.Util.exitPeople(exits, {
-        // Prioritize families with children
-        withChildren: 5.0,    // 5x weight
-        // All other demographics get default weight (1.0)
-      });
+  tick(v, Util, age) {
+    // One-quarter later, about 30% return
+    if (age === 2) {
+      const reenter = Math.round(500 * 0.3);
+      v.sheltered        -= reenter;
+      v.unsheltered += reenter;
+      v.homelessTotal += reenter;
     }
   }
 });
 <</script>>
 
-<p>You launch 150 units of permanent supportive housing. It takes months to complete and costs more per person—but it works. Local media criticize the slow pace, but service providers report long-term stability.</p>
+<div class="passageContent"> 
+<p>You open 300 beds and clear two major encampments. The media love the “huge action,” but by Quarter 3 about 150 people have cycled back out.</p>
 
-<p>You now have **$budget million** left.</p>
-
-<p>
-* [[Continue to next quarter|QuarterTwo]]
-</p>
+[[Continue|ChooseProposal]]
+</div>
 
 
-:: MentalHealth {"position":"662.5,425","size":"100,100"}
-<<set $budget -= 40>>
-<<set $staffMorale += 10>>
-<<set $unsheltered -= 300>>
-<<set $systemCoordination += 10>>
 
-<p>You fund new mobile teams and open a low-barrier detox centre. Fewer people cycle through ERs and jails. Frontline morale improves, but critics say you're not "solving" homelessness fast enough.</p>
-
-<p>You now have $<<print $budget>>M left.</p>
-<p>
-	•	[[Continue to next quarter|QuarterTwo]]
-</p>
-
-
-:: QuarterFour {"position":"412.5,800","size":"100,100"}
-<<set $turn += 1>>
+:: Engagement {"position":"900,400","size":"100,100"}
 <<script>>
-PolicyManager.tick();
+PolicyManager.register({
+  name: "Lived Experience Consultation",
+  costUpfront: 10,
+  costPerTurn: 2,
+  duration: 20, // lasts 4 turns (1 year)
+
+  immediate(v) {
+    v.systemCoordination += 5;
+    v.publicOpinion    += 15;
+  },
+
+  tick(v, Util, age) {
+    // After two quarters, you start to see people move out:
+    if (age >= 2) {
+     v.systemCoordination += 1;
+     v.publicOpinion += 1;
+      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
+      window.Util.exitPeople(exits);
+    }
+  }
+});
+<</script>>
+<div class="passageContent"> 
+<p>You bring together people with lived experience, service providers, and city departments for co-design. It doesn’t look flashy, but by mid-year your plans have become smarter and more targeted.
+
+[[Continue|ChooseProposal]]
+
+</div>
+
+
+
+:: Event1 {"position":"600,950","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
+<div class="passageContent">
+  <h2>!!!</h2>
+  <p>
+    It's mid-July and your city is experiencing an extreme heat wave. Temperatures are topping 40°C with high humidity. Shelters are over capacity, cooling centers are limited, and unhoused residents are reporting heat-related illness.
+  </p>
+
+  <p><strong>Select all the actions you want to take:</strong></p>
+
+  <form id="heatwave-form">
+    <ul>
+      <li>
+        <label>
+          <input type="checkbox" name="response" value="cooling_centres">
+          Open temporary cooling centres
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="response" value="water_kits">
+          Distribute water & hygiene kits via outreach
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="response" value="transport_passes">
+          Provide transit passes for access to indoor spaces
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" name="response" value="hotel_vouchers">
+          Issue hotel vouchers to medically vulnerable people
+        </label>
+      </li>
+    </ul>
+  </form>
+
+
+  <p id="error-msg" style="color: red; display: none;">Please select at least one option before continuing.</p>
+  <p>* [[Continue|PIT]]</p>
+
+</div>
+
+
+
+:: HousingFirst {"position":"500,400","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Build City Affordable Housing",
+  costUpfront: 10,
+  duration: 999999,
+
+  immediate(v) {
+    v.publicOpinion -= 15;
+    // initial setup already deducts costUpfront
+  },
+
+  tick(v, Util, age) {
+    // Decreasing operational cost over time, then net revenue
+    let cost = 8;
+
+    if (age >= 2)  cost = 6;
+    if (age >= 5) cost = 3;
+    if (age >= 7) cost = -1; // begins generating surplus
+
+    v.budget -= cost;
+
+    // Exit people: housing units become available over time
+    if (age >= 2) {
+      const exits = 100 + Math.floor(25 * (age - 2)); // gradual ramp-up
+      window.Util.exitPeople(exits);
+    }
+
+    // Service coordination stabilizes and improves after age 10
+    if (age >= 10 && age < 30) {
+      v.serviceCoordination += 2;
+    }
+  }
+});
 <</script>>
 
-<h2>Quarter $turn Report</h2>
-
-<p>
-<h4>Homeless Population:</h4>$homelessTotal  
-**Budget Remaining:** $budget million  
-**Public Trust:** $publicTrust  
-**Staff Morale:** $staffMorale  
-**System Coordination:** $systemCoordination  
-<<= Object.entries($pop).map(([key, val]) => `${key}: ${val} people`).join("<br>") >>
-</p>
-
-<p>
-* [[Proceed to next quarter|QuarterFour]]
-</p>
 
 
-:: QuarterThree {"position":"412.5,675","size":"100,100"}
-<<set $turn += 1>>
+<div class="passageContent"> 
+<p>building</p>
+
+[[Continue|ChooseProposal]]
+</div>
+
+
+
+:: MentalHealth {"position":"700,400","size":"100,100"}
 <<script>>
-PolicyManager.tick();
+PolicyManager.register({
+  name: "Frontline Mental Health & Addiction Support",
+  costUpfront: 4,
+  costPerTurn: 2,
+  duration: 10,
+
+  immediate(v) {
+    v.staffMorale        += 10;
+    v.unsheltered        -= 300;
+    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
+  },
+
+  tick(v, Util, age) {
+    // Each quarter, 3% of chronic population exit through wrap-around care
+    const chronicPop = v.pop.chronic;
+    const exits     = Math.round(chronicPop * 0.03);
+    window.Util.exitPeople(exits, { chronic: 1 });
+  }
+});
+<</script>>
+<div class="passageContent"> 
+<p>You fund mobile response teams and a low-barrier detox centre. ER visits drop immediately, and by year’s end the chronically homeless count is noticeably down.</p>
+
+[[Continue|ChooseProposal]]
+</div>
+
+
+
+:: NewArrivalKits {"position":"700,700","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Renoviction Awareness",
+  costUpfront: 4,
+  costPerTurn: 1,
+  duration: 3, // heavy up-front push
+
+  immediate(v) {
+  },
+
+  tick(v, Util, age) {
+    // Nothing for now
+  }
+});
 <</script>>
 
-<h2>Quarter $turn Report</h2>
+<div class="passageContent"> 
+<p>Info </p>
 
-<p>
-**Homeless Population:** $homelessTotal  
-**Budget Remaining:** $budget million  
-**Public Trust:** $publicTrust  
-**Staff Morale:** $staffMorale  
-**System Coordination:** $systemCoordination  
-<<= Object.entries($pop).map(([key, val]) => `${key}: ${val} people`).join("<br>") >>
-</p>
-
-<p>
-* [[Proceed to next quarter|QuarterFour]]
-
-</p>
+[[Continue|Dish out funding]]
+</div>
 
 
-:: QuarterTwo {"position":"412.5,550","size":"100,100"}
+
+:: NextYear {"position":"600,1300","size":"100,100"}
 <<set $turn += 1>>
+<<set $year += 1>>
+
+<div class="passageContent"> 
+<h2>End of Year 2024 Summary</h2>
+
+<p>After twelve months under your chosen strategy:</p>
+<ul>
+ <li><strong>Total Homeless Population:</strong> <<= $homelessTotal >> (change of <<= Math.round((($homelessTotal - 2952)/2952)*100) >>%)</li>
+    <li><strong>Budget Remaining:</strong> $<<print $budget>>M</li>
+    <li><strong>Public Trust:</strong> <<= $publicOpinion >></li>
+    <li><strong>Service Coordination:</strong> <<= $systemCoordination >></li>
+    <li><strong>System Capacity:</strong> <<= $systemCapacity >></li>
+    <li><strong>Political Capital:</strong> <<= $politicalCapital >></li>
+</ul>
+
+<p>
+  You’ve done ...... and ...... to .....
+</p>
+
+<p>
+</p>
+</div>
+
+
+
+:: PIT {"position":"600,1100","size":"100,100"}
+<<set $turn += 1>>
+
+<<script>>window.PolicyManager.tick();<</script>>
+
+<div class="passageContent">
+  <h2>📍 Point-in-Time Snapshot, 2024</h2>
+  <p>This report reflects the current state of homelessness and system readiness. </p>
+
+ 
+  <h3>🏠</h3>
+  <ul>
+    <li><strong>Unsheltered:</strong> <<= $pop.unsheltered >></li>
+    <li><strong>Sheltered:</strong> <<= $pop.sheltered >></li>
+    <li><strong>Transitional Housing:</strong> <<= $pop.transitional >></li>
+    <li><strong>Institutional Settings:</strong> <<= $pop.institutional >></li>
+    <li><strong>Chronically Homeless:</strong> <<= $pop.chronic >></li>
+    <li><strong>With Children:</strong> <<= $pop.withChildren >></li>
+    <li><strong>Foster Care History:</strong> <<= $pop.fosterCareHistory >></li>
+  </ul>
+
+  <h3>🧑‍🤝‍🧑</h3>
+  <ul>
+    <li><strong>Male:</strong> <<= $pop.male >></li>
+    <li><strong>Female:</strong> <<= $pop.female >></li>
+    <li><strong>Trans / Non-binary:</strong> <<= $pop.transNB >></li>
+    <li><strong>Age 25–49:</strong> <<= $pop.age25to49 >></li>
+    <li><strong>LGBQ:</strong> <<= $pop.lgbq >></li>
+    <li><strong>LGBTQ+ Youth:</strong> <<= $pop.lgbtqYouth >></li>
+    <li><strong>Racialized:</strong> <<= $pop.racialized >></li>
+    <li><strong>Indigenous:</strong> <<= $pop.indigenous >></li>
+    <li><strong>Veterans:</strong> <<= $pop.veteran >></li>
+    <li><strong>Immigrants / Refugees:</strong> <<= $pop.immigrant >></li>
+  </ul>
+
+  <p><em>This snapshot will help guide your next set of decisions in the evolving response. </em></p>
+
+  <p>📌 [[Continue|NextYear]]</p>
+</div>
+
+
+:: QuarterFour {"position":"200,1300","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
+<div class="passageContent"> 
+  <h2>Quarter 4 Report</h2>
+
+  <p><strong>Year:</strong> <<= $year >></p>
+  <ul>
+    <li><strong>Budget Remaining:</strong> $<<print $budget>>M</li>
+    <li><strong>Public Trust:</strong> <<print $publicOpinion>></li>
+    <li><strong>Service Coordination:</strong> <<print $serviceCoordination>></li>
+    <li><strong>Staff Morale:</strong> <<print $staffMorale>></li>
+    <li><strong>System Capacity:</strong> <<print $systemCapacity>></li>
+    <li><strong>Political Capital:</strong> <<print $politicalCapital>></li>
+    <li><strong>Total Homeless Population:</strong> <<print $homelessTotal>></li>
+  </ul>
+
+  <p><em>You’ve completed one full year of strategy implementation.</em></p>
+
+  <p>
+    <strong>→</strong> [[See End-of-Year Summary|QuarterTwo]]
+  </p>
+</div>
+
+
+:: QuarterThree {"position":"300,1100","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
+<div class="passageContent"> 
+  <h2>Quarter 3 Report</h2>
+
+  <p><strong>Year:</strong> <<= $year >></p>
+  <ul>
+    <li><strong>Budget Remaining:</strong> $<<print $budget>>M</li>
+    <li><strong>Public Trust:</strong> <<print $publicOpinion>></li>
+    <li><strong>Service Coordination:</strong> <<print $serviceCoordination>></li>
+    <li><strong>Staff Morale:</strong> <<print $staffMorale>></li>
+    <li><strong>System Capacity:</strong> <<print $systemCapacity>></li>
+    <li><strong>Political Capital:</strong> <<print $politicalCapital>></li>
+    <li><strong>Total Homeless Population:</strong> <<print $homelessTotal>></li>
+  </ul>
+
+  <p>
+    <strong>→</strong> [[Proceed to Q4|QuarterFour]]
+  </p>
+</div>
+
+
+:: QuarterTwo {"position":"100,1100","size":"100,100"}
+<<script>>window.PolicyManager.tick();<</script>>
+
+<div class="passageContent"> 
+  <h2>Quarter 2 Report</h2>
+
+  <p><strong>Year:</strong> <<= $year >></p>
+  <ul>
+    <li><strong>Budget Remaining:</strong> $<<print $budget>>M</li>
+    <li><strong>Public Trust:</strong> <<print $publicOpinion>></li>
+    <li><strong>Service Coordination:</strong> <<print $serviceCoordination>></li>
+    <li><strong>Staff Morale:</strong> <<print $staffMorale>></li>
+    <li><strong>System Capacity:</strong> <<print $systemCapacity>></li>
+    <li><strong>Political Capital:</strong> <<print $politicalCapital>></li>
+    <li><strong>Total Homeless Population:</strong> <<print $homelessTotal>></li>
+  </ul>
+
+  <p>
+    <strong>→</strong> [[Proceed to Q3|QuarterThree]]
+  </p>
+</div>
+
+
+:: RenovictionAwareness {"position":"500,700","size":"100,100"}
 <<script>>
-PolicyManager.tick();
+PolicyManager.register({
+  name: "Renoviction Awareness",
+  costUpfront: 4,
+  costPerTurn: 1,
+  duration: 3, // heavy up-front push
+
+  immediate(v) {
+  },
+
+  tick(v, Util, age) {
+    // Nothing for now
+  }
+});
 <</script>>
 
-<h2>Quarter $turn Report</h2>
+<div class="passageContent"> 
+<p>Info </p>
 
-<p>
-**Homeless Population:** $homelessTotal  
-**Budget Remaining:** $budget million  
-**Public Trust:** $publicTrust  
-**Staff Morale:** $staffMorale  
-**System Coordination:** $systemCoordination  
-<<= Object.entries($pop).map(([key, val]) => `${key}: ${val} people`).join("<br>") >>
-</p>
-
-<p>
-* [[Proceed to next quarter|QuarterThree]]
-</p>
+[[Continue|Dish out funding]]
+</div>
 
 
-:: ShelterFunding {"position":"400,425","size":"100,100"}
-<<set $budget -= 30>>
-<<set $unsheltered -= 500>>
-<<set $staffMorale -= 10>>
-<<set $publicTrust += 5>>
-<<set $homelessTotal = $unsheltered>>
 
-<p>You open 300 temporary beds and clear two major encampments. Headlines celebrate "swift action." But service providers are stretched thinner than ever, and many unhoused return after 30 days.</p>
-
-<p>You now have **$budget million** left.</p>
-
-<p>
-* [[Continue to next quarter|QuarterTwo]]
-</p>
-
-
-:: Start {"position":"600,300","size":"100,100"}
+:: Start {"position":"600,200","size":"100,100"}
 <div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
 
 Despite these goals, the nation's capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city's history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what's working, what's missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
 
 You've been brought into the city halls at a pivotal moment, right before the next phase of the 10-Year Plan is finalized. Your task is to explore how different decisions, funding priorities, and policy trade-offs change outcomes over time. You can't solve everything at once. But you can change the direction we're heading — starting now.
 
-* [[Emergency Shelter Expansion ($30M)|ShelterFunding]]
+* [[Emergency Shelter Expansion ($30M)|Emergency Shelter Expansion]]
 * [[Housing First Pilot ($50M)|HousingFirst]]
 * [[Frontline Mental Health + Addiction Support ($40M)|MentalHealth]]
 * [[Lived Experience Consultation & Strategic Planning ($10M)|Engagement]]
 </div>
 <<set $turn = 1>>
+<<set $year= 1>>
+<<set $currentYear= 2024>>
 <<set $budget = 100>>
 
 <<set $homelessTotal = 2952>>
@@ -229,368 +558,174 @@ You've been brought into the city halls at a pivotal moment, right before the ne
   immigrant: 0.42
 }>>
 
+
 <!-- System + policy levers -->
 <<set $publicOpinion = 50>>
-<<set $systemCoordination = 20>>
-<<set $capacityStrain = 0>>
+<<set $serviceCoordination = 20>>
+<<set $systemCapacity = 100>>
 <<set $politicalCapital = 3>>
 
 
-:: StoryInterface {"position":"925,250","size":"100,100"}
+:: StoryInterface {"position":"800,200","size":"100,100"}
 <!--  =====  PERSISTENT UI  =====  -->
-<!--  sits under (and independent of) your existing sidebar  -->
 
 <div id="spent-ui">
-  
   <div id="passages">
     <div id="passage-start" data-passage="start" class="passage"></div>
   </div>
+
+  <!-- Timeline -->
+  <div id="timeline" class="timeline active">
+    <span class="day active" id="year_2024">
+      <span class="container"><span class="number">2024</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2025">
+      <span class="container"><span class="number">2025</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2026">
+      <span class="container"><span class="number">2026</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2027">
+      <span class="container"><span class="number">2027</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2028">
+      <span class="container"><span class="number">2028</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2029">
+      <span class="container"><span class="number">2029</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2030">
+      <span class="container"><span class="number">2030</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2031">
+      <span class="container"><span class="number">2031</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2032">
+      <span class="container"><span class="number">2032</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2033">
+      <span class="container"><span class="number">2033</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2034">
+      <span class="container"><span class="number">2034</span></span>
+    </span>
+  </div>
+
+  <!-- Timeline Marker -->
+  <div id="date-marker" class="date-marker active"></div>
   
-      <!-- Timeline -->
-      <div id="timeline" class="timeline active">
-        <span class="day active" id="day_1">
-          <span class="container">
-            <span class="number">1</span>
-          </span>
-        </span>
-        <span class="day" id="day_2">
-          <span class="container">
-            <span class="number">2</span>
-          </span>
-        </span>
-        <span class="day" id="day_3">
-          <span class="container">
-            <span class="number">3</span>
-          </span>
-        </span>
-        <span class="day" id="day_4">
-          <span class="container">
-            <span class="number">4</span>
-          </span>
-        </span>
-        <span class="day" id="day_5">
-          <span class="container">
-            <span class="number">5</span>
-          </span>
-        </span>
-        <span class="day" id="day_6">
-          <span class="container">
-            <span class="number">6</span>
-          </span>
-        </span>
-        <span class="day" id="day_7">
-          <span class="container">
-            <span class="number">7</span>
-          </span>
-        </span>
-        <span class="day" id="day_8">
-          <span class="container">
-            <span class="number">8</span>
-          </span>
-        </span>
-        <span class="day" id="day_9">
-          <span class="container">
-            <span class="number">9</span>
-          </span>
-        </span>
-        <span class="day" id="day_10">
-          <span class="container">
-            <span class="payday">$</span>
-            <span class="number">10</span>
-          </span>
-        </span>
-        <span class="day" id="day_11">
-          <span class="container">
-            <span class="number">11</span>
-          </span>
-        </span>
-        <span class="day" id="day_12">
-          <span class="container">
-            <span class="number">12</span>
-          </span>
-        </span>
-        <span class="day" id="day_13">
-          <span class="container">
-            <span class="number">13</span>
-          </span>
-        </span>
-        <span class="day" id="day_14">
-          <span class="container">
-            <span class="number">14</span>
-          </span>
-        </span>
-        <span class="day" id="day_15">
-          <span class="container">
-            <span class="number">15</span>
-          </span>
-        </span>
-        <span class="day" id="day_16">
-          <span class="container">
-            <span class="number">16</span>
-          </span>
-        </span>
-        <span class="day" id="day_17">
-          <span class="container">
-            <span class="payday">$</span>
-            <span class="number">17</span>
-          </span>
-        </span>
-        <span class="day" id="day_18">
-          <span class="container">
-            <span class="number">18</span>
-          </span>
-        </span>
-        <span class="day" id="day_19">
-          <span class="container">
-            <span class="number">19</span>
-          </span>
-        </span>
-        <span class="day" id="day_20">
-          <span class="container">
-            <span class="number">20</span>
-          </span>
-        </span>
-        <span class="day" id="day_21">
-          <span class="container">
-            <span class="number">21</span>
-          </span>
-        </span>
-        <span class="day" id="day_22">
-          <span class="container">
-            <span class="number">22</span>
-          </span>
-        </span>
-        <span class="day" id="day_23">
-          <span class="container">
-            <span class="number">23</span>
-          </span>
-        </span>
-        <span class="day" id="day_24">
-          <span class="container">
-            <span class="payday">$</span>
-            <span class="number">24</span>
-          </span>
-        </span>
-        <span class="day" id="day_25">
-          <span class="container">
-            <span class="number">25</span>
-          </span>
-        </span>
-        <span class="day" id="day_26">
-          <span class="container">
-            <span class="number">26</span>
-          </span>
-        </span>
-        <span class="day" id="day_27">
-          <span class="container">
-            <span class="number">27</span>
-          </span>
-        </span>
-        <span class="day" id="day_28">
-          <span class="container">
-            <span class="number">28</span>
-          </span>
-        </span>
-        <span class="day" id="day_29">
-          <span class="container">
-            <span class="number">29</span>
-          </span>
-        </span>
-        <span class="day" id="day_30">
-          <span class="container">
-            <span class="number">30</span>
-          </span>
-        </span>
-        <span class="day" id="day_final"><span class="container">1</span></span>
+  <div id="timeline-separator"></div>
+
+  <!-- Date Meter -->
+  <div id="date-meter" class="date-meter">
+    <div class="title">Year</div>
+    <div class="date"><<= $year || 1 >></div>
+    <div class="days-total">/10</div>
+  </div>
+ <div class="balance-meter" id="balance-meter" data-unit="currency" style="top: 0px">
+    <div class="title">Budget</div>
+    <div class="balance">
+      <span class="dollar-sign">$</span>
+      <span class="digits" id="budget-val">100</span>
+    </div>
+  </div>
+
+  <!-- Public Opinion -->
+  <div class="balance-meter" id="balance-meter"  data-unit="currency"  style="top: 100px">
+    <div class="title">Public Opinion</div>
+    <div class="balance">
+      <span class="dollar-sign">$</span>
+      <span class="digits" id="public-opinion-val">50</span>
+    </div>
+  </div>
+
+  <!-- Service Coordination (slider) -->
+  <div class="balance-meter" id="balance-meter"  data-unit="bar"  style="top: 200px">
+    <div class="title">Service Coordination</div>
+    <div class="balance">
+      <div class="bar-container">
+        <div class="bar-fill" id="coordination-bar"></div>
       </div>
-  
-      <!-- Timeline Marker -->
-      <div id="date-marker" class="date-marker active"></div>
-  
-      <!-- Date Meter -->
-      <div id="date-meter" class="date-meter" style="top: 0px">
-        <div class="title">Day</div>
-        <div class="date">1</div>
-        <div class="days-total">/30</div>
-      </div>
-  
-      <!-- Balance Meter-->
-      <div id="balance-meter" class="balance-meter" style="top: 0px">
-        <div class="title">Budget</div>
-        <div class="balance">
-          <span class="dollar-sign">$</span><span class="digits">1,000</span>
-        </div>
-      </div>
-  
-      <!-- Sidebar -->
-      <div id="toolbox" class="toolbox">
-        <!-- Unresolves -->
-        <div
-          id="unresolves-menu"
-          class="unresolves-menu"
-          style="left: 20px; top: -718px"
-        >
-          <span class="title">Debts</span>
-          <div class="container"></div>
-        </div>
-  
-        <div class="container">
-          <!-- Job Strikes -->
-          <div id="job-strikes" class="job-strikes">
-            <span class="title">Job Strikes</span>
-            <div class="job-strike" id="strike-1">×</div>
-            <div class="job-strike" id="strike-2">×</div>
-            <div class="job-strike" id="strike-3">×</div>
-          </div>
-  
-          <!-- Rescues -->
-          <div id="rescues" class="rescues">
-            <span class="title">Need Cash?</span>
-            <div
-              class="rescue crosser"
-              id="rescue_1"
-              title="Smash your kid&#39;s piggy bank: $16.23"
-              data-balance-amt-change="15"
-            >
-              <div class="icon"></div>
-              <span class="tooltip">Smash your kid's piggy bank: $16.23</span>
-              <div class="clear"></div>
-            </div>
-            <div
-              class="rescue crosser"
-              id="rescue_2"
-              title="Donate plasma: $25"
-              data-balance-amt-change="25"
-            >
-              <div class="icon"></div>
-              <span class="tooltip">Donate plasma: $25</span>
-              <div class="clear"></div>
-            </div>
-            <div
-              class="rescue crosser"
-              id="rescue_3"
-              title="Get a Payday loan: $50"
-              data-balance-amt-change="50"
-            >
-              <div class="icon"></div>
-              <span class="tooltip">Get a Payday loan: $50</span>
-              <div class="clear"></div>
-            </div>
-          </div>
-  
-          <!-- Volume -->
-          <div class="volume crosser"></div>
-        </div>
-      </div>
-<!--  =====  END UI  =====  -->
+    </div>
+  </div>
+
+  <!-- System Capacity -->
+  <div class="balance-meter" id="balance-meter"  data-unit="percent"  style="top: 320px">
+    <div class="title">System Capacity</div>
+    <div class="balance">
+      <span class="unit">%</span>
+      <span class="digits" id="capacity-val">20</span>
+    </div>
+  </div>
+
+  <!-- Political Capital (dots) -->
+  <div class="balance-meter"id="balance-meter"   data-unit="dots" style="top: 440px">
+    <div class="title">Political Capital</div>
+    <div class="circles">
+      <span class="circle" data-index="1"></span>
+      <span class="circle" data-index="2"></span>
+      <span class="circle" data-index="3"></span>
+      <span class="circle" data-index="4"></span>
+    </div>
+  </div>
+
+  <!--  =====  END UI  =====  -->
 
 
-:: StoryScript {"position":"1000,375","size":"100,100"}
-/*  =====  UI LOGIC  =====  */
-
-/* helpers --------------------------------------------------------------*/
-function updateTimeline () {
-	/* highlight current day, move marker, refresh meter text */
-	var d = State.variables.day;
-	/* default to 1 if undefined */
-	if (!d) d = State.variables.day = 1;
-
-	$('#timeline .day').removeClass('active');
-	$('#day_' + d).addClass('active');
-
-	/* move outline marker */
-	var $target = $('#day_' + d);
-	if ($target.length) {
-		$('#date-marker')
-			.css('top', $target.position().top)
-			.css('left', $target.position().left);
-	}
-
-	$('.date-meter .date').text(d);
-}
-
-function updateBudget () {
-	var val = State.variables.budget ?? 0;
-	$('.balance-meter .digits').text(val.toLocaleString());
-}
+:: headAppend {"position":"1025,300","size":"100,100"}
+<script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
 
 
-/* event bindings -------------------------------------------------------*/
-$(document).on(':passagestart', function () {
-	updateTimeline();
-	updateBudget();
+:: headAppender [script] {"position":"1150,300","size":"100,100"}
+$(document).one(':storyready', function() {
+  $('head').append( tale.get("headAppend").text );
 });
 
-$(document).on(':enginerestart', function () {
-	State.variables.day = 1;
-	State.variables.budget = 1000;
-});
 
-/* click handlers -------------------------------------------------------*/
-$(document).on('click', '#volume-toggle', toggleVolume);
-
-/* initial call ---------------------------------------------------------*/
-$(updateTimeline);
-$(updateBudget);
-
-/*  =====  END UI LOGIC  =====  */
-
-
-:: StoryScript 1 [script]
-/* twine-user-script #1: "StoryScript" */
+:: StoryScript [script]
+/* === 🧠 UTILITIES & POLICY LOGIC === */
 window.Util = {
-  /** Re‑normalise % shares so they sum to 1.0 */
   renorm(obj) {
-    const total = Object.values(obj).reduce((a,b) => a+b, 0);
+    const total = Object.values(obj).reduce((a,b)=>a+b,0);
     Object.keys(obj).forEach(k => obj[k] = +(obj[k]/total).toFixed(4));
   },
-
-  /** Move N people out of homelessness
-   * @param {number} n - Total number of people to exit
-   * @param {Object} [demographicShares] - Optional object mapping demographic keys to their target proportions (will be normalized)
-   * @param {Function} [filterFn] - Optional filter function to restrict which demographics can exit
-   */
-  exitPeople(n, demographicShares = null, filterFn = () => true) {
+  exitPeople(n, shares = null, filterFn = () => true) {
     const v = State.variables;
     let remaining = n;
+    const eligible = Object.entries(v.pop)
+      .filter(([k,c]) => filterFn(k) && c > 0)
+      .reduce((o,[k,c]) => (o[k] = c, o), {});
+    if (!shares) shares = { ...eligible };
+    else Object.keys(shares).forEach(k => { if (!eligible[k]) delete shares[k]; });
 
-    // Get eligible demographics and their current populations
-    const eligibleDemos = Object.entries(v.pop)
-      .filter(([k, count]) => filterFn(k) && count > 0)
-      .reduce((acc, [k, count]) => {
-        acc[k] = count;
-        return acc;
-      }, {});
-
-    // If no demographic shares provided, use current population proportions
-    if (!demographicShares) {
-      demographicShares = { ...eligibleDemos };
-    } else {
-      // Filter out demographics that don't exist or have zero population
-      Object.keys(demographicShares).forEach(k => {
-        if (!eligibleDemos[k]) delete demographicShares[k];
-      });
-    }
-
-    // Calculate base proportions from current populations
-    const baseProportions = {};
-    const totalPop = Object.values(eligibleDemos).reduce((a, b) => a + b, 0);
-    Object.entries(eligibleDemos).forEach(([k, count]) => {
-      baseProportions[k] = count / totalPop;
+    const totalPop = Object.values(eligible).reduce((a,b) => a + b, 0);
+    const weighted = {};
+    Object.entries(eligible).forEach(([k,c]) => {
+      weighted[k] = (c / totalPop) * (shares[k] ?? 1);
     });
+    this.renorm(weighted);
 
-    // Apply weights to base proportions
-    const weightedProportions = {};
-    Object.entries(baseProportions).forEach(([k, baseProp]) => {
-      const weight = demographicShares[k] || 1;
-      weightedProportions[k] = baseProp * weight;
-    });
-
-    // Normalize the weighted proportions
-    this.renorm(weightedProportions);
-
-    // Calculate and execute exits
-    Object.entries(weightedProportions).forEach(([k, share]) => {
+    Object.entries(weighted).forEach(([k, share]) => {
       const target = Math.min(Math.round(n * share), v.pop[k]);
       const actual = Math.min(target, remaining);
       v.pop[k] -= actual;
@@ -602,9 +737,7 @@ window.Util = {
 
 window.PolicyManager = {
   active: [],
-
   register(cfg) {
-    // merge defaults
     const p = Object.assign({
       age: 0,
       duration: Infinity,
@@ -613,50 +746,346 @@ window.PolicyManager = {
       immediate() {},
       tick() {},
     }, cfg);
-
-    /* apply upfront budget hit + immediate effect */
     State.variables.budget -= p.costUpfront;
     p.immediate(State.variables, Util);
-
     this.active.push(p);
+    if (typeof updateUI === 'function') updateUI();
   },
-
-  /** call once per turn */
   tick() {
     const v = State.variables;
     this.active = this.active.filter(p => {
-      p.age += 1;
-
-      /* recurring budget drain */
+      p.age++;
       v.budget -= p.costPerTurn;
-
-      /* run per‑turn effect */
       p.tick(v, Util, p.age);
-
-      /* expire? */
       return p.age < p.duration;
     });
 
-    // Spawn new inflow after policy effects
-    (function spawnInflow() {
-      const arrivals = v.inflowBase;
-      for(const [demo,share] of Object.entries(v.inflowShare)) {
-        const num = Math.round(arrivals * share);
-        v.pop[demo] = (v.pop[demo] || 0) + num;
-        v.homelessTotal += num;
-      }
-    })();
+    const arrivals = v.inflowBase;
+    for (const [demo, share] of Object.entries(v.inflowShare)) {
+      const num = Math.round(arrivals * share);
+      v.pop[demo] = (v.pop[demo] || 0) + num;
+      v.homelessTotal += num;
+    }
+
+    if (typeof updateUI === 'function') updateUI();
   }
 };
-/* twine-user-script #2: "app.bundle.js" */
-console.log('Hello from ThyWeaver!');
-/* twine-user-script #3: "vendor.bundle.js" */
+function updateTimeline() {
+  const v = State.variables;
+
+  // 1️⃣ Map your logical year index → real year
+  const yearIndex  = v.year || (v.year = 1);        // 1-based
+  const displayYear = 2024 + (yearIndex - 1);       // e.g. 1 → 2024
+
+  // 2️⃣ Highlight the current year
+  $('#timeline .year').removeClass('active');
+  $(`#year_${displayYear}`).addClass('active');
+
+  // 3️⃣ Move the date marker
+  const $t = $(`#year_${displayYear}`);
+  if ($t.length) {
+    $('#date-marker').css({
+      top:  $t.position().top,
+      left: $t.position().left
+    });
+  }
+
+  // 4️⃣ Update the text
+  $('.date-meter .date').text(displayYear);
+
+  // 5️⃣ Compute fractional progress through the year
+  const turnsPerYear = 5;                          // 1/5th per turn
+  const turn        = v.turn || 1;                 // assume v.turn increments
+  const turnInYear  = (turn - 1) % turnsPerYear;    // 0,1,2,3,4
+  const fraction    = turnInYear / turnsPerYear;    // 0.0 → 0.8
+
+  // 6️⃣ Compute total fractional years since 2024
+  const minYear     = 2024;
+  const maxYear     = 2034;
+  const totalYears  = maxYear - minYear;           // e.g. 10
+  const yearsOffset = (yearIndex - 1) + fraction;   // e.g. 2.4 years into plan
+
+  // 7️⃣ Convert to percentage
+  let pct = (yearsOffset / totalYears) * 100;
+  pct = Math.min(100, pct);                         // clamp at 100%
+
+  // 8️⃣ Apply to CSS variable
+  const el = document.getElementById('timeline');
+  if (el) {
+    el.style.setProperty('--tl-progress', pct + '%');
+  }
+}
+$(window).on('load', updateTimeline);
+$(document).on(':passagestart :passagedisplay', updateTimeline);
+updateTimeline();
+
+
+/* === 📊 UI METRIC UPDATER (STATIC + ANIMATED) === */
+function staticUIUpdater() {
+  const v = State.variables;
+
+  // 💸 Budget
+  document.getElementById('budget-val').textContent = (v.budget || 0).toLocaleString();
+
+  // 🔋 System Capacity
+  document.getElementById('capacity-val').textContent = v.systemCapacity ?? '--';
+
+  // 📊 Service Coordination Bar
+  const bar = document.getElementById('coordination-bar');
+  const pct = Math.max(0, Math.min(v.serviceCoordination || 0, 100));
+  if (window.innerWidth <= 979) {
+    bar.style.height = pct + '%';
+    bar.style.width  = '100%';
+  } else {
+    bar.style.width  = pct + '%';
+    bar.style.height = '100%';
+  }
+
+  // 🟢 Political Capital Dots
+  const pc = v.politicalCapital || 0;
+  document.querySelectorAll('.balance-meter .circle').forEach(circle => {
+    const i = parseInt(circle.dataset.index, 10);
+    circle.classList.toggle('filled', i <= pc);
+  });
+}
+
+let animateUIUpdater = null;
+
+function updateUI() {
+  if (animateUIUpdater) animateUIUpdater();
+  else staticUIUpdater();
+}
+
+$(window).on('load', updateUI);
+$(document).on(':passagestart :passagedisplay', () => setTimeout(updateUI, 0));
+$(window).on('resize', updateUI);
+
+
+/* === ⚡ ANIMATE UI METRICS WITH MOTION.JS === */
+$.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
+  .done(() => {
+    const animate = Motion.animate;
+
+    animateUIUpdater = function() {
+      const v = State.variables;
+
+      // 💸 Budget
+      const elB = document.getElementById('budget-val');
+      const oldB = parseInt(elB.textContent.replace(/,/g,''), 10) || 0;
+      const newB = v.budget || 0;
+      animate(oldB, newB, {
+        duration: 0.5, ease: 'circOut',
+        onUpdate(x) {
+          elB.textContent = Math.round(x).toLocaleString();
+        }
+      });
+
+      // 🔋 System Capacity
+      const elC = document.getElementById('capacity-val');
+      const oldC = parseInt(elC.textContent, 10) || 0;
+      const newC = v.systemCapacity || 0;
+      animate(oldC, newC, {
+        duration: 0.5, ease: 'circOut',
+        onUpdate(x) {
+          elC.textContent = Math.round(x);
+        }
+      });
+
+      // 📊 Service Coordination Bar (responsive)
+      const bar = document.getElementById('coordination-bar');
+      const isMobile = window.innerWidth <= 979;
+      const prop     = isMobile ? 'height' : 'width';
+      const oldPct   = parseFloat(bar.style[prop]) || 0;
+      const pct      = Math.max(0, Math.min(v.serviceCoordination || 0, 100));
+
+      animate(oldPct, pct, {
+        duration: 0.5,
+        onUpdate(x) {
+          if (isMobile) {
+            bar.style.height = x + '%';
+            bar.style.width  = '100%';
+          } else {
+            bar.style.width  = x + '%';
+            bar.style.height = '100%';
+          }
+        }
+      });
+
+      // 🟢 Political Capital (non-animated)
+      const pc = v.politicalCapital || 0;
+      document.querySelectorAll('.balance-meter .circle').forEach(circle => {
+        const i = parseInt(circle.dataset.index, 10);
+        circle.classList.toggle('filled', i <= pc);
+      });
+    };
+
+    updateUI(); // initial animated run
+  })
+  .fail(() => {
+    console.warn('⚠️ Motion.js failed to load. Falling back to static UI updates.');
+  });
+
+
+/* === 📱 MOBILE TOOLTIP SUPPORT === */
+$(function() {
+  $(document).on('click', '.balance-meter', function() {
+    if (window.innerWidth > 979) return;
+    const $m = $(this), name = $m.find('.title').text().trim();
+    $m.find('.tooltip').remove();
+    const $tip = $('<div class="tooltip"></div>').text(name).appendTo($m);
+    requestAnimationFrame(() => $tip.css({ opacity: 1, pointerEvents: 'auto' }));
+    setTimeout(() => {
+      $tip.css('opacity', 0);
+      setTimeout(() => $tip.remove(), 250);
+    }, 2500);
+  });
+});
+
 
 :: StoryStylesheet [stylesheet]
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
+
+
+
+/* ----------  MOBILE ≤640px  ---------- */
+@media (max-width: 979px) {
+  /* Prevent any wrapping of currency text */
+  .balance-meter .balance {
+    white-space: nowrap;
+  }
+
+  /* Prevent digits and unit glyph wrapping */
+  .balance-meter .digits,
+  .balance-meter .dollar-sign,
+  .balance-meter .unit {
+    white-space: nowrap;
+  }
+  .balance-meter .circle {
+    width: 2.5vw !important;
+    height: 2.5vw !important;
+  }
+  /* 2×2 grid for political capital dots */
+  .balance-meter[data-unit="dots"] .circles {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 0.6em;
+    justify-content: center;
+    width: fit-content;
+    margin: 0.6em auto 0;
+  }
+}
+
+/* 1×4 layout at narrower viewports */
+@media (max-width: 500px) {
+  .balance-meter[data-unit="dots"] .circles {
+    grid-template-columns: repeat(4, auto);
+  }
+}
+/* ----------  END MOBILE  ---------- */
+/* track/container lives inside .balance */
+.balance-meter .balance .bar-container {
+  background-color: #ddd;
+  border-radius: 999px;
+  overflow: hidden;
+  height: 0.5em;
+  margin-top: 0.4em;
+  width: 100%; /* fill the same column width */
+}
+
+/* the blue fill: default to 50%, transitions nicely */
+.balance-meter .balance .bar-fill {
+  background-color: #0066cc;
+  height: 100%;
+  width: 50%;
+  border-radius: 999px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* Responsive orientation for bar sliders */
+@media (max-width: 979px) {
+  .balance-meter[data-unit="bar"] .bar-container {
+    /* swap dimensions for vertical mode */
+    width: 0.5em;
+    height: 8rem; /* adjust as needed for visibility */
+    display: flex;
+    margin-right: 0.4em;
+    margin-top: 0;
+    position: relative;
+    top: -2.5rem;
+    margin-bottom: 0.5em;
+    align-items: flex-end;
+  }
+  .balance-meter[data-unit="bar"] .bar-fill {
+    /* fill vertically */
+    width: 100% !important;
+  }
+  .balance-meter[data-unit="dots"] {
+    top: 25rem !important;
+  }
+}
+
+/* container flexes circles side by side */
+.balance-meter .circles {
+  display: flex;
+  gap: 0.8em;
+  margin-top: 0.4em;
+}
+
+/* each circle: grey default */
+.balance-meter .circle {
+  width: 1.5vw;
+  height: 1.5vw;
+  border-radius: 50%;
+  background-color: #ccc;
+  transition: background-color 0.2s;
+}
+
+/* “active” (blue) state */
+.balance-meter .circle.filled {
+  background-color: #0066cc;
+}
+
+/* Default font for passages */
+.passage,
+.passageContent {
+  font-family: "Inter", sans-serif;
+}
+
+br {
+  display: none;
+}
+#balance-meter {
+  left: calc(5px + 1%) !important;
+  left: -webkit-calc(5px + 1%) !important;
+}
+
+#timeline .day {
+  font-family: "Spectral", serif !important;
+  font-weight: 400;
+}
+/* Use Spectral for all monetary values and timeline year markers */
+.balance-meter .balance,
+.balance-meter .digits,
+.balance-meter .dollar-sign,
+.date-meter .date,
+.day.spacer,
+.days-total timeline,
+span.day.spacer,
+.money {
+  font-family: "Spectral", serif !important;
+  font-weight: 600;
+}
+
 .passage {
   margin-left: auto !important;
   margin-right: auto !important;
   width: 65% !important;
+}
+
+@media (max-width: 979px) {
+  .passage {
+    width: 50% !important;
+  }
 }
 
 .passageContent {
@@ -709,14 +1138,10 @@ html.touch * {
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
-@media (max-width: 979px) {
-  html {
-    overflow: hidden;
-  }
-}
+
 body {
-  background-color: #151a1e;
-  color: #dbd1b7;
+  background-color: #ffffff;
+  color: #1a1a1a;
   font-family: adobe-caslon-pro, Georgia, Times, serif;
   height: auto;
   min-height: 100%;
@@ -748,13 +1173,14 @@ body .wrap {
   clear: both;
 }
 .tooltip {
-  background-color: #90d4c6;
-  color: #151a1e;
+  background-color: #0066cc;
+  color: #ffffff;
   font-size: 16px;
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-family: "Inter", sans-serif;
   letter-spacing: 0.05em;
   line-height: 1;
   opacity: 0;
+  position: relative;
   padding: 10px 10px 8px;
   pointer-events: none;
   position: absolute;
@@ -771,7 +1197,7 @@ body .wrap {
 .tooltip:before {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 5px solid #90d4c6;
+  border-bottom: 5px solid #0066cc;
   content: "";
   left: 14px;
   position: absolute;
@@ -782,7 +1208,7 @@ body .wrap {
 }
 #welcome {
   background-color: #151a1e;
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
   letter-spacing: 0.05em;
   opacity: 0;
   visibility: hidden;
@@ -798,11 +1224,12 @@ body .wrap {
   text-align: center;
 }
 #balance-meter {
-  color: #dbd1b7;
+  color: 131313;
   cursor: pointer;
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
   left: 0;
   padding: 0.4em;
+  padding-top: 2em;
   position: fixed;
   top: 0;
   text-transform: uppercase;
@@ -811,8 +1238,10 @@ body .wrap {
 #balance-meter:after {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
-  border-top: 4px solid #ce4415;
+  border-top: 4px solid #0066cc;
   content: "";
+  padding-top: 2em;
+  margin-top: 1.4em !important;
   display: inline-block;
   height: 0;
   left: 100%;
@@ -823,19 +1252,23 @@ body .wrap {
   width: 0;
 }
 #balance-meter .title {
-  border-bottom: 1px dotted rgba(219, 209, 183, 0.3);
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
   display: none;
   font-size: 1em;
-  letter-spacing: 0.05em;
+  font-weight: 400;
   margin-bottom: 5px;
   padding-bottom: 5px;
 }
 #balance-meter .balance {
   font-size: 2em;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 #balance-meter .balance .dollar-sign {
-  color: #ce4415;
+  color: #0066cc;
+}
+#balance-meter .balance .unit {
+  color: #0066cc;
 }
 @media (min-width: 740px) {
   #balance-meter {
@@ -845,7 +1278,7 @@ body .wrap {
   #balance-meter:after {
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 8px solid #ce4415;
+    border-top: 8px solid #0066cc;
     top: 30px;
   }
   #balance-meter .title {
@@ -876,29 +1309,21 @@ body .wrap {
     padding-bottom: 5px;
   }
 }
-@media (max-width: 979px) {
-  #balance-meter {
-    top: 10px !important;
-  }
-}
-@media (max-width: 739px) {
-  #balance-meter {
-    top: 0 !important;
-  }
-}
+
 #date-meter {
-  color: #dbd1b7;
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  color: #131313;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
   right: 15px;
   padding: 0.4em;
   position: fixed;
   top: 0;
   text-transform: uppercase;
   z-index: 7;
+  padding-top: 2em;
 }
 #date-meter .title {
   display: none;
-  border-bottom: 1px dotted rgba(219, 209, 183, 0.3);
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
   font-size: 23px;
   letter-spacing: 0.05em;
   margin-bottom: 5px;
@@ -913,6 +1338,8 @@ body .wrap {
 #date-meter .days-total {
   color: #5f5d54;
   display: inline-block;
+  font-family: "Spectral", serif !important;
+  font-weight: 600;
   font-size: 2em;
   letter-spacing: 0.05em;
 }
@@ -976,7 +1403,7 @@ body .wrap {
   clear: both;
   cursor: pointer;
   display: block;
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.4;
   position: relative;
@@ -1148,7 +1575,7 @@ body .wrap {
   opacity: 0.2;
 }
 #job-strikes .job-strike.active {
-  color: #ce4415;
+  color: #0066cc;
   opacity: 1;
 }
 @media (min-width: 980px) {
@@ -1176,17 +1603,17 @@ body .wrap {
   right: 0;
 }
 #timeline .day {
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
   height: 3.2258065%;
   display: block;
   text-align: center;
   width: 100%;
 }
 #timeline .day.active .number {
-  color: #dbd1b7;
+  color: 131313;
 }
 #timeline .day.active .payday {
-  color: #ce4415;
+  color: #0066cc;
 }
 #timeline .day .container {
   color: #5f5d54;
@@ -1208,12 +1635,13 @@ body .wrap {
 }
 @media (min-width: 980px) {
   #timeline {
-    background: #202326;
+    background: #fcfcfc;
     position: fixed;
     width: 75px;
   }
   #timeline .day#day_final .container {
-    background-color: #ce4415;
+    background-color: #0066cc;
+    color: #ffffff;
     border-radius: 100%;
     color: #151a1e;
     display: block;
@@ -1253,13 +1681,13 @@ body .wrap {
     top: -5px;
   }
   #timeline .day.active .container:before {
-    background-color: #dbd1b7;
+    background-color: #1a1a1a;
   }
   #timeline .day#day_final .container {
     color: transparent;
   }
   #timeline .day#day_final .container:before {
-    background-color: #ce4415;
+    background-color: #0066cc;
   }
 }
 @media (max-width: 739px) {
@@ -1268,7 +1696,7 @@ body .wrap {
   }
 }
 #toolbox {
-  background-color: #202326;
+  background-color: #fcfcfc;
   height: 100%;
   padding-top: 50px;
   position: fixed;
@@ -1278,7 +1706,7 @@ body .wrap {
 }
 #toolbox .title {
   display: block;
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
   text-transform: uppercase;
 }
 #toolbox .volume {
@@ -1296,7 +1724,7 @@ body .wrap {
 }
 @media (min-width: 980px) {
   #toolbox {
-    background-color: #202326;
+    background-color: #fcfcfc;
     bottom: auto;
     height: 100%;
     left: 0;
@@ -1310,7 +1738,7 @@ body .wrap {
   }
   #toolbox .title {
     display: block;
-    font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+    font-family: "Inter", Helvetica, Arial, sans-serif;
     font-size: 1em;
     margin: 0 auto 20px auto;
     text-align: center;
@@ -1333,22 +1761,22 @@ body .wrap {
     transform: translateY(0);
   }
   #toolbox:after {
-    background: -moz-linear-gradient(top, rgba(32, 35, 38, 0) 0, #202326 90%);
+    background: -moz-linear-gradient(top, rgba(32, 35, 38, 0) 0, #fcfcfc 90%);
     background: -webkit-gradient(
       linear,
       left top,
       left bottom,
       color-stop(0, rgba(32, 35, 38, 0)),
-      color-stop(90%, #202326)
+      color-stop(90%, #fcfcfc)
     );
     background: -webkit-linear-gradient(
       top,
       rgba(32, 35, 38, 0) 0,
-      #202326 90%
+      #fcfcfc 90%
     );
-    background: -o-linear-gradient(top, rgba(32, 35, 38, 0) 0, #202326 90%);
-    background: -ms-linear-gradient(top, rgba(32, 35, 38, 0) 0, #202326 90%);
-    background: linear-gradient(to bottom, rgba(32, 35, 38, 0) 0, #202326 90%);
+    background: -o-linear-gradient(top, rgba(32, 35, 38, 0) 0, #fcfcfc 90%);
+    background: -ms-linear-gradient(top, rgba(32, 35, 38, 0) 0, #fcfcfc 90%);
+    background: linear-gradient(to bottom, rgba(32, 35, 38, 0) 0, #fcfcfc 90%);
     bottom: 0;
     content: "";
     display: block;
@@ -1446,11 +1874,38 @@ body .wrap {
   }
 }
 #content {
-  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
   height: 100%;
   left: 0;
   position: absolute;
   top: 0;
   width: 100%;
   z-index: 4;
+}
+
+#timeline::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: var(--tl-progress, 0%);
+  background-color: #0066cc;
+  transition: height 0.5s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+/* Hide on small screens */
+@media (max-width: 979px) {
+  #timeline::before {
+    display: none;
+  }
+}
+/* Only offset for vertical bar sliders (mobile layout) */
+@media (max-width: 979px) {
+  .balance-meter[data-unit="bar"] .tooltip {
+    top: calc(100% - 5rem);
+  }
+  body {
+    overflow-y: auto;
+  }
 }
