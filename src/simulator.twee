@@ -1383,7 +1383,25 @@ zoom: 1.1;
   .swiper-slide-shadow {
     background: rgba(0, 0, 0, 0.05) !important;
   }
-
+  @media screen and (max-width: 979px) {
+    .swiper {
+      width: 38vw !important;
+      margin-left: 2rem !important;
+    }
+  
+    .button {
+      margin-left: 2rem !important;
+    }
+  
+    .swiper-slide {
+      font-size: 0.85em; 
+      padding: 1rem 0.75rem;
+    }
+  
+    .impacts {
+      display: none; 
+    }
+  }
       .swiper-slide {
         display: flex;
         align-items: center;
@@ -1518,13 +1536,13 @@ zoom: 1.1;
           Whereas outdated zoning still blocks shelters in many areas; and,<br />
           Whereas delays risk missing new funding and worsen the housing crisis;<br /><br />
           </p>
-          <p>           <strong>Therefore be it resolved that</strong> shelters be permitted in all urban zones immediately, using the current definition in By-law 2008-250 until updated.<br /><br />
+          <p>           <em>Therefore be it resolved that</em> shelters be permitted in all urban zones immediately, using the current definition in By-law 2008-250 until updated.<br /><br />
           </p>
           <div class="impacts">
             <p>Should this motion pass, the City anticipates the following impacts:</p>
             <ul>
-              <li><p>Increased System Capacity</p></li>
-              <li><p>Decreased Unsheltered Inflow</p></li>
+              <li><p>Increased system capacity</p></li>
+              <li><p>Decreased unsheltered inflow</p></li>
               <li><p>Enabling access to time-sensitive federal/provincial funding</p></li>
             </ul>
           </div>
@@ -1533,46 +1551,53 @@ zoom: 1.1;
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">S. 2202</div>
-          </div>
-          <h2>Bill 2</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
-            This Act may be cited as the “Clean Water for All Act.”<br /><br />
-            <strong>Section 2. Purpose.</strong><br />
-            (1) To ensure access to safe and affordable drinking water for all
-            Americans.<br />
-            (2) <em>Further provisions to follow…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Sen. John Smith | Introduced: February 12, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">H.R. 3305</div>
-          </div>
-          <h2>Bill 3</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
-            This Act may be cited as the “Affordable Housing Expansion Act.”<br /><br />
-            <strong>Section 2. Findings.</strong><br />
-            (1) There is a national shortage of affordable housing.<br />
-            (2) <em>Additional findings to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Rep. Maria Lee | Introduced: January 20, 2025
-          </div>
-        </div>
+  <div class="bill-header">
+    <div>City of Ottawa</div>
+    <div>ACS2024-OCC-CCS-0045</div>
+    <div class="bill-number">Councillor Ariel Troster</div>
+  </div>
+  <h2>Motion: Renovictions</h2>
+  <p>
+  Whereas renovictions are displacing tenants and eroding affordable housing in Ottawa, and the City must act in the absence of sufficient provincial enforcement; and,<br />
+  Whereas the City of Hamilton has adopted Ontario’s first anti-renoviction by-law with licensing and enforcement measures;<br /><br />
+</p>
+  <p>
+    <em>Therefore be it resolved that</em> landlords are required to obtain a renovation license, prove necessity for vacant possession, and provide relocation assistance for affected tenants.
+  </p>
+  <div class="impacts">
+    <p>Should this motion pass, the City anticipates the following impacts:</p>
+    <ul>
+      <li><p>Reduced eviction-driven inflow</p></li>
+      <li><p>Preservation of existing affordable units</p></li>
+    </ul>
+  </div>
+  <div class="meta">
+    Planning and Housing Committee
+  </div>
+</div>
+<div class="swiper-slide">
+<div class="bill-header">
+  <div>City of Ottawa</div>
+  <div>November 20<sup>th</sup>, 2024</div>
+  <div> ACS2024- OCC-CCS- 0035</div>
+  <div class="bill-number">Councillor Laine Johnson</div>
+</div>
+<h2>Motion: Affordable Housing Acquisition Fund</h2>
+<p>
+  Whereas Ottawa is losing affordable housing faster than it can build new supply; and,<br />
+  Whereas acquisition funds in cities like Toronto and Montreal have helped preserve affordable units through non-profit ownership; and,<br />
+  Whereas relying solely on new construction risks missing opportunities to protect existing stock;<br /><br />
+</p>
+<p>
+  <em>Therefore be it resolved that</em> the City allocate surplus revenues from the Vacant Unit Tax to establish an acquisition fund for the preservation of at-risk affordable housing.
+</p>
+<div class="impacts">
+  <p>Should this motion pass, the City anticipates the ability to preserve existing affordable units.</p>
+</div>
+<div class="meta">
+  Planning and Housing Committee
+</div>
+</div>
         <div class="swiper-slide">
           <div class="bill-header">
             <div>117<sup>th</sup> Congress</div>
@@ -1583,9 +1608,9 @@ zoom: 1.1;
           <p>
             Be it enacted by the Senate and House of Representatives of the
             United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
+            <em>Section 1. Short title.</em><br />
             This Act may be cited as the “National Broadband Expansion Act.”<br /><br />
-            <strong>Section 2. Findings.</strong><br />
+            <em>Section 2. Findings.</em><br />
             (1) Universal broadband access is essential for economic
             opportunity.<br />
             (2) <em>Further findings to be inserted…</em>
@@ -1604,9 +1629,9 @@ zoom: 1.1;
           <p>
             Be it enacted by the Senate and House of Representatives of the
             United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
+            <em>Section 1. Short title.</em><br />
             This Act may be cited as the “Student Debt Relief Act.”<br /><br />
-            <strong>Section 2. Purpose.</strong><br />
+            <em>Section 2. Purpose.</em><br />
             (1) To provide relief for federal student loan borrowers.<br />
             (2) <em>Additional provisions to be inserted…</em>
           </p>
@@ -1624,10 +1649,10 @@ zoom: 1.1;
           <p>
             Be it enacted by the Senate and House of Representatives of the
             United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
+            <em>Section 1. Short title.</em><br />
             This Act may be cited as the “Climate Resilience Infrastructure
             Act.”<br /><br />
-            <strong>Section 2. Findings.</strong><br />
+            <em>Section 2. Findings.</em><br />
             (1) Infrastructure must be modernized to withstand climate
             change.<br />
             (2) <em>Further findings to be inserted…</em>
@@ -1646,9 +1671,9 @@ zoom: 1.1;
           <p>
             Be it enacted by the Senate and House of Representatives of the
             United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
+            <em>Section 1. Short title.</em><br />
             This Act may be cited as the “Universal Childcare Access Act.”<br /><br />
-            <strong>Section 2. Purpose.</strong><br />
+            <em>Section 2. Purpose.</em><br />
             (1) To expand access to affordable childcare services.<br />
             (2) <em>Further provisions to be inserted…</em>
           </p>
@@ -1666,9 +1691,9 @@ zoom: 1.1;
           <p>
             Be it enacted by the Senate and House of Representatives of the
             United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
+            <em>Section 1. Short title.</em><br />
             This Act may be cited as the “Healthcare Equity Advancement Act.”<br /><br />
-            <strong>Section 2. Findings.</strong><br />
+            <em>Section 2. Findings.</em><br />
             (1) Persistent disparities exist in healthcare access and
             outcomes.<br />
             (2) <em>Additional findings to be inserted…</em>
@@ -1687,9 +1712,9 @@ zoom: 1.1;
           <p>
             Be it enacted by the Senate and House of Representatives of the
             United States of America in Congress assembled:<br /><br />
-            <strong>Section 1. Short title.</strong><br />
+            <em>Section 1. Short title.</em><br />
             This Act may be cited as the “Small Business Recovery Act.”<br /><br />
-            <strong>Section 2. Purpose.</strong><br />
+            <em>Section 2. Purpose.</em><br />
             (1) To support small businesses in recovering from economic
             downturns.<br />
             (2) <em>Further provisions to follow…</em>
@@ -1702,7 +1727,7 @@ zoom: 1.1;
     </div>
 
     <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;">
-  <<button "OK">>
+  <<button "Adopt">>
     <<run (()=>{
       const map = [
         "Bill 1",
