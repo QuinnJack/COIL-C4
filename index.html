@@ -111,6 +111,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 @import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
 
+
 .million {
   font-size: 24px;
   margin-left: -.5em;
@@ -1088,7 +1089,8 @@ body .wrap {
   }
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts(
 "https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
-  "https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"
+  "https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js",
+  "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
 );
 
 
@@ -2146,26 +2148,43 @@ PolicyManager.register({
 
 [[Continue|Dish out funding]]
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="Start" tags="" position="600,200" size="100,100">&lt;&lt;script&gt;&gt;
-// 1) Inject Swiper’s CSS if it isn’t already in &lt;head&gt;
-if (!$(&#39;head&#39;).find(&#39;link[href*=&quot;swiper-bundle.min.css&quot;]&#39;).length) {
-  $(&#39;head&#39;).append(
-    &#39;&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css&quot;&gt;&#39;
-  );
-}
+// run on *every* time this passage finishes displaying
+$(document).on(&#39;:passagedisplay&#39;, function (ev) {
+  // 1) inject the CSS if we haven&#39;t already
+  if (!$(&#39;head&#39;).find(&#39;link[href*=&quot;swiper-bundle.min.css&quot;]&#39;).length) {
+    $(&#39;head&#39;).append(
+      &#39;&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css&quot;&gt;&#39;
+    );
+  }
 
-// 2) Dynamically load Swiper JS, then initialize when it’s ready
-$.getScript(&#39;https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js&#39;)
-  .done(function(){
-    // now Swiper is defined
-    window.mySwiper = new Swiper(&quot;.mySwiper&quot;, {
-      effect: &quot;cards&quot;,
-      grabCursor: true,
+  // 2) helper to actually init the carousel
+  function setupSwiper() {
+    const el = ev.content.querySelector(&#39;.mySwiper&#39;);
+    if (!el) return;
+    if (window.mySwiper) {
+      window.mySwiper.destroy(true, true);
+    }
+    // ← here’s the only change: add observer + observeParents
+    window.mySwiper = new Swiper(el, {
+      effect:      &#39;cards&#39;,
+      grabCursor:  true,
+      observer:        true,
+      observeParents:  true
     });
-  })
-  .fail(function(){
-    console.error(&quot;Failed to load Swiper.&quot;);
-  });
+  }
+
+  // 3) load Swiper.js if needed, otherwise just init
+  if (typeof Swiper === &#39;undefined&#39;) {
+    $.getScript(&#39;https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js&#39;)
+     .done(setupSwiper)
+     .fail(() =&gt; console.error(&#39;Failed to load Swiper.&#39;));
+  }
+  else {
+    setupSwiper();
+  }
+});
 &lt;&lt;/script&gt;&gt;
+
 &lt;div class=&quot;passageContent&quot;&gt; 
 
 
@@ -2214,10 +2233,28 @@ zoom: 1.1;
       }
 
       .swiper {
-        width: 25em !important;
+        width: 23rem !important;
         max-width: 900px;
         height: 40em !important;
         max-height: 1000px;
+      }
+      @media screen and (max-width: 600px) {
+        .swiper {
+          width: 42vw !important;
+        }
+        .swiper-slide {
+          font-size: 0.9em;
+          padding: 1rem 0.75rem;
+        }
+      }
+      @media screen and (max-width: 979px) {
+        .swiper {
+          width: 38vw !important;
+          margin-left: 2rem !important;
+        }
+        .button {
+          margin-left: 2rem !important;
+        }
       }
   .swiper-slide-shadow {
     background: rgba(0, 0, 0, 0.05) !important;
@@ -2243,6 +2280,22 @@ zoom: 1.1;
       .swiper-slide {
         pointer-events: none;
       }
+
+.slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center slider + button together */
+  margin: 2rem auto;      /* vertical spacing + center wrapper in page */
+}
+
+.slider-wrapper .swiper {
+  
+  margin: 0;                     /* reset any old margins */
+  margin-left: -1rem;            /* &lt;&lt;–– shift the whole slider a bit left */
+
+  */
+}
+
 
       .swiper-slide.swiper-slide-active {
         pointer-events: auto;
@@ -2299,7 +2352,9 @@ zoom: 1.1;
   position: relative !important;
   top: -0.25rem !important;
   text-align: center !important;
-  margin-left: 5rem !important;
+  margin: 0.3rem auto; /* centers it */
+  position: relative;
+
 }
       .meta {
         text-align: right;
@@ -2315,7 +2370,7 @@ zoom: 1.1;
 
 
 
-&lt;div style=&quot;display: flex; flex-direction: column; align-items: center; margin-left: 1rem;&quot;&gt;
+    &lt;div class=&quot;slider-wrapper&quot;&gt;
 
     &lt;div class=&quot;swiper mySwiper&quot;&gt;
       &lt;div class=&quot;swiper-wrapper&quot;&gt;
@@ -2510,10 +2565,9 @@ zoom: 1.1;
      
     &lt;/div&gt;
 
-&lt;div style=&quot;text-align:center; margin-top:2em; margin-left:2em;&quot;&gt;
+    &lt;div style=&quot;display: flex; flex-direction: column; align-items: center; margin-top: 2em;&quot;&gt;
   &lt;&lt;button &quot;OK&quot;&gt;&gt;
     &lt;&lt;run (()=&gt;{
-      // map swiper‐slide indices to your policy‐passage names
       const map = [
         &quot;Bill 1&quot;,
         &quot;Bill 2&quot;,
@@ -2527,12 +2581,12 @@ zoom: 1.1;
     })()&gt;&gt;
   &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
+&lt;/div&gt;
     &lt;/div&gt;
 * [[Emergency Shelter Expansion ($30M)|Bill 1]]
 * [[Housing First Pilot ($50M)|Bill 2]]
 * [[Frontline Mental Health + Addiction Support ($40M)|Bill 3]]
-* [[Lived Experience Consultation &amp; Strategic Planning ($10M)|Bill 4]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="StoryInterface" tags="" position="800,200" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
+* [[Lived Experience Consultation &amp; Strategic Planning ($10M)|Bill 4]]</tw-passagedata><tw-passagedata pid="17" name="StoryInterface" tags="" position="800,200" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
 
 &lt;div id=&quot;spent-ui&quot;&gt;
   &lt;div id=&quot;passages&quot;&gt;
