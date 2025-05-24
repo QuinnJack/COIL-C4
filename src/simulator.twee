@@ -580,12 +580,12 @@ PolicyManager.register({
   <p><em>This snapshot will help guide your next set of decisions in the evolving response. </em></p>
 
   <p>📌 [[Continue|NextYear]]</p>
-    <p>📌 [[PIT1|PIT1]]</p>
+    <p>📌 [[PIT1|PointInTime1]]</p>
 
 </div>
 
 
-:: PIT1 {"position":"725,1225","size":"100,100"}
+:: PointInTime1 {"position":"725,1225","size":"100,100"}
 \:: Point in Time Report
 <div class="passageContent">
 	<h2>Point in Time Report</h2>
@@ -670,11 +670,13 @@ PolicyManager.register({
 <<script>>
 /*  SugarCube macro: all the JS below runs only when this passage shows  */
 $(document).one(':passagedisplay', function (ev) {
+
 	/*  make sure we’re actually in this passage  */
-	if (ev.passage.title !== 'Point in Time Report') { return; }
+	if (ev.passage.title !== 'PointInTime1') { return; }
 
 	const V        = State.variables;
 	const history  = V.history || [];
+console.log("History variable 1:", history);
 
 	/* ——— helper: last snapshot for a given year ——— */
 	function lastSnapshotForYear (yr) {
@@ -688,7 +690,8 @@ $(document).one(':passagedisplay', function (ev) {
 
 	const curData  = lastSnapshotForYear(curYearIdx);
 	const prevData = lastSnapshotForYear(prevYearIdx);
-
+console.log("Current year data:", curData);
+console.log("Previous year data:", prevData);
 	/*  … everything else in your original script is unchanged …  */
 });
 <</script>>
@@ -3313,27 +3316,13 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 
 
 
-:: headAppend {"position":"1025,300","size":"100,100"}
-<script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>  <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css"
-    />
-
-
-
-:: headAppender [script] {"position":"1150,300","size":"100,100"}
-$(document).one(':storyready', function() {
-  $('head').append(tale.get("headAppend").text );
-});
-
-
 :: StoryScript [script]
+importScripts(
+"https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
+  "https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"
+);
+
+
 /* === 🧠 UTILITIES & POLICY LOGIC === */
 window.Util = {
   renorm(obj) {
@@ -3647,6 +3636,9 @@ $(function() {
 @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
 
 @import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
+
+@import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
+@import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
 
 .million {
   font-size: 24px;
