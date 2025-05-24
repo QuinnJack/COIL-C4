@@ -3329,7 +3329,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 
 :: headAppender [script] {"position":"1150,300","size":"100,100"}
 $(document).one(':storyready', function() {
-  $('head').append( tale.get("headAppend").text );
+  $('head').append(tale.get("headAppend").text );
 });
 
 
