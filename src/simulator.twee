@@ -586,115 +586,148 @@ PolicyManager.register({
 
 
 :: PointInTime1 {"position":"725,1225","size":"100,100"}
-\:: Point in Time Report
-<div class="passageContent">
-	<h2>Point in Time Report</h2>
+  <div class="passage-content">
 
-	<p>
-		Displaying data for the end of
-		<strong>
-			Year <<= $year - 1 >>
-			(<<= $currentYear + $year - 2 >>)
-		</strong>,
-		compared to
-		<strong>
-			Year <<= $year - 2 >>
-			(<<= $currentYear + $year - 3 >>)
-		</strong>.
-	</p>
+  <div class="chart-section">
+    <h3>Housing Status Change</h3>
+    <canvas id="housingStackedBar" height="150"></canvas>
+  </div>
 
-	<div class="chart-section">
-		<h3>Overall Homelessness Trend</h3>
-		<div class="chart-container" style="height:300px;">
-			<canvas id="homelessTotalTrendChart"></canvas>
-		</div>
-	</div>
+  <div class="chart-section">
+    <h3>Homelessness Trend</h3>
+    <canvas id="homelessLineChart" height="150"></canvas>
+  </div>
 
-	<hr>
+  <div class="chart-section">
+    <h3>Identity Demographics</h3>
+    <div id="identityMetrics"></div>
+  </div>
 
-	<div class="chart-section">
-		<h3>Current Housing Status (Year <<= $year - 1 >>)</h3>
-		<div class="chart-container" style="height:300px;">
-			<canvas id="currentHousingStatusDoughnut"></canvas>
-		</div>
-	</div>
+  <<script>>
+  $(document).one(':passagedisplay', function(ev) {
+    const V = State.variables;
+    const hist = V.history || [];
 
-	<div class="chart-section">
-		<h3>Housing Status: Year <<= $year - 2 >> vs Year <<= $year - 1 >></h3>
-		<div class="chart-container" style="height:350px;">
-			<canvas id="compareHousingStatusBar"></canvas>
-		</div>
-	</div>
+    if (!hist.length) {
+      return;
+    }
 
-	<hr>
+    // — pick snapshots —
+    const before = hist[0];
+    const after  = hist[1] || null;
+    console.log("▶️ before snapshot:", before);
+    if (after) console.log("▶️ after snapshot:", after);
 
-	<div class="chart-section">
-		<h3>Current Identity Demographics (Gender – Year <<= $year - 1 >>)</h3>
-		<div class="chart-container" style="height:300px;">
-			<canvas id="currentIdentityGenderDoughnut"></canvas>
-		</div>
-	</div>
+    // — 1. Stacked Bar for Housing Status —
+    (function() {
+      const ctx = document.getElementById('housingStackedBar').getContext('2d');
+      const cats = ['unsheltered','sheltered','transitional','institutional'];
+      const colors = ['#FF6384','#36A2EB','#FFCE56','#4BC0C0'];
 
-	<div class="chart-section">
-		<h3>Other Identity Demographics: Year <<= $year - 2 >> vs Year <<= $year - 1 >></h3>
-		<p class="small-note">(Indigenous, Racialized, Veteran, Immigrant)</p>
-		<div class="chart-container" style="height:350px;">
-			<canvas id="compareIdentityOtherBar"></canvas>
-		</div>
-	</div>
+      // dynamically build labels
+      const labels = [`Year ${before.year}`];
+      if (after) labels.push(`Year ${after.year}`);
 
-	<hr>
+      // build datasets
+      const datasets = cats.map((key,i) => {
+        const arr = [ before.pop[key]/before.homelessTotal ];
+        if (after) arr.push(after.pop[key]/after.homelessTotal);
+        return {
+          label: key.charAt(0).toUpperCase()+key.slice(1),
+          data: arr,
+          backgroundColor: colors[i]
+        };
+      });
 
-	<div class="chart-section">
-		<h3>Detailed Demographic Comparison</h3>
-		<label for="demographicSelector">Select Demographic Group:</label>
-		<select id="demographicSelector">
-			<option value="housingDetail">Housing Sub‑Types (Chronic, Children, Foster Care)</option>
-			<option value="identityDetail">Identity Sub‑Types (LGBQ, LGBTQ Youth)</option>
-			<!-- add more groups as needed -->
-		</select>
-		<div class="chart-container" style="height:350px; margin-top:10px;">
-			<canvas id="detailedCompareBarChart"></canvas>
-		</div>
-	</div>
 
-	<p style="margin-top:20px;">[[Continue gameplay|YourNextPassageAfterReport]]</p>
-</div>
+      new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          scales: {
+            x: { stacked: true },
+            y: {
+              stacked: true,
+              ticks: { callback: v => (v*100).toFixed(0) + '%' }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${(ctx.parsed.y*100).toFixed(1)}%`
+              }
+            }
+          }
+        }
+      });
+    })();
 
-<style role="stylesheet">
-	.chart-section   { margin-bottom: 30px; }
-	.chart-container { position: relative; width: 90%; max-width: 700px; margin: auto; }
-	.small-note      { font-size: 0.9em; color: #666; text-align: center; }
-</style>
+    // — 2. Line Chart for Total Homeless Trend —
+    (function() {
+      const ctx = document.getElementById('homelessLineChart').getContext('2d');
+      const labels = hist.map(s => `Year ${s.year}`);
+      const data   = hist.map(s => s.homelessTotal);
 
-<<script>>
-/*  SugarCube macro: all the JS below runs only when this passage shows  */
-$(document).one(':passagedisplay', function (ev) {
 
-	/*  make sure we’re actually in this passage  */
-	if (ev.passage.title !== 'PointInTime1') { return; }
 
-	const V        = State.variables;
-	const history  = V.history || [];
-console.log("History variable 1:", history);
+      // gradient
+      const grad = ctx.createLinearGradient(0,0,0,300);
+      grad.addColorStop(0, 'rgba(54,162,235,0.5)');
+      grad.addColorStop(1, 'rgba(54,162,235,0)');
 
-	/* ——— helper: last snapshot for a given year ——— */
-	function lastSnapshotForYear (yr) {
-		const sameYear = history.filter(h => h.year === yr);
-		if (!sameYear.length) { return null; }
-		return sameYear.sort((a, b) => b.turn - a.turn)[0];
-	}
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Total Homeless',
+            data,
+            fill: true,
+            backgroundColor: grad,
+            borderColor: 'rgba(54,162,235,1)',
+            tension: 0.4,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          animation: { duration: 1500 }
+        }
+      });
+    })();
 
-	const curYearIdx = V.year - 1;   /* reporting on the year that just finished   */
-	const prevYearIdx = V.year - 2;
+    // — 3. Identity Demographics with Arrows —
+    (function() {
+      const container = document.getElementById('identityMetrics');
+      container.innerHTML = '';
+      const keys = [
+        'male','female','transNB','lgbq','lgbtqYouth',
+        'age25to49','racialized','indigenous','veteran','immigrant'
+      ];
 
-	const curData  = lastSnapshotForYear(curYearIdx);
-	const prevData = lastSnapshotForYear(prevYearIdx);
-console.log("Current year data:", curData);
-console.log("Previous year data:", prevData);
-	/*  … everything else in your original script is unchanged …  */
-});
-<</script>>
+      keys.forEach(key => {
+        const bShare = before.pop[key]/before.homelessTotal;
+        const aShare = after ? after.pop[key]/after.homelessTotal : bShare;
+        const arrow  = after
+          ? aShare > bShare ? '↑'
+            : aShare < bShare ? '↓'
+            : '→'
+          : '';
+        console.log(` ${key}: before ${(bShare*100).toFixed(1)}%, after ${(aShare*100).toFixed(1)}%, arrow ${arrow}`);
+
+        const label = key === 'transNB' ? 'Trans & NB'
+          : key.charAt(0).toUpperCase() + key.slice(1);
+
+        const p = document.createElement('p');
+        p.textContent = `${label}: ${(aShare*100).toFixed(1)}% ${arrow}`;
+        container.appendChild(p);
+      });
+    })();
+
+  });
+  <</script>>
+
 
 
 :: QuarterFour {"position":"200,1300","size":"100,100"}
@@ -3303,16 +3336,15 @@ You've been brought into the city halls at a pivotal moment, right before the ne
   v.history.push(initialSnapshot);
 <</script>>
 
+
 * [[Start|Start]]
+* [[PointInTime1|PointInTime1]]
+
 [[Tetris|Tetris]]
 </div>
 
 
 :: Untitled Passage 2 {"position":"725,1050","size":"100,100"}
-
-
-
-:: YourNextPassageAfterReport {"position":"725,1350","size":"100,100"}
 
 
 
