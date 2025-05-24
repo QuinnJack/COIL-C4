@@ -830,26 +830,43 @@ PolicyManager.register({
 
 :: Start {"position":"600,200","size":"100,100"}
 <<script>>
-// 1) Inject Swiper’s CSS if it isn’t already in <head>
-if (!$('head').find('link[href*="swiper-bundle.min.css"]').length) {
-  $('head').append(
-    '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">'
-  );
-}
+// run on *every* time this passage finishes displaying
+$(document).on(':passagedisplay', function (ev) {
+  // 1) inject the CSS if we haven't already
+  if (!$('head').find('link[href*="swiper-bundle.min.css"]').length) {
+    $('head').append(
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">'
+    );
+  }
 
-// 2) Dynamically load Swiper JS, then initialize when it’s ready
-$.getScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
-  .done(function(){
-    // now Swiper is defined
-    window.mySwiper = new Swiper(".mySwiper", {
-      effect: "cards",
-      grabCursor: true,
+  // 2) helper to actually init the carousel
+  function setupSwiper() {
+    const el = ev.content.querySelector('.mySwiper');
+    if (!el) return;
+    if (window.mySwiper) {
+      window.mySwiper.destroy(true, true);
+    }
+    // ← here’s the only change: add observer + observeParents
+    window.mySwiper = new Swiper(el, {
+      effect:      'cards',
+      grabCursor:  true,
+      observer:        true,
+      observeParents:  true
     });
-  })
-  .fail(function(){
-    console.error("Failed to load Swiper.");
-  });
+  }
+
+  // 3) load Swiper.js if needed, otherwise just init
+  if (typeof Swiper === 'undefined') {
+    $.getScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
+     .done(setupSwiper)
+     .fail(() => console.error('Failed to load Swiper.'));
+  }
+  else {
+    setupSwiper();
+  }
+});
 <</script>>
+
 <div class="passageContent"> 
 
 
@@ -898,10 +915,28 @@ zoom: 1.1;
       }
 
       .swiper {
-        width: 25em !important;
+        width: 23rem !important;
         max-width: 900px;
         height: 40em !important;
         max-height: 1000px;
+      }
+      @media screen and (max-width: 600px) {
+        .swiper {
+          width: 42vw !important;
+        }
+        .swiper-slide {
+          font-size: 0.9em;
+          padding: 1rem 0.75rem;
+        }
+      }
+      @media screen and (max-width: 979px) {
+        .swiper {
+          width: 38vw !important;
+          margin-left: 2rem !important;
+        }
+        .button {
+          margin-left: 2rem !important;
+        }
       }
   .swiper-slide-shadow {
     background: rgba(0, 0, 0, 0.05) !important;
@@ -927,6 +962,22 @@ zoom: 1.1;
       .swiper-slide {
         pointer-events: none;
       }
+
+.slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center slider + button together */
+  margin: 2rem auto;      /* vertical spacing + center wrapper in page */
+}
+
+.slider-wrapper .swiper {
+  
+  margin: 0;                     /* reset any old margins */
+  margin-left: -1rem;            /* <<–– shift the whole slider a bit left */
+
+  */
+}
+
 
       .swiper-slide.swiper-slide-active {
         pointer-events: auto;
@@ -983,7 +1034,9 @@ zoom: 1.1;
   position: relative !important;
   top: -0.25rem !important;
   text-align: center !important;
-  margin-left: 5rem !important;
+  margin: 0.3rem auto; /* centers it */
+  position: relative;
+
 }
       .meta {
         text-align: right;
@@ -999,7 +1052,7 @@ zoom: 1.1;
 
 
 
-<div style="display: flex; flex-direction: column; align-items: center; margin-left: 1rem;">
+    <div class="slider-wrapper">
 
     <div class="swiper mySwiper">
       <div class="swiper-wrapper">
@@ -1194,10 +1247,9 @@ zoom: 1.1;
      
     </div>
 
-<div style="text-align:center; margin-top:2em; margin-left:2em;">
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;">
   <<button "OK">>
     <<run (()=>{
-      // map swiper‐slide indices to your policy‐passage names
       const map = [
         "Bill 1",
         "Bill 2",
@@ -1211,12 +1263,13 @@ zoom: 1.1;
     })()>>
   <</button>>
 </div>
+</div>
     </div>
 * [[Emergency Shelter Expansion ($30M)|Bill 1]]
 * [[Housing First Pilot ($50M)|Bill 2]]
 * [[Frontline Mental Health + Addiction Support ($40M)|Bill 3]]
 * [[Lived Experience Consultation & Strategic Planning ($10M)|Bill 4]]
-</div>
+
 
 
 
@@ -3351,7 +3404,8 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 :: StoryScript [script]
 importScripts(
 "https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
-  "https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"
+  "https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js",
+  "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
 );
 
 
@@ -3671,6 +3725,7 @@ $(function() {
 
 @import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
+
 
 .million {
   font-size: 24px;
