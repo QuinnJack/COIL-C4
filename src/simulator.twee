@@ -1,10 +1,10 @@
 :: StoryTitle
-new 1
+new 2
 
 
 :: StoryData
 {
-  "ifid": "c484ef4a-ee83-4f2a-96ff-d20164c21e49",
+  "ifid": "a7f90e11-1b50-433c-ab4d-862befc609ec",
   "format": "SugarCube",
   "format-version": "2.37.3",
   "start": "Start",
@@ -119,6 +119,7 @@ PolicyManager.tick();
 
 <p>
 * [[Proceed to next quarter|QuarterFour]]
+
 </p>
 
 
@@ -161,7 +162,7 @@ PolicyManager.tick();
 
 
 :: Start {"position":"600,300","size":"100,100"}
-In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
+<div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
 
 Despite these goals, the nation's capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city's history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what's working, what's missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
 
@@ -171,6 +172,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 * [[Housing First Pilot ($50M)|HousingFirst]]
 * [[Frontline Mental Health + Addiction Support ($40M)|MentalHealth]]
 * [[Lived Experience Consultation & Strategic Planning ($10M)|Engagement]]
+</div>
 <<set $turn = 1>>
 <<set $budget = 100>>
 
@@ -234,7 +236,307 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 <<set $politicalCapital = 3>>
 
 
-:: StoryScript [script]
+:: StoryInterface {"position":"925,250","size":"100,100"}
+<!--  =====  PERSISTENT UI  =====  -->
+<!--  sits under (and independent of) your existing sidebar  -->
+
+<div id="spent-ui">
+  
+  <div id="passages">
+    <div id="passage-start" data-passage="start" class="passage"></div>
+  </div>
+  
+      <!-- Timeline -->
+      <div id="timeline" class="timeline active">
+        <span class="day active" id="day_1">
+          <span class="container">
+            <span class="number">1</span>
+          </span>
+        </span>
+        <span class="day" id="day_2">
+          <span class="container">
+            <span class="number">2</span>
+          </span>
+        </span>
+        <span class="day" id="day_3">
+          <span class="container">
+            <span class="number">3</span>
+          </span>
+        </span>
+        <span class="day" id="day_4">
+          <span class="container">
+            <span class="number">4</span>
+          </span>
+        </span>
+        <span class="day" id="day_5">
+          <span class="container">
+            <span class="number">5</span>
+          </span>
+        </span>
+        <span class="day" id="day_6">
+          <span class="container">
+            <span class="number">6</span>
+          </span>
+        </span>
+        <span class="day" id="day_7">
+          <span class="container">
+            <span class="number">7</span>
+          </span>
+        </span>
+        <span class="day" id="day_8">
+          <span class="container">
+            <span class="number">8</span>
+          </span>
+        </span>
+        <span class="day" id="day_9">
+          <span class="container">
+            <span class="number">9</span>
+          </span>
+        </span>
+        <span class="day" id="day_10">
+          <span class="container">
+            <span class="payday">$</span>
+            <span class="number">10</span>
+          </span>
+        </span>
+        <span class="day" id="day_11">
+          <span class="container">
+            <span class="number">11</span>
+          </span>
+        </span>
+        <span class="day" id="day_12">
+          <span class="container">
+            <span class="number">12</span>
+          </span>
+        </span>
+        <span class="day" id="day_13">
+          <span class="container">
+            <span class="number">13</span>
+          </span>
+        </span>
+        <span class="day" id="day_14">
+          <span class="container">
+            <span class="number">14</span>
+          </span>
+        </span>
+        <span class="day" id="day_15">
+          <span class="container">
+            <span class="number">15</span>
+          </span>
+        </span>
+        <span class="day" id="day_16">
+          <span class="container">
+            <span class="number">16</span>
+          </span>
+        </span>
+        <span class="day" id="day_17">
+          <span class="container">
+            <span class="payday">$</span>
+            <span class="number">17</span>
+          </span>
+        </span>
+        <span class="day" id="day_18">
+          <span class="container">
+            <span class="number">18</span>
+          </span>
+        </span>
+        <span class="day" id="day_19">
+          <span class="container">
+            <span class="number">19</span>
+          </span>
+        </span>
+        <span class="day" id="day_20">
+          <span class="container">
+            <span class="number">20</span>
+          </span>
+        </span>
+        <span class="day" id="day_21">
+          <span class="container">
+            <span class="number">21</span>
+          </span>
+        </span>
+        <span class="day" id="day_22">
+          <span class="container">
+            <span class="number">22</span>
+          </span>
+        </span>
+        <span class="day" id="day_23">
+          <span class="container">
+            <span class="number">23</span>
+          </span>
+        </span>
+        <span class="day" id="day_24">
+          <span class="container">
+            <span class="payday">$</span>
+            <span class="number">24</span>
+          </span>
+        </span>
+        <span class="day" id="day_25">
+          <span class="container">
+            <span class="number">25</span>
+          </span>
+        </span>
+        <span class="day" id="day_26">
+          <span class="container">
+            <span class="number">26</span>
+          </span>
+        </span>
+        <span class="day" id="day_27">
+          <span class="container">
+            <span class="number">27</span>
+          </span>
+        </span>
+        <span class="day" id="day_28">
+          <span class="container">
+            <span class="number">28</span>
+          </span>
+        </span>
+        <span class="day" id="day_29">
+          <span class="container">
+            <span class="number">29</span>
+          </span>
+        </span>
+        <span class="day" id="day_30">
+          <span class="container">
+            <span class="number">30</span>
+          </span>
+        </span>
+        <span class="day" id="day_final"><span class="container">1</span></span>
+      </div>
+  
+      <!-- Timeline Marker -->
+      <div id="date-marker" class="date-marker active"></div>
+  
+      <!-- Date Meter -->
+      <div id="date-meter" class="date-meter" style="top: 0px">
+        <div class="title">Day</div>
+        <div class="date">1</div>
+        <div class="days-total">/30</div>
+      </div>
+  
+      <!-- Balance Meter-->
+      <div id="balance-meter" class="balance-meter" style="top: 0px">
+        <div class="title">Budget</div>
+        <div class="balance">
+          <span class="dollar-sign">$</span><span class="digits">1,000</span>
+        </div>
+      </div>
+  
+      <!-- Sidebar -->
+      <div id="toolbox" class="toolbox">
+        <!-- Unresolves -->
+        <div
+          id="unresolves-menu"
+          class="unresolves-menu"
+          style="left: 20px; top: -718px"
+        >
+          <span class="title">Debts</span>
+          <div class="container"></div>
+        </div>
+  
+        <div class="container">
+          <!-- Job Strikes -->
+          <div id="job-strikes" class="job-strikes">
+            <span class="title">Job Strikes</span>
+            <div class="job-strike" id="strike-1">×</div>
+            <div class="job-strike" id="strike-2">×</div>
+            <div class="job-strike" id="strike-3">×</div>
+          </div>
+  
+          <!-- Rescues -->
+          <div id="rescues" class="rescues">
+            <span class="title">Need Cash?</span>
+            <div
+              class="rescue crosser"
+              id="rescue_1"
+              title="Smash your kid&#39;s piggy bank: $16.23"
+              data-balance-amt-change="15"
+            >
+              <div class="icon"></div>
+              <span class="tooltip">Smash your kid's piggy bank: $16.23</span>
+              <div class="clear"></div>
+            </div>
+            <div
+              class="rescue crosser"
+              id="rescue_2"
+              title="Donate plasma: $25"
+              data-balance-amt-change="25"
+            >
+              <div class="icon"></div>
+              <span class="tooltip">Donate plasma: $25</span>
+              <div class="clear"></div>
+            </div>
+            <div
+              class="rescue crosser"
+              id="rescue_3"
+              title="Get a Payday loan: $50"
+              data-balance-amt-change="50"
+            >
+              <div class="icon"></div>
+              <span class="tooltip">Get a Payday loan: $50</span>
+              <div class="clear"></div>
+            </div>
+          </div>
+  
+          <!-- Volume -->
+          <div class="volume crosser"></div>
+        </div>
+      </div>
+<!--  =====  END UI  =====  -->
+
+
+:: StoryScript {"position":"1000,375","size":"100,100"}
+/*  =====  UI LOGIC  =====  */
+
+/* helpers --------------------------------------------------------------*/
+function updateTimeline () {
+	/* highlight current day, move marker, refresh meter text */
+	var d = State.variables.day;
+	/* default to 1 if undefined */
+	if (!d) d = State.variables.day = 1;
+
+	$('#timeline .day').removeClass('active');
+	$('#day_' + d).addClass('active');
+
+	/* move outline marker */
+	var $target = $('#day_' + d);
+	if ($target.length) {
+		$('#date-marker')
+			.css('top', $target.position().top)
+			.css('left', $target.position().left);
+	}
+
+	$('.date-meter .date').text(d);
+}
+
+function updateBudget () {
+	var val = State.variables.budget ?? 0;
+	$('.balance-meter .digits').text(val.toLocaleString());
+}
+
+
+/* event bindings -------------------------------------------------------*/
+$(document).on(':passagestart', function () {
+	updateTimeline();
+	updateBudget();
+});
+
+$(document).on(':enginerestart', function () {
+	State.variables.day = 1;
+	State.variables.budget = 1000;
+});
+
+/* click handlers -------------------------------------------------------*/
+$(document).on('click', '#volume-toggle', toggleVolume);
+
+/* initial call ---------------------------------------------------------*/
+$(updateTimeline);
+$(updateBudget);
+
+/*  =====  END UI LOGIC  =====  */
+
+
+:: StoryScript 1 [script]
 /* twine-user-script #1: "StoryScript" */
 window.Util = {
   /** Re‑normalise % shares so they sum to 1.0 */
@@ -351,45 +653,804 @@ console.log('Hello from ThyWeaver!');
 /* twine-user-script #3: "vendor.bundle.js" */
 
 :: StoryStylesheet [stylesheet]
-/* Import fonts */
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
-
-:root {
-  --displayfont: "Spectral", serif;
-  --monofont: "Geist Mono", monospace;
-  --bodyfont: "Inter", sans-serif;
-  --white: #eee;
-  --grey: #555;
-  --black: #141414;
-  --accent: #EE6352;
+.passage {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 65% !important;
 }
 
-/* Hide UI elements */
-#ui-bar {
-  display: none;
+.passageContent {
+  margin-top: 10rem; /* shift down */
+  margin-bottom: 4rem;
 }
 
-#debug-bar {
-  display: none;
-}
-
-/* Reset margins */
-#story {
-  margin: 0;
-}
-
-/* Global styles */
 body,
 html {
   margin: 0;
   padding: 0 !important;
   position: relative;
 }
-
 body * {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
+}
+\::-moz-selection,
+\::selection {
+  background: #eee;
+  text-shadow: none;
+}
+a {
+  text-decoration: none;
+}
+svg {
+  vertical-align: middle;
+}
+menu {
+  margin: 0;
+  padding: 0;
+}
+html {
+  background-image: url(../images/icons/icons.svg) no-repeat -9999px -9999px;
+  height: 100%;
+  width: 100%;
+}
+html * {
+  -webkit-font-smoothing: antialiased;
+}
+html .android_false * {
+  text-rendering: optimizeLegibility;
+}
+html.touch * {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+@media (max-width: 979px) {
+  html {
+    overflow: hidden;
+  }
+}
+body {
+  background-color: #151a1e;
+  color: #dbd1b7;
+  font-family: adobe-caslon-pro, Georgia, Times, serif;
+  height: auto;
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+body .wrap {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+@media (min-width: 980px) {
+  body {
+    height: 100%;
+    min-height: 644px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+  }
+}
+.left {
+  float: left;
+}
+.clear {
+  clear: both;
+}
+.tooltip {
+  background-color: #90d4c6;
+  color: #151a1e;
+  font-size: 16px;
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  opacity: 0;
+  padding: 10px 10px 8px;
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  margin-top: 10px;
+  text-transform: uppercase;
+  top: 100%;
+  white-space: nowrap;
+  z-index: 999;
+  -webkit-transition: opacity 0.2s linear;
+  -moz-transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear;
+}
+.tooltip:before {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #90d4c6;
+  content: "";
+  left: 14px;
+  position: absolute;
+  top: -5px;
+}
+.crosser {
+  position: relative;
+}
+#welcome {
+  background-color: #151a1e;
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 9;
+  -webkit-transition: opacity 0.5s linear;
+  -moz-transition: opacity 0.5s linear;
+  transition: opacity 0.5s linear;
+}
+#welcome.active {
+  opacity: 1;
+}
+#welcome .container {
+  text-align: center;
+}
+#balance-meter {
+  color: #dbd1b7;
+  cursor: pointer;
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  left: 0;
+  padding: 0.4em;
+  position: fixed;
+  top: 0;
+  text-transform: uppercase;
+  z-index: 7;
+}
+#balance-meter:after {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #ce4415;
+  content: "";
+  display: inline-block;
+  height: 0;
+  left: 100%;
+  margin-left: 0;
+  position: absolute;
+  top: 22px;
+  vertical-align: middle;
+  width: 0;
+}
+#balance-meter .title {
+  border-bottom: 1px dotted rgba(219, 209, 183, 0.3);
+  display: none;
+  font-size: 1em;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+#balance-meter .balance {
+  font-size: 2em;
+  letter-spacing: 0.05em;
+}
+#balance-meter .balance .dollar-sign {
+  color: #ce4415;
+}
+@media (min-width: 740px) {
+  #balance-meter {
+    left: 20px;
+    top: 10px;
+  }
+  #balance-meter:after {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #ce4415;
+    top: 30px;
+  }
+  #balance-meter .title {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+  }
+  #balance-meter .balance {
+    font-size: 3em;
+  }
+}
+@media (min-width: 980px) {
+  #balance-meter {
+    cursor: default;
+    left: calc(75px + 1%);
+    left: -webkit-calc(75px + 1%);
+    text-align: left;
+    top: 0;
+    max-width: 200px;
+    min-width: 100px;
+    width: 10%;
+  }
+  #balance-meter:after {
+    display: none;
+  }
+  #balance-meter .title {
+    display: block;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+  }
+}
+@media (max-width: 979px) {
+  #balance-meter {
+    top: 10px !important;
+  }
+}
+@media (max-width: 739px) {
+  #balance-meter {
+    top: 0 !important;
+  }
+}
+#date-meter {
+  color: #dbd1b7;
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  right: 15px;
+  padding: 0.4em;
+  position: fixed;
+  top: 0;
+  text-transform: uppercase;
+  z-index: 7;
+}
+#date-meter .title {
+  display: none;
+  border-bottom: 1px dotted rgba(219, 209, 183, 0.3);
+  font-size: 23px;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+#date-meter .date {
+  display: inline-block;
+  font-size: 2em;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+#date-meter .days-total {
+  color: #5f5d54;
+  display: inline-block;
+  font-size: 2em;
+  letter-spacing: 0.05em;
+}
+@media (min-width: 740px) {
+  #date-meter {
+    right: 30px;
+    top: 10px;
+  }
+  #date-meter .title {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+  }
+  #date-meter .date {
+    font-size: 3em;
+  }
+  #date-meter .days-total {
+    font-size: 3em;
+  }
+}
+@media (min-width: 980px) {
+  #date-meter {
+    right: calc(75px + 1%);
+    right: -webkit-calc(75px + 1%);
+    top: 0;
+    text-align: right;
+    max-width: 200px;
+    min-width: 100px;
+    width: 10%;
+  }
+  #date-meter .title {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+  }
+  #date-meter .date {
+    text-align: right;
+    width: 100%;
+  }
+  #date-meter .days-total {
+    display: none;
+  }
+}
+@media (max-width: 979px) {
+  #date-meter {
+    top: 10px !important;
+  }
+}
+@media (max-width: 739px) {
+  #date-meter {
+    top: 0 !important;
+  }
+}
+#rescues {
+  float: left;
+  padding: 10px;
+  width: 50%;
+}
+#rescues .rescue {
+  color: #90d4c6;
+  clear: both;
+  cursor: pointer;
+  display: block;
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  position: relative;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+#rescues .rescue:hover {
+  color: #90d4c6;
+}
+#rescues .rescue .icon {
+  display: block;
+  background: url(../images/icons/icons.svg) no-repeat 100px 100px;
+  float: left;
+  height: 57px;
+  margin: 0 15px 0 0;
+  vertical-align: bottom;
+  width: 57px;
+}
+#rescues .rescue#rescue_1 .icon {
+  background-position: 0 -371px;
+}
+#rescues .rescue#rescue_2 .icon {
+  background-position: -72px -371px;
+}
+#rescues .rescue#rescue_3 .icon {
+  background-position: -144px -371px;
+}
+#rescues .rescue .tooltip {
+  margin-left: 67px;
+}
+@media (min-width: 740px) {
+  #rescues .rescue {
+    font-size: 22px;
+    line-height: 36px;
+  }
+}
+@media (min-width: 980px) {
+  #rescues {
+    float: none;
+    padding: 0;
+    width: 100%;
+  }
+  #rescues .rescue {
+    margin: 10px auto;
+    position: relative;
+    text-align: center;
+  }
+  #rescues .rescue .icon {
+    float: none;
+    margin: 0 auto;
+  }
+  #rescues .rescue .tooltip {
+    left: 100%;
+    margin: -17px 0 0;
+    top: 50%;
+  }
+  #rescues .rescue .tooltip:before {
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid #90d4c6;
+    content: "";
+    left: -11px;
+    margin-top: -6px;
+    position: absolute;
+    top: 50%;
+  }
+  #rescues .rescue:hover .tooltip {
+    opacity: 1;
+  }
+}
+@media (max-width: 979px) {
+  #rescues {
+    border-right: 1px solid #5f5d54;
+    height: 100%;
+    padding: 0 25px 0 10px;
+  }
+  #rescues .title {
+    font-size: 28px;
+    text-align: center;
+  }
+  #rescues .rescue {
+    border-bottom: 1px solid #5f5d54;
+    padding: 25px 0;
+    width: 100%;
+  }
+  #rescues .rescue:last-child {
+    border-bottom: none;
+  }
+  #rescues .rescue .icon {
+    float: left;
+    vertical-align: middle;
+  }
+  #rescues .rescue .tooltip {
+    background: 0 0;
+    color: #90d4c6;
+    display: block;
+    font-size: 22px;
+    line-height: 1.1;
+    margin: 0;
+    opacity: 1;
+    overflow: hidden;
+    padding: 0;
+    position: static;
+    vertical-align: middle;
+    white-space: normal;
+  }
+  #rescues .rescue .tooltip:before {
+    display: none;
+  }
+  #rescues .rescue:after,
+  #rescues .rescue:before {
+    left: -10px;
+    height: 80px;
+    width: 80px;
+    margin-top: 0;
+    top: 55px;
+  }
+}
+@media (max-width: 739px) {
+  #rescues {
+    padding: 0 10px;
+  }
+  #rescues .title {
+    font-size: 20px;
+    margin: 0;
+  }
+  #rescues .rescue {
+    margin: 0;
+    padding: 12px 0;
+  }
+  #rescues .rescue .icon {
+    background-size: 480px 300px;
+    height: 34px;
+    width: 34px;
+  }
+  #rescues .rescue#rescue_1 .icon {
+    background-position: 0 -223px;
+  }
+  #rescues .rescue#rescue_2 .icon {
+    background-position: -43px -223px;
+  }
+  #rescues .rescue#rescue_3 .icon {
+    background-position: -86px -223px;
+  }
+  #rescues .rescue .tooltip {
+    font-size: 16px;
+  }
+  #rescues .rescue:after,
+  #rescues .rescue:before {
+    left: -7px;
+    height: 50px;
+    width: 50px;
+    margin-top: 0;
+    top: 28px;
+  }
+}
+#job-strikes {
+  display: none;
+  float: right;
+  padding: 10px;
+  width: 100%;
+}
+#job-strikes.no-job {
+  opacity: 0.3;
+}
+#job-strikes .job-strike {
+  font-size: 80px;
+  line-height: 1;
+  opacity: 0.2;
+}
+#job-strikes .job-strike.active {
+  color: #ce4415;
+  opacity: 1;
+}
+@media (min-width: 980px) {
+  #job-strikes {
+    display: block;
+    float: none;
+    width: 100%;
+  }
+  #job-strikes .job-strike {
+    line-height: 0.7;
+    text-align: center;
+  }
+}
+#timeline {
+  height: 100%;
+  padding: 20px 0;
+  pointer-events: none;
+  right: -44px;
+  position: fixed;
+  top: 0;
+  width: 20px;
+  z-index: 3;
+}
+#timeline.active {
+  right: 0;
+}
+#timeline .day {
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  height: 3.2258065%;
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+#timeline .day.active .number {
+  color: #dbd1b7;
+}
+#timeline .day.active .payday {
+  color: #ce4415;
+}
+#timeline .day .container {
+  color: #5f5d54;
+  vertical-align: middle;
+  position: relative;
+  text-align: center;
+}
+#timeline .day .container .payday {
+  left: -14px;
+  position: absolute;
+  text-align: left;
+  top: 0;
+  width: 20px;
+}
+@media (min-width: 740px) {
+  #timeline {
+    width: 36px;
+  }
+}
+@media (min-width: 980px) {
+  #timeline {
+    background: #202326;
+    position: fixed;
+    width: 75px;
+  }
+  #timeline .day#day_final .container {
+    background-color: #ce4415;
+    border-radius: 100%;
+    color: #151a1e;
+    display: block;
+    height: 30px;
+    line-height: 31px;
+    margin: 0 auto;
+    width: 30px;
+  }
+}
+@media (max-width: 979px) {
+  #timeline {
+    padding-bottom: 0;
+  }
+  #timeline .day {
+    position: relative;
+  }
+  #timeline .day .container {
+    position: static;
+  }
+  #timeline .day .container:before {
+    background-color: #5f5d54;
+    border-radius: 100%;
+    content: "";
+    display: inline-block;
+    height: 6px;
+    margin: 0 auto;
+    width: 6px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+  }
+  #timeline .day .container .number {
+    visibility: hidden;
+  }
+  #timeline .day .container .payday {
+    left: -5px;
+    top: -5px;
+  }
+  #timeline .day.active .container:before {
+    background-color: #dbd1b7;
+  }
+  #timeline .day#day_final .container {
+    color: transparent;
+  }
+  #timeline .day#day_final .container:before {
+    background-color: #ce4415;
+  }
+}
+@media (max-width: 739px) {
+  #timeline .day .container .payday {
+    left: -2px;
+  }
+}
+#toolbox {
+  background-color: #202326;
+  height: 100%;
+  padding-top: 50px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 6;
+}
+#toolbox .title {
+  display: block;
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+}
+#toolbox .volume {
+  cursor: pointer;
+  background: url(../images/icons/icons.svg) no-repeat -718px -108px;
+  border-radius: 100%;
+  height: 57px;
+  position: relative;
+  width: 57px;
+}
+@media (min-width: 740px) {
+  #toolbox {
+    padding: 80px 15px 0 15px;
+  }
+}
+@media (min-width: 980px) {
+  #toolbox {
+    background-color: #202326;
+    bottom: auto;
+    height: 100%;
+    left: 0;
+    padding: 0;
+    width: 75px;
+    z-index: 7;
+  }
+  #toolbox .container {
+    bottom: 0;
+    position: absolute;
+  }
+  #toolbox .title {
+    display: block;
+    font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+    font-size: 1em;
+    margin: 0 auto 20px auto;
+    text-align: center;
+    width: 80%;
+  }
+  #toolbox .volume {
+    margin: 20px auto;
+  }
+}
+@media (max-width: 979px) {
+  #toolbox {
+    padding-top: 90px;
+    -webkit-transition: -webkit-transform 0.25s ease-in-out;
+    transition: transform 0.25s ease-in-out;
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  #toolbox.active {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  #toolbox:after {
+    background: -moz-linear-gradient(top, rgba(32, 35, 38, 0) 0, #202326 90%);
+    background: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0, rgba(32, 35, 38, 0)),
+      color-stop(90%, #202326)
+    );
+    background: -webkit-linear-gradient(
+      top,
+      rgba(32, 35, 38, 0) 0,
+      #202326 90%
+    );
+    background: -o-linear-gradient(top, rgba(32, 35, 38, 0) 0, #202326 90%);
+    background: -ms-linear-gradient(top, rgba(32, 35, 38, 0) 0, #202326 90%);
+    background: linear-gradient(to bottom, rgba(32, 35, 38, 0) 0, #202326 90%);
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 80px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+  #toolbox .container {
+    height: 100%;
+    position: relative;
+  }
+  #toolbox .volume {
+    top: -75px;
+    left: 50%;
+    margin: 0 0 80px -28px;
+    position: absolute;
+  }
+}
+@media (max-width: 739px) {
+  #toolbox {
+    padding-top: 60px;
+  }
+  #toolbox:after {
+    height: 50px;
+  }
+  #toolbox .volume {
+    margin-left: -17px;
+    top: -52px;
+    background-size: 480px 300px;
+    height: 34px;
+    width: 34px;
+    background-position: -431px -65px;
+  }
+}
+#unresolves-menu {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}
+#unresolves-menu .title {
+  display: inline-block;
+}
+#unresolves-menu .container {
+  display: inline-block;
+  position: static;
+}
+@media (min-width: 980px) {
+  #unresolves-menu {
+    left: 85px;
+    top: 0;
+    width: 96px;
+  }
+  #unresolves-menu .title {
+    display: none;
+  }
+  #unresolves-menu .container {
+    position: relative;
+  }
+}
+@media (max-width: 979px) {
+  #unresolves-menu {
+    left: 50% !important;
+    top: 90px !important;
+    height: calc(100% - 90px);
+    width: 50%;
+  }
+  #unresolves-menu .title {
+    display: block;
+    margin-bottom: 0;
+    font-size: 28px;
+    text-align: center;
+    width: 100%;
+  }
+  #unresolves-menu .container {
+    display: block;
+    height: calc(100% - 48px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 25px;
+  }
+}
+@media (max-width: 739px) {
+  #unresolves-menu {
+    height: calc(100% - 60px);
+    top: 60px !important;
+  }
+  #unresolves-menu .title {
+    font-size: 20px;
+    margin: 0;
+  }
+  #unresolves-menu .container {
+    height: calc(100% - 24px);
+    padding: 0 10px;
+  }
+}
+#content {
+  font-family: alternate-gothic-no-3-d, Helvetica, Arial, sans-serif;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 4;
 }
