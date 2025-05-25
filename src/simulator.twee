@@ -7,12 +7,12 @@ simulator
   "ifid": "f2594c19-2b1a-436c-a749-c92e439252f0",
   "format": "SugarCube",
   "format-version": "2.37.3",
-  "start": "Untitled Passage 1",
+  "start": "Start",
   "zoom": 1
 }
 
 
-:: Bill 1 {"position":"300,400","size":"100,100"}
+:: Bill 1 {"position":"325,500","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Emergency Shelter Expansion",
@@ -42,12 +42,12 @@ PolicyManager.register({
 <div class="passageContent"> 
 <p>You open 300 beds and clear two major encampments. The media love the “huge action,” but by Quarter 3 about 150 people have cycled back out.</p>
 
-[[Continue|ChooseProposal]]
+[[Continue|BuildCanadaHomes]]
 </div>
 
 
 
-:: Bill 2 {"position":"500,400","size":"100,100"}
+:: Bill 2 {"position":"500,500","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Build City Affordable Housing",
@@ -88,12 +88,12 @@ PolicyManager.register({
   <p>Building is complete</p>
 </div>
 
-[[Continue|ChooseProposal]]
+[[Continue|BuildCanadaHomes]]
 </div>
 
 
 
-:: Bill 3 {"position":"700,400","size":"100,100"}
+:: Bill 3 {"position":"700,500","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Frontline Mental Health & Addiction Support",
@@ -120,12 +120,12 @@ PolicyManager.register({
 <div class="passageContent"> 
 <p>You fund mobile response teams and a low-barrier detox centre. ER visits drop immediately, and by year’s end the chronically homeless count is noticeably down.</p>
 
-[[Continue|ChooseProposal]]
+[[Continue|BuildCanadaHomes]]
 </div>
 
 
 
-:: Bill 4 {"position":"900,400","size":"100,100"}
+:: Bill 4 {"position":"900,500","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Lived Experience Consultation",
@@ -152,13 +152,13 @@ PolicyManager.register({
 <div class="passageContent"> 
 <p>You bring together people with lived experience, service providers, and city departments for co-design. It doesn’t look flashy, but by mid-year your plans have become smarter and more targeted. </p>
 
-[[Continue|ChooseProposal]]
+[[Continue|BuildCanadaHomes]]
 
 </div>
 
 
 
-:: Bills {"position":"1050,75","size":"100,100"}
+:: Bills {"position":"1225,175","size":"100,100"}
 <<script>>
 // run on *every* time this passage finishes displaying
 $(document).on(':passagedisplay', function (ev) {
@@ -600,19 +600,671 @@ zoom: 1.1;
 
 
 
-:: ChooseProposal {"position":"600,550","size":"100,100"}
-<<set $turn += 1>>
-<<script>>window.PolicyManager.tick();<</script>>
+:: BuildCanadaHomes {"position":"600,700","size":"100,100"}
+<!-- CSS Styling -->
+<style>
+  .build-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 5rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #1c1c1e;
+  }
+.button {
+  background-color: rgb(32, 117, 202);
+  background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+  border: 1px solid rgb(38, 111, 185); /* ✔ Correct border color */
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  max-width: 420px;
+  margin: 0.9rem auto;
+  position: relative;
+  top: -0.25rem;
+}
 
-<div class="passageContent"> Students in the C4 COIL has proposed solutions to homelessness. Pick one 
+.button:hover {
+  background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 2px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on hover */
+}
 
+.button:active {
+  transform: scale(0.98);
+  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 1px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on click */
+}
 
-* [[New Arrival Kits|NewArrivalKits]]
-* [[Renoviction Awareness|RenovictionAwareness]]
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+  border-color: rgb(44, 123, 202); /* ✔ Keep border consistent on focus */
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  border-color: #2a5a87; /* ✔ Still visible, but dimmed */
+}
+
+.button:disabled:hover,
+.button:disabled:active {
+  pointer-events: none;
+  box-shadow: none;
+}
+.button:first-of-type {
+  margin-top: 1rem;
+}
+</style>
+<!-- Intro Text -->
+<div class="passage-content">
+<div class="build-intro">
+  <p>
+    The federal government launches <strong>Build Canada Homes</strong>, its most ambitious housing program since WWII.
+    The program offers billions in financing, standardized housing designs, and land access for cities ready to build.
+    Your city has been invited to submit a proposal. Do you focus on mass affordable units, starter homes, or innovative pilots?
+  </p>
+
+  <!-- Buttons with individual policy registration and passage jump -->
+  <button class="button" onclick="buildAffordable();">Prioritize mid-rise apartment buildings with deeply affordable and supportive units.</button>
+  <button class="button" onclick="buildStarter();">Focus on starter homes and affordable ownership for middle-income families.</button>
+  <button class="button" onclick="buildModular();">Lead a modular housing and office-to-residential conversion pilot on underused land.</button>
+</div>
+
+<!-- Policy Scripts -->
+<script>
+  function buildAffordable() {
+    PolicyManager.register({
+      name: "Build City Affordable Housing",
+      costUpfront: 10,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion -= 15;
+      },
+      tick(v, Util, age) {
+        let cost = 8;
+        if (age >= 2) cost = 0.42;
+        if (age >= 5) cost = 0.12;
+        if (age >= 7) cost = -0.5;
+        v.budget -= cost;
+
+        if (age >= 2) {
+          const exits = 100 + Math.floor(25 * (age - 2));
+          window.Util.exitPeople(exits);
+        }
+
+        if (age >= 10 && age < 30) {
+          v.serviceCoordination += 2;
+        }
+      }
+    });
+    SugarCube.Engine.play("PreServiceFunding");
+  }
+
+  function buildStarter() {
+    PolicyManager.register({
+      name: "Starter Homes Expansion",
+      costUpfront: 8,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion += 10;
+        v.inflow -= 5;
+      },
+      tick(v, Util, age) {
+        let cost = 5;
+        if (age >= 3) cost = 1;
+        if (age >= 6) cost = -0.25;
+        v.budget -= cost;
+
+        if (age >= 3) {
+          v.housingSupply += 150;
+        }
+      }
+    });
+    SugarCube.Engine.play("PreServiceFunding");
+  }
+
+  function buildModular() {
+    PolicyManager.register({
+      name: "Modular Housing & Office Conversions",
+      costUpfront: 6,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion += 5;
+        v.systemCapacity += 10;
+      },
+      tick(v, Util, age) {
+        let cost = 3;
+        if (age >= 2) cost = 0.8;
+        if (age >= 4) cost = 0.2;
+        v.budget -= cost;
+
+        if (age >= 2) {
+          const exits = 80 + Math.floor(15 * (age - 2));
+          window.Util.exitPeople(exits);
+        }
+
+        if (age >= 6) {
+          v.systemCapacity += 3;
+        }
+      }
+    });
+    SugarCube.Engine.play("PreServiceFunding");
+  }
+</script>
 </div>
 
 
-:: Dish out funding {"position":"600,825","size":"100,100"}
+:: ChooseCityPolicy1 {"position":"600,300","size":"100,100"}
+<<script>>
+// run on *every* time this passage finishes displaying
+$(document).on(':passagedisplay', function (ev) {
+  // 1) inject the CSS if we haven't already
+  if (!$('head').find('link[href*="swiper-bundle.min.css"]').length) {
+    $('head').append(
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">'
+    );
+  }
+
+  // 2) helper to actually init the carousel
+  function setupSwiper() {
+    const el = ev.content.querySelector('.mySwiper');
+    if (!el) return;
+    if (window.mySwiper) {
+      window.mySwiper.destroy(true, true);
+    }
+    // ← here’s the only change: add observer + observeParents
+    window.mySwiper = new Swiper(el, {
+      effect:      'cards',
+      grabCursor:  true,
+      observer:        true,
+      observeParents:  true
+    });
+  }
+
+  // 3) load Swiper.js if needed, otherwise just init
+  if (typeof Swiper === 'undefined') {
+    $.getScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
+     .done(setupSwiper)
+     .fail(() => console.error('Failed to load Swiper.'));
+  }
+  else {
+    setupSwiper();
+  }
+});
+<</script>>
+
+<div class="passageContent"> 
+
+
+
+
+    <!-- Demo styles -->
+    <style>
+
+:root {
+zoom: 1.1;
+}
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #fff;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .swiper {
+        width: 23rem !important;
+        max-width: 900px;
+        height: 40em !important;
+        max-height: 1000px;
+      }
+      @media screen and (max-width: 600px) {
+        .swiper {
+          width: 42vw !important;
+        }
+        .swiper-slide {
+          font-size: 0.9em;
+          padding: 1rem 0.75rem;
+        }
+      }
+      @media screen and (max-width: 979px) {
+        .swiper {
+          width: 38vw !important;
+          margin-left: 2rem !important;
+        }
+        .button {
+          margin-left: 2rem !important;
+        }
+      }
+  .swiper-slide-shadow {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+  @media screen and (max-width: 979px) {
+    .swiper {
+      width: 38vw !important;
+      margin-left: 2rem !important;
+    }
+  
+    .button {
+      margin-left: 2rem !important;
+    }
+  
+    .swiper-slide {
+      font-size: 0.85em; 
+      padding: 1rem 0.75rem;
+    }
+    
+    .impacts {
+      display: none; 
+    }
+  }
+      .swiper-slide {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px;
+        font-size: 14px;
+        background-color: #fff;
+          border-radius: 14.130435% / 10.483871%;
+                      border-color: rgba(156, 162, 166, 0.32);
+       border-left-width: 1.5px;
+      border-right-width: 1.5px;
+      border-style: solid;
+      border-top-width: 1.5px;
+      border-bottom-width: 1.5px;
+
+      }
+      .swiper-slide {
+        pointer-events: none;
+      }
+
+.slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center slider + button together */
+  margin: 2rem auto;      /* vertical spacing + center wrapper in page */
+}
+
+.slider-wrapper .swiper {
+  
+  margin: 0;                     /* reset any old margins */
+  margin-left: -1rem;            /* <<–– shift the whole slider a bit left */
+
+  */
+}
+
+
+      .swiper-slide.swiper-slide-active {
+        pointer-events: auto;
+            border-color: rgba(156, 162, 166, 0.18);
+       border-left-width: 1.5px;
+      border-right-width: 1.5px;
+      border-style: solid;
+      border-top-width: 1.5px;
+            border-bottom-width: 1.5px;
+
+      }
+      .break {
+        display: block;
+        content: "";
+      }
+      .small-break {
+        display: block;
+        content: "";
+      }
+      .bill-header {
+        text-align: center;
+        margin-bottom: 20px;
+        line-height: 1.2;
+          border-bottom: 1px solid #ccc;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+      }
+      .bill-header div {
+        font-variant: small-caps;
+        letter-spacing: 1px;
+        font-size: 0.85em;
+      }
+      .bill-header .bill-number {
+        font-size: 1.2em;
+        margin-top: 6px;
+      }
+      .swiper-slide h2 {
+        margin: 0 0 16px;
+        font-size: 1.3em;
+        text-align: center;
+        font-variant: small-caps;
+        letter-spacing: 0.5px;
+      }
+      .swiper-slide p {
+        line-height: 1.5;
+        font-size: 0.95em;
+        flex: 1;
+      }
+     button {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  margin: 0.3rem !important;
+  position: relative !important;
+  top: -0.25rem !important;
+  text-align: center !important;
+  margin: 0.3rem auto; /* centers it */
+  position: relative;
+
+}
+      .meta {
+        text-align: right;
+        font-size: 0.8em;
+        color: #555;
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+      }
+      
+@font-face{font-family:swiper-icons;src:url('data:application/font-woff;charset=utf-8;base64, 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');font-weight:400;font-style:normal}:root{--swiper-theme-color:#007aff}:host{position:relative;display:block;margin-left:auto;margin-right:auto;z-index:1}.swiper{margin-left:auto;margin-right:auto;position:relative;overflow:hidden;list-style:none;padding:0;z-index:1;display:block}.swiper-vertical>.swiper-wrapper{flex-direction:column}.swiper-wrapper{position:relative;width:100%;height:100%;z-index:1;display:flex;transition-property:transform;transition-timing-function:var(--swiper-wrapper-transition-timing-function,initial);box-sizing:content-box}.swiper-android .swiper-slide,.swiper-ios .swiper-slide,.swiper-wrapper{transform:translate3d(0px,0,0)}.swiper-horizontal{touch-action:pan-y}.swiper-vertical{touch-action:pan-x}.swiper-slide{flex-shrink:0;width:100%;height:100%;position:relative;transition-property:transform;display:block}.swiper-slide-invisible-blank{visibility:hidden}.swiper-autoheight,.swiper-autoheight .swiper-slide{height:auto}.swiper-autoheight .swiper-wrapper{align-items:flex-start;transition-property:transform,height}.swiper-backface-hidden .swiper-slide{transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-3d.swiper-css-mode .swiper-wrapper{perspective:1200px}.swiper-3d .swiper-wrapper{transform-style:preserve-3d}.swiper-3d{perspective:1200px}.swiper-3d .swiper-cube-shadow,.swiper-3d .swiper-slide{transform-style:preserve-3d}.swiper-css-mode>.swiper-wrapper{overflow:auto;scrollbar-width:none;-ms-overflow-style:none}.swiper-css-mode>.swiper-wrapper::-webkit-scrollbar{display:none}.swiper-css-mode>.swiper-wrapper>.swiper-slide{scroll-snap-align:start start}.swiper-css-mode.swiper-horizontal>.swiper-wrapper{scroll-snap-type:x mandatory}.swiper-css-mode.swiper-vertical>.swiper-wrapper{scroll-snap-type:y mandatory}.swiper-css-mode.swiper-free-mode>.swiper-wrapper{scroll-snap-type:none}.swiper-css-mode.swiper-free-mode>.swiper-wrapper>.swiper-slide{scroll-snap-align:none}.swiper-css-mode.swiper-centered>.swiper-wrapper::before{content:'';flex-shrink:0;order:9999}.swiper-css-mode.swiper-centered>.swiper-wrapper>.swiper-slide{scroll-snap-align:center center;scroll-snap-stop:always}.swiper-css-mode.swiper-centered.swiper-horizontal>.swiper-wrapper>.swiper-slide:first-child{margin-inline-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-horizontal>.swiper-wrapper::before{height:100%;min-height:1px;width:var(--swiper-centered-offset-after)}.swiper-css-mode.swiper-centered.swiper-vertical>.swiper-wrapper>.swiper-slide:first-child{margin-block-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-vertical>.swiper-wrapper::before{width:100%;min-width:1px;height:var(--swiper-centered-offset-after)}.swiper-3d .swiper-slide-shadow,.swiper-3d .swiper-slide-shadow-bottom,.swiper-3d .swiper-slide-shadow-left,.swiper-3d .swiper-slide-shadow-right,.swiper-3d .swiper-slide-shadow-top{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:10}.swiper-3d .swiper-slide-shadow{background:rgba(0,0,0,.15)}.swiper-3d .swiper-slide-shadow-left{background-image:linear-gradient(to left,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-right{background-image:linear-gradient(to right,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-top{background-image:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-bottom{background-image:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-lazy-preloader{width:42px;height:42px;position:absolute;left:50%;top:50%;margin-left:-21px;margin-top:-21px;z-index:10;transform-origin:50%;box-sizing:border-box;border:4px solid var(--swiper-preloader-color,var(--swiper-theme-color));border-radius:50%;border-top-color:transparent}.swiper-watch-progress .swiper-slide-visible .swiper-lazy-preloader,.swiper:not(.swiper-watch-progress) .swiper-lazy-preloader{animation:swiper-preloader-spin 1s infinite linear}.swiper-lazy-preloader-white{--swiper-preloader-color:#fff}.swiper-lazy-preloader-black{--swiper-preloader-color:#000}@keyframes swiper-preloader-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.swiper-virtual .swiper-slide{-webkit-backface-visibility:hidden;transform:translateZ(0)}.swiper-virtual.swiper-css-mode .swiper-wrapper::after{content:'';position:absolute;left:0;top:0;pointer-events:none}.swiper-virtual.swiper-css-mode.swiper-horizontal .swiper-wrapper::after{height:1px;width:var(--swiper-virtual-size)}.swiper-virtual.swiper-css-mode.swiper-vertical .swiper-wrapper::after{width:1px;height:var(--swiper-virtual-size)}:root{--swiper-navigation-size:44px}.swiper-button-next,.swiper-button-prev{position:absolute;top:var(--swiper-navigation-top-offset,50%);width:calc(var(--swiper-navigation-size)/ 44 * 27);height:var(--swiper-navigation-size);margin-top:calc(0px - (var(--swiper-navigation-size)/ 2));z-index:10;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--swiper-navigation-color,var(--swiper-theme-color))}.swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{opacity:.35;cursor:auto;pointer-events:none}.swiper-button-next.swiper-button-hidden,.swiper-button-prev.swiper-button-hidden{opacity:0;cursor:auto;pointer-events:none}.swiper-navigation-disabled .swiper-button-next,.swiper-navigation-disabled .swiper-button-prev{display:none!important}.swiper-button-next svg,.swiper-button-prev svg{width:100%;height:100%;object-fit:contain;transform-origin:center}.swiper-rtl .swiper-button-next svg,.swiper-rtl .swiper-button-prev svg{transform:rotate(180deg)}.swiper-button-prev,.swiper-rtl .swiper-button-next{left:var(--swiper-navigation-sides-offset,10px);right:auto}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-lock{display:none}.swiper-button-next:after,.swiper-button-prev:after{font-family:swiper-icons;font-size:var(--swiper-navigation-size);text-transform:none!important;letter-spacing:0;font-variant:initial;line-height:1}.swiper-button-prev:after,.swiper-rtl .swiper-button-next:after{content:'prev'}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-next:after,.swiper-rtl .swiper-button-prev:after{content:'next'}.swiper-pagination{position:absolute;text-align:center;transition:.3s opacity;transform:translate3d(0,0,0);z-index:10}.swiper-pagination.swiper-pagination-hidden{opacity:0}.swiper-pagination-disabled>.swiper-pagination,.swiper-pagination.swiper-pagination-disabled{display:none!important}.swiper-horizontal>.swiper-pagination-bullets,.swiper-pagination-bullets.swiper-pagination-horizontal,.swiper-pagination-custom,.swiper-pagination-fraction{bottom:var(--swiper-pagination-bottom,8px);top:var(--swiper-pagination-top,auto);left:0;width:100%}.swiper-pagination-bullets-dynamic{overflow:hidden;font-size:0}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transform:scale(.33);position:relative}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-main{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev-prev{transform:scale(.33)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next-next{transform:scale(.33)}.swiper-pagination-bullet{width:var(--swiper-pagination-bullet-width,var(--swiper-pagination-bullet-size,8px));height:var(--swiper-pagination-bullet-height,var(--swiper-pagination-bullet-size,8px));display:inline-block;border-radius:var(--swiper-pagination-bullet-border-radius,50%);background:var(--swiper-pagination-bullet-inactive-color,#000);opacity:var(--swiper-pagination-bullet-inactive-opacity, .2)}button.swiper-pagination-bullet{border:none;margin:0;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none}.swiper-pagination-clickable .swiper-pagination-bullet{cursor:pointer}.swiper-pagination-bullet:only-child{display:none!important}.swiper-pagination-bullet-active{opacity:var(--swiper-pagination-bullet-opacity, 1);background:var(--swiper-pagination-color,var(--swiper-theme-color))}.swiper-pagination-vertical.swiper-pagination-bullets,.swiper-vertical>.swiper-pagination-bullets{right:var(--swiper-pagination-right,8px);left:var(--swiper-pagination-left,auto);top:50%;transform:translate3d(0px,-50%,0)}.swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets .swiper-pagination-bullet{margin:var(--swiper-pagination-bullet-vertical-gap,6px) 0;display:block}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{top:50%;transform:translateY(-50%);width:8px}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{display:inline-block;transition:.2s transform,.2s top}.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{margin:0 var(--swiper-pagination-bullet-horizontal-gap,4px)}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{left:50%;transform:translateX(-50%);white-space:nowrap}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s left}.swiper-horizontal.swiper-rtl>.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s right}.swiper-pagination-fraction{color:var(--swiper-pagination-fraction-color,inherit)}.swiper-pagination-progressbar{background:var(--swiper-pagination-progressbar-bg-color,rgba(0,0,0,.25));position:absolute}.swiper-pagination-progressbar .swiper-pagination-progressbar-fill{background:var(--swiper-pagination-color,var(--swiper-theme-color));position:absolute;left:0;top:0;width:100%;height:100%;transform:scale(0);transform-origin:left top}.swiper-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{transform-origin:right top}.swiper-horizontal>.swiper-pagination-progressbar,.swiper-pagination-progressbar.swiper-pagination-horizontal,.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,.swiper-vertical>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite{width:100%;height:var(--swiper-pagination-progressbar-size,4px);left:0;top:0}.swiper-horizontal>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-vertical,.swiper-vertical>.swiper-pagination-progressbar{width:var(--swiper-pagination-progressbar-size,4px);height:100%;left:0;top:0}.swiper-pagination-lock{display:none}.swiper-scrollbar{border-radius:var(--swiper-scrollbar-border-radius,10px);position:relative;touch-action:none;background:var(--swiper-scrollbar-bg-color,rgba(0,0,0,.1))}.swiper-scrollbar-disabled>.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-disabled{display:none!important}.swiper-horizontal>.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-horizontal{position:absolute;left:var(--swiper-scrollbar-sides-offset,1%);bottom:var(--swiper-scrollbar-bottom,4px);top:var(--swiper-scrollbar-top,auto);z-index:50;height:var(--swiper-scrollbar-size,4px);width:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar.swiper-scrollbar-vertical,.swiper-vertical>.swiper-scrollbar{position:absolute;left:var(--swiper-scrollbar-left,auto);right:var(--swiper-scrollbar-right,4px);top:var(--swiper-scrollbar-sides-offset,1%);z-index:50;width:var(--swiper-scrollbar-size,4px);height:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar-drag{height:100%;width:100%;position:relative;background:var(--swiper-scrollbar-drag-bg-color,rgba(0,0,0,.5));border-radius:var(--swiper-scrollbar-border-radius,10px);left:0;top:0}.swiper-scrollbar-cursor-drag{cursor:move}.swiper-scrollbar-lock{display:none}.swiper-zoom-container{width:100%;height:100%;display:flex;justify-content:center;align-items:center;text-align:center}.swiper-zoom-container>canvas,.swiper-zoom-container>img,.swiper-zoom-container>svg{max-width:100%;max-height:100%;object-fit:contain}.swiper-slide-zoomed{cursor:move;touch-action:none}.swiper .swiper-notification{position:absolute;left:0;top:0;pointer-events:none;opacity:0;z-index:-1000}.swiper-free-mode>.swiper-wrapper{transition-timing-function:ease-out;margin:0 auto}.swiper-grid>.swiper-wrapper{flex-wrap:wrap}.swiper-grid-column>.swiper-wrapper{flex-wrap:wrap;flex-direction:column}.swiper-fade.swiper-free-mode .swiper-slide{transition-timing-function:ease-out}.swiper-fade .swiper-slide{pointer-events:none;transition-property:opacity}.swiper-fade .swiper-slide .swiper-slide{pointer-events:none}.swiper-fade .swiper-slide-active{pointer-events:auto}.swiper-fade .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper.swiper-cube{overflow:visible}.swiper-cube .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1;visibility:hidden;transform-origin:0 0;width:100%;height:100%}.swiper-cube .swiper-slide .swiper-slide{pointer-events:none}.swiper-cube.swiper-rtl .swiper-slide{transform-origin:100% 0}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-next,.swiper-cube .swiper-slide-prev{pointer-events:auto;visibility:visible}.swiper-cube .swiper-cube-shadow{position:absolute;left:0;bottom:0px;width:100%;height:100%;opacity:.6;z-index:0}.swiper-cube .swiper-cube-shadow:before{content:'';background:#000;position:absolute;left:0;top:0;bottom:0;right:0;filter:blur(50px)}.swiper-cube .swiper-slide-next+.swiper-slide{pointer-events:auto;visibility:visible}.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-bottom,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-left,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-right,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper.swiper-flip{overflow:visible}.swiper-flip .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1}.swiper-flip .swiper-slide .swiper-slide{pointer-events:none}.swiper-flip .swiper-slide-active,.swiper-flip .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-bottom,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-left,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-right,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-creative .swiper-slide{-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden;transition-property:transform,opacity,height}.swiper.swiper-cards{overflow:visible}.swiper-cards .swiper-slide{transform-origin:center bottom;-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden}
+    </style>
+
+
+
+
+    <div class="slider-wrapper">
+
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>City of Ottawa</div>
+            <div>February 5<sup>th</sup>, 2025</div>
+            <div> ACS2025-OCC-CCS-0002         </div>
+            <div class="bill-number">  Councillor Jeff Leiper            </div>
+          </div>
+          <h2>Motion: Shelter Use in all Zones</h2>
+          <p>
+          Whereas the Official Plan calls for shelters in all urban zones; and,<br />
+          Whereas outdated zoning still blocks shelters in many areas; and,<br />
+          Whereas delays risk missing new funding and worsen the housing crisis;<br /><br />
+          </p>
+          <p>           <em>Therefore be it resolved that</em> shelters be permitted in all urban zones immediately, using the current definition in By-law 2008-250 until updated.<br /><br />
+          </p>
+          <div class="impacts">
+            <p>Should this motion pass, the City anticipates the following impacts:</p>
+            <ul>
+              <li><p>Increased system capacity</p></li>
+              <li><p>Decreased unsheltered inflow</p></li>
+              <li><p>Enabling access to time-sensitive federal/provincial funding</p></li>
+            </ul>
+          </div>
+          <div class="meta">
+            Planning and Housing Committee
+          </div>
+        </div>
+        <div class="swiper-slide">
+  <div class="bill-header">
+    <div>City of Ottawa</div>
+    <div>ACS2024-OCC-CCS-0045</div>
+    <div class="bill-number">Councillor Ariel Troster</div>
+  </div>
+  <h2>Motion: Renovictions</h2>
+  <p>
+  Whereas renovictions are displacing tenants and eroding affordable housing, and the City must act in the absence of sufficient provincial enforcement; and,<br />
+  Whereas the City of Hamilton has adopted Ontario’s first anti-renoviction by-law with licensing and enforcement measures;<br /><br />
+</p>
+  <p>
+    <em>Therefore be it resolved that</em> landlords are required to obtain a renovation license, prove necessity for vacant possession, and provide relocation assistance for affected tenants.
+  </p>
+  <div class="impacts">
+    <p>Should this motion pass, the City anticipates the following impacts:</p>
+    <ul>
+      <li><p>Reduced eviction-driven inflow</p></li>
+      <li><p>Preservation of existing affordable units</p></li>
+    </ul>
+  </div>
+  <div class="meta">
+    Planning and Housing Committee
+  </div>
+</div>
+<div class="swiper-slide">
+<div class="bill-header">
+  <div>City of Ottawa</div>
+  <div>November 20<sup>th</sup>, 2024</div>
+  <div> ACS2024- OCC-CCS- 0035</div>
+  <div class="bill-number">Councillor Laine Johnson</div>
+</div>
+<h2>Motion: Affordable Housing Acquisition Fund</h2>
+<p>
+  Whereas the City is losing affordable housing faster than it can build new supply; and,<br />
+  Whereas acquisition funds in cities like Toronto and Montreal have helped preserve affordable units through non-profit ownership; and,<br />
+  Whereas relying solely on new construction risks missing opportunities to protect existing stock;<br /><br />
+</p>
+<p>
+  <em>Therefore be it resolved that</em> the City allocate surplus revenues from the Vacant Unit Tax to establish an acquisition fund for the preservation of at-risk affordable housing.
+</p>
+<div class="impacts">
+  <p>Should this motion pass, the City anticipates the ability to further protect and maintain existing affordable units.</p>
+</div>
+<div class="meta">
+  Planning and Housing Committee
+</div>
+</div>
+<div class="swiper-slide">
+<div class="bill-header">
+  <div>City of Ottawa</div>
+  <div>March 2024</div>
+  <div>Motion No. 2024-32-11</div>
+  <div class="bill-number">Councillor Ariel Troster</div>
+</div>
+<h2>Motion: Leasing Office Space for Transitional Housing</h2>
+<p>
+Whereas unprecedented shelter demand has forced the use of recreation centres as overflow sites, which must return to public use; and,<br />
+  Whereas commercial properties present an opportunity to rapidly expand transitional housing capacity; 
+</p>
+<p>
+<em>Therefore be it resolved that</em> Council approve long-term leases to convert vacant office space into transitional housing, with capital support for renovations.
+</p>
+<div class="impacts">
+  <p>Should this motion pass, the City anticipates the following impacts:</p>
+  <ul>
+    <li><p>Increased transitional housing capacity</p></li>
+    <li><p>Reduced reliance on emergency overflow centres</p></li>
+    <li><p>More dignified interim housing for shelter clients</p></li>
+  </ul>
+</div>
+<div class="meta">
+  Emergency Shelter Crisis Taskforce
+</div>
+</div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 2077</div>
+          </div>
+          <h2>Bill 5</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <em>Section 1. Short title.</em><br />
+            This Act may be cited as the “Student Debt Relief Act.”<br /><br />
+            <em>Section 2. Purpose.</em><br />
+            (1) To provide relief for federal student loan borrowers.<br />
+            (2) <em>Additional provisions to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Linda Tran | Introduced: February 28, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">S. 3890</div>
+          </div>
+          <h2>Bill 6</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <em>Section 1. Short title.</em><br />
+            This Act may be cited as the “Climate Resilience Infrastructure
+            Act.”<br /><br />
+            <em>Section 2. Findings.</em><br />
+            (1) Infrastructure must be modernized to withstand climate
+            change.<br />
+            (2) <em>Further findings to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Sen. Priya Patel | Introduced: January 30, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 9999</div>
+          </div>
+          <h2>Bill 7</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <em>Section 1. Short title.</em><br />
+            This Act may be cited as the “Universal Childcare Access Act.”<br /><br />
+            <em>Section 2. Purpose.</em><br />
+            (1) To expand access to affordable childcare services.<br />
+            (2) <em>Further provisions to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Samuel Green | Introduced: March 2, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">S. 1010</div>
+          </div>
+          <h2>Bill 8</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <em>Section 1. Short title.</em><br />
+            This Act may be cited as the “Healthcare Equity Advancement Act.”<br /><br />
+            <em>Section 2. Findings.</em><br />
+            (1) Persistent disparities exist in healthcare access and
+            outcomes.<br />
+            (2) <em>Additional findings to be inserted…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Sen. Emily Carter | Introduced: January 15, 2025
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bill-header">
+            <div>117<sup>th</sup> Congress</div>
+            <div>1<sup>st</sup> Session</div>
+            <div class="bill-number">H.R. 8888</div>
+          </div>
+          <h2>Bill 9</h2>
+          <p>
+            Be it enacted by the Senate and House of Representatives of the
+            United States of America in Congress assembled:<br /><br />
+            <em>Section 1. Short title.</em><br />
+            This Act may be cited as the “Small Business Recovery Act.”<br /><br />
+            <em>Section 2. Purpose.</em><br />
+            (1) To support small businesses in recovering from economic
+            downturns.<br />
+            (2) <em>Further provisions to follow…</em>
+          </p>
+          <div class="meta">
+            Sponsor: Rep. Olivia Brown | Introduced: February 10, 2025
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;">
+  <<button "Adopt">>
+    <<run (()=>{
+      const map = [
+        "Bill 1",
+        "Bill 2",
+        "Bill 3",
+        "Bill 4"
+      ];
+      // get the active slide index
+      const idx = window.mySwiper.activeIndex;
+      // play the corresponding passage
+      Engine.play(map[idx]);
+    })()>>
+  <</button>>
+</div>
+</div>
+    </div>
+<div style="display: none;">
+  * [[Emergency Shelter Expansion ($30M)|Bill 1]]  
+  * [[Housing First Pilot ($50M)|Bill 2]]  
+  * [[Frontline Mental Health + Addiction Support ($40M)|Bill 3]]  
+  * [[Lived Experience Consultation & Strategic Planning ($10M)|Bill 4]]  
+</div>
+
+
+
+:: Dish out funding {"position":"800,1175","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -692,7 +1344,7 @@ $(document).on(':passagedisplay', function () {
 <</script>>
 
 
-:: Event1 {"position":"600,950","size":"100,100"}
+:: Event1 {"position":"450,1125","size":"100,100"}
 <<set $turn += 1>>
   <<script>>window.PolicyManager.tick();<</script>>
   
@@ -932,7 +1584,7 @@ $(document).on(':passagedisplay', function () {
   
 
 
-:: NewArrivalKits {"position":"700,700","size":"100,100"}
+:: NewArrivalKits {"position":"1200,1225","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Renoviction Awareness",
@@ -957,7 +1609,7 @@ PolicyManager.register({
 
 
 
-:: NextYear {"position":"600,1300","size":"100,100"}
+:: NextYear {"position":"625,1475","size":"100,100"}
 <<set $turn += 1>>
 <<set $year += 1>>
 
@@ -984,7 +1636,7 @@ PolicyManager.register({
 
 
 
-:: PIT {"position":"600,1100","size":"100,100"}
+:: PIT {"position":"625,1275","size":"100,100"}
 <<set $turn += 1>>
 
 <<script>>window.PolicyManager.tick();<</script>>
@@ -1027,7 +1679,7 @@ PolicyManager.register({
 </div>
 
 
-:: PointInTime1 {"position":"725,1225","size":"100,100"}
+:: PointInTime1 {"position":"750,1400","size":"100,100"}
   <div class="passage-content">
 
   <div class="chart-section">
@@ -1172,7 +1824,54 @@ PolicyManager.register({
 
 
 
-:: QuarterFour {"position":"200,1300","size":"100,100"}
+:: PreServiceFunding {"position":"600,800","size":"100,100"}
+<!-- CSS Styling -->
+<style>
+  .build-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 5rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #1c1c1e;
+  }
+.button {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  margin: 0.3rem auto; /* centers it */
+  display: block;
+  text-align: center !important;
+}
+</style>
+
+<!-- Intro Text -->
+<div class="passage-content">
+  <div class="build-intro">
+    <p>
+      Now that key policies are in motion, it’s time to decide how to support them.
+      From shelters to tenant services to housing outreach, your budget shapes what actually gets delivered — and how well it works.
+    </p>
+    <p>
+      These services don’t always align perfectly. Now it’s your job to allocate funds to each one — and decide what role they’ll play in the years ahead.
+    </p>
+    <button class="button" onclick="SugarCube.Engine.play('ServiceFunding1')">Fund Services</button>
+  </div>
+</div>
+
+
+:: QuarterFour {"position":"75,1300","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -1198,7 +1897,7 @@ PolicyManager.register({
 </div>
 
 
-:: QuarterThree {"position":"300,1100","size":"100,100"}
+:: QuarterThree {"position":"175,1100","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -1222,7 +1921,7 @@ PolicyManager.register({
 </div>
 
 
-:: QuarterTwo {"position":"100,1100","size":"100,100"}
+:: QuarterTwo {"position":"0,1100","size":"100,100"}
 <<script>>window.PolicyManager.tick();<</script>>
 
 <div class="passageContent"> 
@@ -1245,7 +1944,7 @@ PolicyManager.register({
 </div>
 
 
-:: RenovictionAwareness {"position":"500,700","size":"100,100"}
+:: RenovictionAwareness {"position":"1300,1050","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Renoviction Awareness",
@@ -1270,616 +1969,7 @@ PolicyManager.register({
 
 
 
-:: Start {"position":"600,175","size":"100,100"}
-<<script>>
-// run on *every* time this passage finishes displaying
-$(document).on(':passagedisplay', function (ev) {
-  // 1) inject the CSS if we haven't already
-  if (!$('head').find('link[href*="swiper-bundle.min.css"]').length) {
-    $('head').append(
-      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">'
-    );
-  }
-
-  // 2) helper to actually init the carousel
-  function setupSwiper() {
-    const el = ev.content.querySelector('.mySwiper');
-    if (!el) return;
-    if (window.mySwiper) {
-      window.mySwiper.destroy(true, true);
-    }
-    // ← here’s the only change: add observer + observeParents
-    window.mySwiper = new Swiper(el, {
-      effect:      'cards',
-      grabCursor:  true,
-      observer:        true,
-      observeParents:  true
-    });
-  }
-
-  // 3) load Swiper.js if needed, otherwise just init
-  if (typeof Swiper === 'undefined') {
-    $.getScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
-     .done(setupSwiper)
-     .fail(() => console.error('Failed to load Swiper.'));
-  }
-  else {
-    setupSwiper();
-  }
-});
-<</script>>
-
-<div class="passageContent"> 
-
-
-
-
-    <!-- Demo styles -->
-    <style>
-
-:root {
-zoom: 1.1;
-}
-      html,
-      body {
-        position: relative;
-        height: 100%;
-      }
-
-      body {
-        background: #eee;
-        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        color: #000;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        background: #fff;
-        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        color: #000;
-        margin: 0;
-        padding: 0;
-      }
-
-      html,
-      body {
-        position: relative;
-        height: 100%;
-      }
-
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .swiper {
-        width: 23rem !important;
-        max-width: 900px;
-        height: 40em !important;
-        max-height: 1000px;
-      }
-      @media screen and (max-width: 600px) {
-        .swiper {
-          width: 42vw !important;
-        }
-        .swiper-slide {
-          font-size: 0.9em;
-          padding: 1rem 0.75rem;
-        }
-      }
-      @media screen and (max-width: 979px) {
-        .swiper {
-          width: 38vw !important;
-          margin-left: 2rem !important;
-        }
-        .button {
-          margin-left: 2rem !important;
-        }
-      }
-  .swiper-slide-shadow {
-    background: rgba(0, 0, 0, 0.05) !important;
-  }
-  @media screen and (max-width: 979px) {
-    .swiper {
-      width: 38vw !important;
-      margin-left: 2rem !important;
-    }
-  
-    .button {
-      margin-left: 2rem !important;
-    }
-  
-    .swiper-slide {
-      font-size: 0.85em; 
-      padding: 1rem 0.75rem;
-    }
-  
-    .impacts {
-      display: none; 
-    }
-  }
-      .swiper-slide {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 20px;
-        font-size: 14px;
-        background-color: #fff;
-          border-radius: 14.130435% / 10.483871%;
-                      border-color: rgba(156, 162, 166, 0.32);
-       border-left-width: 1.5px;
-      border-right-width: 1.5px;
-      border-style: solid;
-      border-top-width: 1.5px;
-      border-bottom-width: 1.5px;
-
-      }
-      .swiper-slide {
-        pointer-events: none;
-      }
-
-.slider-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;   /* center slider + button together */
-  margin: 2rem auto;      /* vertical spacing + center wrapper in page */
-}
-
-.slider-wrapper .swiper {
-  
-  margin: 0;                     /* reset any old margins */
-  margin-left: -1rem;            /* <<–– shift the whole slider a bit left */
-
-  */
-}
-
-
-      .swiper-slide.swiper-slide-active {
-        pointer-events: auto;
-            border-color: rgba(156, 162, 166, 0.18);
-       border-left-width: 1.5px;
-      border-right-width: 1.5px;
-      border-style: solid;
-      border-top-width: 1.5px;
-            border-bottom-width: 1.5px;
-
-      }
-      .break {
-        display: block;
-        content: "";
-      }
-      .small-break {
-        display: block;
-        content: "";
-      }
-      .bill-header {
-        text-align: center;
-        margin-bottom: 20px;
-        line-height: 1.2;
-          border-bottom: 1px solid #ccc;
-    padding-bottom: 0.5em;
-    margin-bottom: 1em;
-      }
-      .bill-header div {
-        font-variant: small-caps;
-        letter-spacing: 1px;
-        font-size: 0.85em;
-      }
-      .bill-header .bill-number {
-        font-size: 1.2em;
-        margin-top: 6px;
-      }
-      .swiper-slide h2 {
-        margin: 0 0 16px;
-        font-size: 1.3em;
-        text-align: center;
-        font-variant: small-caps;
-        letter-spacing: 0.5px;
-      }
-      .swiper-slide p {
-        line-height: 1.5;
-        font-size: 0.95em;
-        flex: 1;
-      }
-     button {
-  background-color: #ffffff !important;
-  color: #111827 !important;
-  border: 1px solid #e5e7eb !important;
-  padding: 0.5rem 0.75rem !important;
-  border-radius: 0.5rem !important;
-  font-size: 0.875rem !important;
-  font-weight: 500 !important;
-  line-height: 1.25 !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease-in-out !important;
-  margin: 0.3rem !important;
-  position: relative !important;
-  top: -0.25rem !important;
-  text-align: center !important;
-  margin: 0.3rem auto; /* centers it */
-  position: relative;
-
-}
-      .meta {
-        text-align: right;
-        font-size: 0.8em;
-        color: #555;
-        margin-top: 20px;
-        font-family: Arial, sans-serif;
-      }
-      
-@font-face{font-family:swiper-icons;src:url('data:application/font-woff;charset=utf-8;base64, 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');font-weight:400;font-style:normal}:root{--swiper-theme-color:#007aff}:host{position:relative;display:block;margin-left:auto;margin-right:auto;z-index:1}.swiper{margin-left:auto;margin-right:auto;position:relative;overflow:hidden;list-style:none;padding:0;z-index:1;display:block}.swiper-vertical>.swiper-wrapper{flex-direction:column}.swiper-wrapper{position:relative;width:100%;height:100%;z-index:1;display:flex;transition-property:transform;transition-timing-function:var(--swiper-wrapper-transition-timing-function,initial);box-sizing:content-box}.swiper-android .swiper-slide,.swiper-ios .swiper-slide,.swiper-wrapper{transform:translate3d(0px,0,0)}.swiper-horizontal{touch-action:pan-y}.swiper-vertical{touch-action:pan-x}.swiper-slide{flex-shrink:0;width:100%;height:100%;position:relative;transition-property:transform;display:block}.swiper-slide-invisible-blank{visibility:hidden}.swiper-autoheight,.swiper-autoheight .swiper-slide{height:auto}.swiper-autoheight .swiper-wrapper{align-items:flex-start;transition-property:transform,height}.swiper-backface-hidden .swiper-slide{transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-3d.swiper-css-mode .swiper-wrapper{perspective:1200px}.swiper-3d .swiper-wrapper{transform-style:preserve-3d}.swiper-3d{perspective:1200px}.swiper-3d .swiper-cube-shadow,.swiper-3d .swiper-slide{transform-style:preserve-3d}.swiper-css-mode>.swiper-wrapper{overflow:auto;scrollbar-width:none;-ms-overflow-style:none}.swiper-css-mode>.swiper-wrapper::-webkit-scrollbar{display:none}.swiper-css-mode>.swiper-wrapper>.swiper-slide{scroll-snap-align:start start}.swiper-css-mode.swiper-horizontal>.swiper-wrapper{scroll-snap-type:x mandatory}.swiper-css-mode.swiper-vertical>.swiper-wrapper{scroll-snap-type:y mandatory}.swiper-css-mode.swiper-free-mode>.swiper-wrapper{scroll-snap-type:none}.swiper-css-mode.swiper-free-mode>.swiper-wrapper>.swiper-slide{scroll-snap-align:none}.swiper-css-mode.swiper-centered>.swiper-wrapper::before{content:'';flex-shrink:0;order:9999}.swiper-css-mode.swiper-centered>.swiper-wrapper>.swiper-slide{scroll-snap-align:center center;scroll-snap-stop:always}.swiper-css-mode.swiper-centered.swiper-horizontal>.swiper-wrapper>.swiper-slide:first-child{margin-inline-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-horizontal>.swiper-wrapper::before{height:100%;min-height:1px;width:var(--swiper-centered-offset-after)}.swiper-css-mode.swiper-centered.swiper-vertical>.swiper-wrapper>.swiper-slide:first-child{margin-block-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-vertical>.swiper-wrapper::before{width:100%;min-width:1px;height:var(--swiper-centered-offset-after)}.swiper-3d .swiper-slide-shadow,.swiper-3d .swiper-slide-shadow-bottom,.swiper-3d .swiper-slide-shadow-left,.swiper-3d .swiper-slide-shadow-right,.swiper-3d .swiper-slide-shadow-top{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:10}.swiper-3d .swiper-slide-shadow{background:rgba(0,0,0,.15)}.swiper-3d .swiper-slide-shadow-left{background-image:linear-gradient(to left,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-right{background-image:linear-gradient(to right,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-top{background-image:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-bottom{background-image:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-lazy-preloader{width:42px;height:42px;position:absolute;left:50%;top:50%;margin-left:-21px;margin-top:-21px;z-index:10;transform-origin:50%;box-sizing:border-box;border:4px solid var(--swiper-preloader-color,var(--swiper-theme-color));border-radius:50%;border-top-color:transparent}.swiper-watch-progress .swiper-slide-visible .swiper-lazy-preloader,.swiper:not(.swiper-watch-progress) .swiper-lazy-preloader{animation:swiper-preloader-spin 1s infinite linear}.swiper-lazy-preloader-white{--swiper-preloader-color:#fff}.swiper-lazy-preloader-black{--swiper-preloader-color:#000}@keyframes swiper-preloader-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.swiper-virtual .swiper-slide{-webkit-backface-visibility:hidden;transform:translateZ(0)}.swiper-virtual.swiper-css-mode .swiper-wrapper::after{content:'';position:absolute;left:0;top:0;pointer-events:none}.swiper-virtual.swiper-css-mode.swiper-horizontal .swiper-wrapper::after{height:1px;width:var(--swiper-virtual-size)}.swiper-virtual.swiper-css-mode.swiper-vertical .swiper-wrapper::after{width:1px;height:var(--swiper-virtual-size)}:root{--swiper-navigation-size:44px}.swiper-button-next,.swiper-button-prev{position:absolute;top:var(--swiper-navigation-top-offset,50%);width:calc(var(--swiper-navigation-size)/ 44 * 27);height:var(--swiper-navigation-size);margin-top:calc(0px - (var(--swiper-navigation-size)/ 2));z-index:10;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--swiper-navigation-color,var(--swiper-theme-color))}.swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{opacity:.35;cursor:auto;pointer-events:none}.swiper-button-next.swiper-button-hidden,.swiper-button-prev.swiper-button-hidden{opacity:0;cursor:auto;pointer-events:none}.swiper-navigation-disabled .swiper-button-next,.swiper-navigation-disabled .swiper-button-prev{display:none!important}.swiper-button-next svg,.swiper-button-prev svg{width:100%;height:100%;object-fit:contain;transform-origin:center}.swiper-rtl .swiper-button-next svg,.swiper-rtl .swiper-button-prev svg{transform:rotate(180deg)}.swiper-button-prev,.swiper-rtl .swiper-button-next{left:var(--swiper-navigation-sides-offset,10px);right:auto}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-lock{display:none}.swiper-button-next:after,.swiper-button-prev:after{font-family:swiper-icons;font-size:var(--swiper-navigation-size);text-transform:none!important;letter-spacing:0;font-variant:initial;line-height:1}.swiper-button-prev:after,.swiper-rtl .swiper-button-next:after{content:'prev'}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-next:after,.swiper-rtl .swiper-button-prev:after{content:'next'}.swiper-pagination{position:absolute;text-align:center;transition:.3s opacity;transform:translate3d(0,0,0);z-index:10}.swiper-pagination.swiper-pagination-hidden{opacity:0}.swiper-pagination-disabled>.swiper-pagination,.swiper-pagination.swiper-pagination-disabled{display:none!important}.swiper-horizontal>.swiper-pagination-bullets,.swiper-pagination-bullets.swiper-pagination-horizontal,.swiper-pagination-custom,.swiper-pagination-fraction{bottom:var(--swiper-pagination-bottom,8px);top:var(--swiper-pagination-top,auto);left:0;width:100%}.swiper-pagination-bullets-dynamic{overflow:hidden;font-size:0}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transform:scale(.33);position:relative}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-main{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev-prev{transform:scale(.33)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next-next{transform:scale(.33)}.swiper-pagination-bullet{width:var(--swiper-pagination-bullet-width,var(--swiper-pagination-bullet-size,8px));height:var(--swiper-pagination-bullet-height,var(--swiper-pagination-bullet-size,8px));display:inline-block;border-radius:var(--swiper-pagination-bullet-border-radius,50%);background:var(--swiper-pagination-bullet-inactive-color,#000);opacity:var(--swiper-pagination-bullet-inactive-opacity, .2)}button.swiper-pagination-bullet{border:none;margin:0;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none}.swiper-pagination-clickable .swiper-pagination-bullet{cursor:pointer}.swiper-pagination-bullet:only-child{display:none!important}.swiper-pagination-bullet-active{opacity:var(--swiper-pagination-bullet-opacity, 1);background:var(--swiper-pagination-color,var(--swiper-theme-color))}.swiper-pagination-vertical.swiper-pagination-bullets,.swiper-vertical>.swiper-pagination-bullets{right:var(--swiper-pagination-right,8px);left:var(--swiper-pagination-left,auto);top:50%;transform:translate3d(0px,-50%,0)}.swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets .swiper-pagination-bullet{margin:var(--swiper-pagination-bullet-vertical-gap,6px) 0;display:block}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{top:50%;transform:translateY(-50%);width:8px}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{display:inline-block;transition:.2s transform,.2s top}.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{margin:0 var(--swiper-pagination-bullet-horizontal-gap,4px)}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{left:50%;transform:translateX(-50%);white-space:nowrap}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s left}.swiper-horizontal.swiper-rtl>.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s right}.swiper-pagination-fraction{color:var(--swiper-pagination-fraction-color,inherit)}.swiper-pagination-progressbar{background:var(--swiper-pagination-progressbar-bg-color,rgba(0,0,0,.25));position:absolute}.swiper-pagination-progressbar .swiper-pagination-progressbar-fill{background:var(--swiper-pagination-color,var(--swiper-theme-color));position:absolute;left:0;top:0;width:100%;height:100%;transform:scale(0);transform-origin:left top}.swiper-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{transform-origin:right top}.swiper-horizontal>.swiper-pagination-progressbar,.swiper-pagination-progressbar.swiper-pagination-horizontal,.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,.swiper-vertical>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite{width:100%;height:var(--swiper-pagination-progressbar-size,4px);left:0;top:0}.swiper-horizontal>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-vertical,.swiper-vertical>.swiper-pagination-progressbar{width:var(--swiper-pagination-progressbar-size,4px);height:100%;left:0;top:0}.swiper-pagination-lock{display:none}.swiper-scrollbar{border-radius:var(--swiper-scrollbar-border-radius,10px);position:relative;touch-action:none;background:var(--swiper-scrollbar-bg-color,rgba(0,0,0,.1))}.swiper-scrollbar-disabled>.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-disabled{display:none!important}.swiper-horizontal>.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-horizontal{position:absolute;left:var(--swiper-scrollbar-sides-offset,1%);bottom:var(--swiper-scrollbar-bottom,4px);top:var(--swiper-scrollbar-top,auto);z-index:50;height:var(--swiper-scrollbar-size,4px);width:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar.swiper-scrollbar-vertical,.swiper-vertical>.swiper-scrollbar{position:absolute;left:var(--swiper-scrollbar-left,auto);right:var(--swiper-scrollbar-right,4px);top:var(--swiper-scrollbar-sides-offset,1%);z-index:50;width:var(--swiper-scrollbar-size,4px);height:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar-drag{height:100%;width:100%;position:relative;background:var(--swiper-scrollbar-drag-bg-color,rgba(0,0,0,.5));border-radius:var(--swiper-scrollbar-border-radius,10px);left:0;top:0}.swiper-scrollbar-cursor-drag{cursor:move}.swiper-scrollbar-lock{display:none}.swiper-zoom-container{width:100%;height:100%;display:flex;justify-content:center;align-items:center;text-align:center}.swiper-zoom-container>canvas,.swiper-zoom-container>img,.swiper-zoom-container>svg{max-width:100%;max-height:100%;object-fit:contain}.swiper-slide-zoomed{cursor:move;touch-action:none}.swiper .swiper-notification{position:absolute;left:0;top:0;pointer-events:none;opacity:0;z-index:-1000}.swiper-free-mode>.swiper-wrapper{transition-timing-function:ease-out;margin:0 auto}.swiper-grid>.swiper-wrapper{flex-wrap:wrap}.swiper-grid-column>.swiper-wrapper{flex-wrap:wrap;flex-direction:column}.swiper-fade.swiper-free-mode .swiper-slide{transition-timing-function:ease-out}.swiper-fade .swiper-slide{pointer-events:none;transition-property:opacity}.swiper-fade .swiper-slide .swiper-slide{pointer-events:none}.swiper-fade .swiper-slide-active{pointer-events:auto}.swiper-fade .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper.swiper-cube{overflow:visible}.swiper-cube .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1;visibility:hidden;transform-origin:0 0;width:100%;height:100%}.swiper-cube .swiper-slide .swiper-slide{pointer-events:none}.swiper-cube.swiper-rtl .swiper-slide{transform-origin:100% 0}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-next,.swiper-cube .swiper-slide-prev{pointer-events:auto;visibility:visible}.swiper-cube .swiper-cube-shadow{position:absolute;left:0;bottom:0px;width:100%;height:100%;opacity:.6;z-index:0}.swiper-cube .swiper-cube-shadow:before{content:'';background:#000;position:absolute;left:0;top:0;bottom:0;right:0;filter:blur(50px)}.swiper-cube .swiper-slide-next+.swiper-slide{pointer-events:auto;visibility:visible}.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-bottom,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-left,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-right,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper.swiper-flip{overflow:visible}.swiper-flip .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1}.swiper-flip .swiper-slide .swiper-slide{pointer-events:none}.swiper-flip .swiper-slide-active,.swiper-flip .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-bottom,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-left,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-right,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-creative .swiper-slide{-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden;transition-property:transform,opacity,height}.swiper.swiper-cards{overflow:visible}.swiper-cards .swiper-slide{transform-origin:center bottom;-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden}
-    </style>
-
-
-
-
-    <div class="slider-wrapper">
-
-    <div class="swiper mySwiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>City of Ottawa</div>
-            <div>February 5<sup>th</sup>, 2025</div>
-            <div> ACS2025-OCC-CCS-0002         </div>
-            <div class="bill-number">  Councillor Jeff Leiper            </div>
-          </div>
-          <h2>Motion: Shelter Use in all Zones</h2>
-          <p>
-          Whereas the Official Plan calls for shelters in all urban zones; and,<br />
-          Whereas outdated zoning still blocks shelters in many areas; and,<br />
-          Whereas delays risk missing new funding and worsen the housing crisis;<br /><br />
-          </p>
-          <p>           <em>Therefore be it resolved that</em> shelters be permitted in all urban zones immediately, using the current definition in By-law 2008-250 until updated.<br /><br />
-          </p>
-          <div class="impacts">
-            <p>Should this motion pass, the City anticipates the following impacts:</p>
-            <ul>
-              <li><p>Increased system capacity</p></li>
-              <li><p>Decreased unsheltered inflow</p></li>
-              <li><p>Enabling access to time-sensitive federal/provincial funding</p></li>
-            </ul>
-          </div>
-          <div class="meta">
-            Planning and Housing Committee
-          </div>
-        </div>
-        <div class="swiper-slide">
-  <div class="bill-header">
-    <div>City of Ottawa</div>
-    <div>ACS2024-OCC-CCS-0045</div>
-    <div class="bill-number">Councillor Ariel Troster</div>
-  </div>
-  <h2>Motion: Renovictions</h2>
-  <p>
-  Whereas renovictions are displacing tenants and eroding affordable housing in Ottawa, and the City must act in the absence of sufficient provincial enforcement; and,<br />
-  Whereas the City of Hamilton has adopted Ontario’s first anti-renoviction by-law with licensing and enforcement measures;<br /><br />
-</p>
-  <p>
-    <em>Therefore be it resolved that</em> landlords are required to obtain a renovation license, prove necessity for vacant possession, and provide relocation assistance for affected tenants.
-  </p>
-  <div class="impacts">
-    <p>Should this motion pass, the City anticipates the following impacts:</p>
-    <ul>
-      <li><p>Reduced eviction-driven inflow</p></li>
-      <li><p>Preservation of existing affordable units</p></li>
-    </ul>
-  </div>
-  <div class="meta">
-    Planning and Housing Committee
-  </div>
-</div>
-<div class="swiper-slide">
-<div class="bill-header">
-  <div>City of Ottawa</div>
-  <div>November 20<sup>th</sup>, 2024</div>
-  <div> ACS2024- OCC-CCS- 0035</div>
-  <div class="bill-number">Councillor Laine Johnson</div>
-</div>
-<h2>Motion: Affordable Housing Acquisition Fund</h2>
-<p>
-  Whereas Ottawa is losing affordable housing faster than it can build new supply; and,<br />
-  Whereas acquisition funds in cities like Toronto and Montreal have helped preserve affordable units through non-profit ownership; and,<br />
-  Whereas relying solely on new construction risks missing opportunities to protect existing stock;<br /><br />
-</p>
-<p>
-  <em>Therefore be it resolved that</em> the City allocate surplus revenues from the Vacant Unit Tax to establish an acquisition fund for the preservation of at-risk affordable housing.
-</p>
-<div class="impacts">
-  <p>Should this motion pass, the City anticipates the ability to preserve existing affordable units.</p>
-</div>
-<div class="meta">
-  Planning and Housing Committee
-</div>
-</div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">S. 1457</div>
-          </div>
-          <h2>Bill 4</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “National Broadband Expansion Act.”<br /><br />
-            <em>Section 2. Findings.</em><br />
-            (1) Universal broadband access is essential for economic
-            opportunity.<br />
-            (2) <em>Further findings to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Sen. Alex Kim | Introduced: March 10, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">H.R. 2077</div>
-          </div>
-          <h2>Bill 5</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Student Debt Relief Act.”<br /><br />
-            <em>Section 2. Purpose.</em><br />
-            (1) To provide relief for federal student loan borrowers.<br />
-            (2) <em>Additional provisions to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Rep. Linda Tran | Introduced: February 28, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">S. 3890</div>
-          </div>
-          <h2>Bill 6</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Climate Resilience Infrastructure
-            Act.”<br /><br />
-            <em>Section 2. Findings.</em><br />
-            (1) Infrastructure must be modernized to withstand climate
-            change.<br />
-            (2) <em>Further findings to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Sen. Priya Patel | Introduced: January 30, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">H.R. 9999</div>
-          </div>
-          <h2>Bill 7</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Universal Childcare Access Act.”<br /><br />
-            <em>Section 2. Purpose.</em><br />
-            (1) To expand access to affordable childcare services.<br />
-            (2) <em>Further provisions to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Rep. Samuel Green | Introduced: March 2, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">S. 1010</div>
-          </div>
-          <h2>Bill 8</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Healthcare Equity Advancement Act.”<br /><br />
-            <em>Section 2. Findings.</em><br />
-            (1) Persistent disparities exist in healthcare access and
-            outcomes.<br />
-            (2) <em>Additional findings to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Sen. Emily Carter | Introduced: January 15, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">H.R. 8888</div>
-          </div>
-          <h2>Bill 9</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Small Business Recovery Act.”<br /><br />
-            <em>Section 2. Purpose.</em><br />
-            (1) To support small businesses in recovering from economic
-            downturns.<br />
-            (2) <em>Further provisions to follow…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Rep. Olivia Brown | Introduced: February 10, 2025
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;">
-  <<button "Adopt">>
-    <<run (()=>{
-      const map = [
-        "Bill 1",
-        "Bill 2",
-        "Bill 3",
-        "Bill 4"
-      ];
-      // get the active slide index
-      const idx = window.mySwiper.activeIndex;
-      // play the corresponding passage
-      Engine.play(map[idx]);
-    })()>>
-  <</button>>
-</div>
-</div>
-    </div>
-<div style="display: none;">
-  * [[Emergency Shelter Expansion ($30M)|Bill 1]]  
-  * [[Housing First Pilot ($50M)|Bill 2]]  
-  * [[Frontline Mental Health + Addiction Support ($40M)|Bill 3]]  
-  * [[Lived Experience Consultation & Strategic Planning ($10M)|Bill 4]]  
-</div>
-
-
-
-:: StoryInterface {"position":"800,200","size":"100,100"}
-<!--  =====  PERSISTENT UI  =====  -->
-
-<div id="spent-ui">
-  <div id="passages">
-    <div id="passage-start" data-passage="start" class="passage"></div>
-  </div>
-
-  <!-- Timeline -->
-  <div id="timeline" class="timeline active">
-    <span class="day active" id="year_2024">
-      <span class="container"><span class="number">2024</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2025">
-      <span class="container"><span class="number">2025</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2026">
-      <span class="container"><span class="number">2026</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2027">
-      <span class="container"><span class="number">2027</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2028">
-      <span class="container"><span class="number">2028</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2029">
-      <span class="container"><span class="number">2029</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2030">
-      <span class="container"><span class="number">2030</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2031">
-      <span class="container"><span class="number">2031</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2032">
-      <span class="container"><span class="number">2032</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2033">
-      <span class="container"><span class="number">2033</span></span>
-    </span>
-    <span class="day spacer"></span><span class="day spacer"></span>
-
-    <span class="day" id="year_2034">
-      <span class="container"><span class="number">2034</span></span>
-    </span>
-  </div>
-
-  <!-- Timeline Marker -->
-  <div id="date-marker" class="date-marker active"></div>
-  
-  <div id="timeline-separator"></div>
-
-  <!-- Date Meter -->
-  <div id="date-meter" class="date-meter">
-    <div class="title">Year</div>
-    <div class="date"><<= $year || 1 >></div>
-    <div class="days-total">/10</div>
-  </div>
- <div class="balance-meter" id="balance-meter" data-unit="currency" style="top: 0px">
-    <div class="title">Budget</div>
-    <div class="balance">
-      <span class="dollar-sign">$</span>
-      <span class="digits" id="budget-val">100</span>
-            <span class="million">M</span>
-    </div>
-  </div>
-
-  <!-- Public Opinion -->
-  <div class="balance-meter" id="balance-meter"  data-unit="currency"  style="top: 100px">
-    <div class="title">Public Opinion</div>
-    <div class="balance">
-      <span class="emoji" id="public-opinion-emoji">•_•</span>
-    </div>
-  </div>
-
-  <!-- Service Coordination (slider) -->
-  <div class="balance-meter" id="balance-meter"  data-unit="bar"  style="top: 200px">
-    <div class="title">Service Coordination</div>
-    <div class="balance">
-      <div class="bar-container">
-        <div class="bar-fill" id="coordination-bar"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- System Capacity -->
-  <div class="balance-meter" id="balance-meter"  data-unit="percent"  style="top: 320px">
-    <div class="title">System Capacity</div>
-    <div class="balance">
-      <span class="unit">%</span>
-      <span class="digits" id="capacity-val">20</span>
-    </div>
-  </div>
-
-  <!-- Political Capital (dots) -->
-  <div class="balance-meter"id="balance-meter"   data-unit="dots" style="top: 440px">
-    <div class="title">Political Capital</div>
-    <div class="circles">
-      <span class="circle" data-index="1"></span>
-      <span class="circle" data-index="2"></span>
-      <span class="circle" data-index="3"></span>
-      <span class="circle" data-index="4"></span>
-    </div>
-  </div>
-
-  <!--  =====  END UI  =====  -->
-
-
-:: Tetris {"position":"700,0","size":"100,100"}
+:: ServiceFunding1 {"position":"600,900","size":"100,100"}
 <div class="puzzle-layout">
     <div id="game-area">
       <!-- The plugin will create its canvas inside this div -->
@@ -1929,7 +2019,7 @@ zoom: 1.1;
       </div>
       <div id="selected-piece-controls-group">
         <div class="title" id="selected-piece-id">
-          Click a piece on the grid to select it.
+          Click a service on the grid to select it.
         </div>
         <div
           style="
@@ -3901,7 +3991,7 @@ body {
   </style>
 
 
-:: Untitled Passage 1 {"position":"300,50","size":"100,100"}
+:: Start {"position":"600,100","size":"100,100"}
 <<set $history = []>>
 <div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
 
@@ -4000,15 +4090,135 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 <</script>>
 
 
-* [[Start|Start]]
-* [[PointInTime1|PointInTime1]]
+* [[Start|ChooseCityPolicy1]]
 
-[[Tetris|Tetris]]
 </div>
 
 
-:: Untitled Passage 2 {"position":"725,1050","size":"100,100"}
+:: StoryInterface {"position":"1225,275","size":"100,100"}
+<!--  =====  PERSISTENT UI  =====  -->
 
+<div id="spent-ui">
+  <div id="passages">
+    <div id="passage-start" data-passage="start" class="passage"></div>
+  </div>
+
+  <!-- Timeline -->
+  <div id="timeline" class="timeline active">
+    <span class="day active" id="year_2024">
+      <span class="container"><span class="number">2024</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2025">
+      <span class="container"><span class="number">2025</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2026">
+      <span class="container"><span class="number">2026</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2027">
+      <span class="container"><span class="number">2027</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2028">
+      <span class="container"><span class="number">2028</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2029">
+      <span class="container"><span class="number">2029</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2030">
+      <span class="container"><span class="number">2030</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2031">
+      <span class="container"><span class="number">2031</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2032">
+      <span class="container"><span class="number">2032</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2033">
+      <span class="container"><span class="number">2033</span></span>
+    </span>
+    <span class="day spacer"></span><span class="day spacer"></span>
+
+    <span class="day" id="year_2034">
+      <span class="container"><span class="number">2034</span></span>
+    </span>
+  </div>
+
+  <!-- Timeline Marker -->
+  <div id="date-marker" class="date-marker active"></div>
+  
+  <div id="timeline-separator"></div>
+
+  <!-- Date Meter -->
+  <div id="date-meter" class="date-meter">
+    <div class="title">Year</div>
+    <div class="date"><<= $year || 1 >></div>
+    <div class="days-total">/10</div>
+  </div>
+ <div class="balance-meter" id="balance-meter" data-unit="currency" style="top: 0px">
+    <div class="title">Budget</div>
+    <div class="balance">
+      <span class="dollar-sign">$</span>
+      <span class="digits" id="budget-val">100</span>
+            <span class="million">M</span>
+    </div>
+  </div>
+
+  <!-- Public Opinion -->
+  <div class="balance-meter" id="balance-meter"  data-unit="currency"  style="top: 100px">
+    <div class="title">Public Opinion</div>
+    <div class="balance">
+      <span class="emoji" id="public-opinion-emoji">•_•</span>
+    </div>
+  </div>
+
+  <!-- Service Coordination (slider) -->
+  <div class="balance-meter" id="balance-meter"  data-unit="bar"  style="top: 200px">
+    <div class="title">Service Coordination</div>
+    <div class="balance">
+      <div class="bar-container">
+        <div class="bar-fill" id="coordination-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- System Capacity -->
+  <div class="balance-meter" id="balance-meter"  data-unit="percent"  style="top: 320px">
+    <div class="title">System Capacity</div>
+    <div class="balance">
+      <span class="unit">%</span>
+      <span class="digits" id="capacity-val">20</span>
+    </div>
+  </div>
+
+  <!-- Political Capital (dots) -->
+  <div class="balance-meter"id="balance-meter"   data-unit="dots" style="top: 440px">
+    <div class="title">Political Capital</div>
+    <div class="circles">
+      <span class="circle" data-index="1"></span>
+      <span class="circle" data-index="2"></span>
+      <span class="circle" data-index="3"></span>
+      <span class="circle" data-index="4"></span>
+    </div>
+  </div>
+
+  <!--  =====  END UI  =====  -->
 
 
 :: StoryScript [script]
