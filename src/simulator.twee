@@ -601,6 +601,8 @@ zoom: 1.1;
 
 
 :: BuildCanadaHomes {"position":"600,700","size":"100,100"}
+  <<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
 <!-- CSS Styling -->
 <style>
   .build-intro {
@@ -686,9 +688,9 @@ zoom: 1.1;
   </p>
 
   <!-- Buttons with individual policy registration and passage jump -->
-  <button class="button" onclick="buildAffordable();">Prioritize mid-rise apartment buildings with deeply affordable and supportive units.</button>
-  <button class="button" onclick="buildStarter();">Focus on starter homes and affordable ownership for middle-income families.</button>
-  <button class="button" onclick="buildModular();">Lead a modular housing and office-to-residential conversion pilot on underused land.</button>
+  <button class="button" onclick="buildAffordable();">Densify existing neighbourhoods with new mid-rise apartments</button>
+  <button class="button" onclick="buildStarter();"> Expand suburban development with starter homes for low and middle-income families.</button>
+  <button class="button" onclick="buildModular();">Accelerate housing construction through prefabricated, factory-built homes.</button>
 </div>
 
 <!-- Policy Scripts -->
@@ -775,7 +777,124 @@ zoom: 1.1;
 </div>
 
 
+:: ChooseC4Project1 {"position":"600,1000","size":"100,100"}
+  <<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
+<!-- CSS Styling -->
+<style>
+  .build-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 5rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #1c1c1e;
+  }
+.button {
+  background-color: rgb(32, 117, 202);
+  background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+  border: 1px solid rgb(38, 111, 185); /* ✔ Correct border color */
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  max-width: 420px;
+  margin: 0.9rem auto;
+  position: relative;
+  top: -0.25rem;
+}
+
+.button:hover {
+  background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 2px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on hover */
+}
+
+.button:active {
+  transform: scale(0.98);
+  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 1px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on click */
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+  border-color: rgb(44, 123, 202); /* ✔ Keep border consistent on focus */
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  border-color: #2a5a87; /* ✔ Still visible, but dimmed */
+}
+
+.button:disabled:hover,
+.button:disabled:active {
+  pointer-events: none;
+  box-shadow: none;
+}
+.button:first-of-type {
+  margin-top: 1rem;
+}
+</style>
+<!-- Intro Text -->
+<!-- Intro Text -->
+<div class="passage-content">
+  <div class="build-intro">
+    <p>
+      As part of a <strong>COIL (Collaborative Online International Learning)</strong> initiative, students from York University, University of Ottawa, University of Guelph, Laurier, and Unisinos in Brazil have partnered with local organizations to develop community-based housing and homelessness solutions. 
+      Each project offers a different approach, grounded, collaborative, and designed for tangible real-world impact. You’ve been invited to support one. Which project do you choose to enact in your city?
+    </p>
+
+    <!-- Buttons with individual project policy activation -->
+    <button class="button" onclick="project1();">In Person Fundraiser</button>
+    <button class="button" onclick="project1();">Climate Crisis Backpack Kit </button>
+    <button class="button" onclick="project1();">Farmer Product Connection</button>
+  </div>
+
+  <!-- Project Scripts -->
+  <script>
+   function project1() {
+    PolicyManager.register({
+      name: "Student Project 1 – TODO: Add more details",
+      costUpfront: 0,
+      duration: 10,
+      immediate(v) {
+        // Optional: Modify variables right away
+      },
+      tick(v, Util, age) {
+        // Optional: Add ongoing effects here
+      }
+    });
+    SugarCube.Engine.play("Event1");
+  }
+  </script>
+</div>
+
+
 :: ChooseCityPolicy1 {"position":"600,300","size":"100,100"}
+  <<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
 <<script>>
 // run on *every* time this passage finishes displaying
 $(document).on(':passagedisplay', function (ev) {
@@ -824,6 +943,10 @@ $(document).on(':passagedisplay', function (ev) {
 
 :root {
 zoom: 1.1;
+}
+
+.passageContent {
+margin-top: 0rem !important
 }
       html,
       body {
@@ -1130,111 +1253,7 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   Emergency Shelter Crisis Taskforce
 </div>
 </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">H.R. 2077</div>
-          </div>
-          <h2>Bill 5</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Student Debt Relief Act.”<br /><br />
-            <em>Section 2. Purpose.</em><br />
-            (1) To provide relief for federal student loan borrowers.<br />
-            (2) <em>Additional provisions to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Rep. Linda Tran | Introduced: February 28, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">S. 3890</div>
-          </div>
-          <h2>Bill 6</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Climate Resilience Infrastructure
-            Act.”<br /><br />
-            <em>Section 2. Findings.</em><br />
-            (1) Infrastructure must be modernized to withstand climate
-            change.<br />
-            (2) <em>Further findings to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Sen. Priya Patel | Introduced: January 30, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">H.R. 9999</div>
-          </div>
-          <h2>Bill 7</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Universal Childcare Access Act.”<br /><br />
-            <em>Section 2. Purpose.</em><br />
-            (1) To expand access to affordable childcare services.<br />
-            (2) <em>Further provisions to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Rep. Samuel Green | Introduced: March 2, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">S. 1010</div>
-          </div>
-          <h2>Bill 8</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Healthcare Equity Advancement Act.”<br /><br />
-            <em>Section 2. Findings.</em><br />
-            (1) Persistent disparities exist in healthcare access and
-            outcomes.<br />
-            (2) <em>Additional findings to be inserted…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Sen. Emily Carter | Introduced: January 15, 2025
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="bill-header">
-            <div>117<sup>th</sup> Congress</div>
-            <div>1<sup>st</sup> Session</div>
-            <div class="bill-number">H.R. 8888</div>
-          </div>
-          <h2>Bill 9</h2>
-          <p>
-            Be it enacted by the Senate and House of Representatives of the
-            United States of America in Congress assembled:<br /><br />
-            <em>Section 1. Short title.</em><br />
-            This Act may be cited as the “Small Business Recovery Act.”<br /><br />
-            <em>Section 2. Purpose.</em><br />
-            (1) To support small businesses in recovering from economic
-            downturns.<br />
-            (2) <em>Further provisions to follow…</em>
-          </p>
-          <div class="meta">
-            Sponsor: Rep. Olivia Brown | Introduced: February 10, 2025
-          </div>
-        </div>
-      </div>
+     
     </div>
 
     <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2em;">
@@ -1264,7 +1283,175 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 
 
 
-:: Dish out funding {"position":"800,1175","size":"100,100"}
+:: ChooseProjectProposal1 {"position":"600,1200","size":"100,100"}
+  <<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+<!-- CSS Styling -->
+<style>
+  .build-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 5rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #1c1c1e;
+  }
+.button {
+  background-color: rgb(32, 117, 202);
+  background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+  border: 1px solid rgb(38, 111, 185); /* ✔ Correct border color */
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  max-width: 420px;
+  margin: 0.9rem auto;
+  position: relative;
+  top: -0.25rem;
+}
+
+.button:hover {
+  background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 2px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on hover */
+}
+
+.button:active {
+  transform: scale(0.98);
+  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 1px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on click */
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+  border-color: rgb(44, 123, 202); /* ✔ Keep border consistent on focus */
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  border-color: #2a5a87; /* ✔ Still visible, but dimmed */
+}
+
+.button:disabled:hover,
+.button:disabled:active {
+  pointer-events: none;
+  box-shadow: none;
+}
+.button:first-of-type {
+  margin-top: 1rem;
+}
+</style>
+<div class="passage-content">
+  <div class="build-intro">
+    <p>
+      With PIT results in hand, your city must now decide on a major strategic investment. Each option shapes the long-term capacity and focus of your homelessness response.
+      What direction do you choose?
+    </p>
+
+    <!-- Button: Supportive Housing Office -->
+    <button class="button" onclick="launchSupportiveOffice();">
+      Create a permanent Supportive Housing Delivery Office
+    </button>
+
+    <!-- Button: Data Lab -->
+    <button class="button" onclick="launchDataLab();">
+      Launch a Housing & Homelessness Data Lab
+    </button>
+
+    <!-- Button: Encampment Response -->
+    <button class="button" onclick="launchEncampmentTaskForce();">
+      Form a Multi-Agency Encampment Response Task Force
+    </button>
+  </div>
+</div>
+
+<script>
+  function launchSupportiveOffice() {
+    PolicyManager.register({
+      name: "Supportive Housing Delivery Office",
+      costUpfront: 12,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion -= 5;
+        v.systemCoordination += 1;
+      },
+      tick(v, Util, age) {
+        v.budget -= 1.5;
+        if (age >= 3) {
+          window.Util.exitPeople(50 + age * 10);
+          v.systemCoordination += 0.5;
+        }
+      }
+    });
+    SugarCube.Engine.play("SupportiveOffice");
+  }
+
+  function launchDataLab() {
+    PolicyManager.register({
+      name: "Housing & Homelessness Data Lab",
+      costUpfront: 6,
+      duration: 999999,
+      immediate(v) {
+        v.systemCoordination += 0.5;
+      },
+      tick(v, Util, age) {
+        v.budget -= 0.5;
+        if (age >= 2) {
+          v.policyEffectiveness += 1;
+        }
+      }
+    });
+    SugarCube.Engine.play("DataLab");
+  }
+
+  function launchEncampmentTaskForce() {
+    PolicyManager.register({
+      name: "Encampment Response Task Force",
+      costUpfront: 4,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion += 15;
+        v.systemStrain += 5;
+      },
+      tick(v, Util, age) {
+        v.budget -= 1;
+        if (age >= 2) {
+          v.unsheltered -= 5;
+          v.publicTrust -= 1;
+        }
+      }
+    });
+    SugarCube.Engine.play("EncampmentTaskForce");
+  }
+</script>
+
+
+:: DataLab {"position":"600,1400","size":"100,100"}
+[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]
+
+
+:: Dish out funding {"position":"1050,1000","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -1344,247 +1531,722 @@ $(document).on(':passagedisplay', function () {
 <</script>>
 
 
-:: Event1 {"position":"450,1125","size":"100,100"}
-<<set $turn += 1>>
-  <<script>>window.PolicyManager.tick();<</script>>
-  
-  <style>
-  $font-header: "Pirata One", cursive;
-  $font-body: "Merriweather", serif;
-  $col-black: #2a2d2f;
-  
-  
-  
-  @keyframes roller {
-    from {
-      background-position: 0 0;
-    }
-    to {
-      background-position: 0 200vh;
-    }
+:: EncampmentTaskForce {"position":"800,1400","size":"100,100"}
+[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]
+
+
+:: Event1 {"position":"600,1100","size":"100,100"}
+
+<<script>>
+if (PolicyManager.has("Build City Affordable Housing")) {
+  State.variables.bchChoice = "affordable";
+} else if (PolicyManager.has("Starter Homes Expansion")) {
+  State.variables.bchChoice = "starter";
+} else if (PolicyManager.has("Modular Housing & Office Conversions")) {
+  State.variables.bchChoice = "modular";
+}
+<</script>>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Homemade+Apple&family=Nothing+You+Could+Do&display=swap');
+
+.font-gochi {
+  font-family: 'Gochi Hand', cursive;
+}
+
+.font-homemade {
+  font-family: 'Homemade Apple', cursive;
+}
+
+.font-nothing {
+  font-family: 'Nothing You Could Do', cursive;
+}
+.break {
+content: "";
+display: block;
+height: 1px;
+}
+
+
+.container {
+  max-width: 950px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Base airmail letter container */
+.airmail-letter {
+  position: relative;
+  padding: 40px;
+  background-color: #fff;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 300px;
+  border: 15px solid transparent;
+  background-clip: padding-box;
+font-family: "Courier New", serif;
+margin: 20px;
+color: #333;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+/* The striped border */
+.airmail-letter::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    45deg,
+    #e53935,
+    /* red */ #e53935 10px,
+    white 10px,
+    white 20px,
+    #1e88e5,
+    /* blue */ #1e88e5 30px,
+    white 30px,
+    white 40px
+  );
+}
+
+/* Paper texture overlay */
+.airmail-letter::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='%23000000' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+/* Letter header with postmark and stamp */
+.letter-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Circular postmark */
+.postmark {
+  width: 100px;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.postmark::before {
+  content: "AIRMAIL";
+  position: absolute;
+  font-weight: bold;
+  font-size: 12px;
+  transform: rotate(-30deg);
+}
+
+.postmark::after {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 1px;
+  background-color: #333;
+  transform: rotate(-30deg);
+}
+
+/* Postage stamp */
+.stamp {
+  width: 50px;
+  height: 70px;
+  background: linear-gradient(45deg, #f5f5f5, #e0e0e0);
+  border: 1px solid #ccc;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  text-align: center;
+  overflow: hidden;
+  margin-left: 20px;
+}
+
+.stamp::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.05) 3px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
+}
+
+/* Letter content styling */
+.letter-content {
+  line-height: 1.6;
+  text-align: justify;
+  position: relative;
+  z-index: 2;
+}
+
+.letter-date {
+  text-align: right;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.greeting {
+  margin-bottom: 20px;
+}
+
+.signature {
+  margin-top: 40px;
+  text-align: right;
+  font-style: italic;
+}
+
+/* Media queries for responsive design */
+@media screen and (max-width: 768px) {
+  .airmail-letter {
+    padding: 30px;
+    border-width: 10px;
   }
-  
-  @keyframes paper-spin {
-    from {
-      transform: rotate(-360deg) scale(0.3) translateZ(0);
-      filter: blur(3px);
-    }
-    to {
-      transform: rotate(8deg) scale(1) translateZ(0);
-    }
+
+  .airmail-letter::before {
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: repeating-linear-gradient(
+      45deg,
+      #e53935,
+      #e53935 8px,
+      white 8px,
+      white 16px,
+      #1e88e5,
+      #1e88e5 24px,
+      white 24px,
+      white 32px
+    );
   }
-  
-  .paper-stack {
-    position: relative;
-    width: 58.5vw;
-    height: 45vw;
-    margin-left: auto;
-    margin-right: auto;
-    transform-origin: center center;
-    animation: paper-spin cubic-bezier(0.86, 0, 0.07, 1)s linear forwards;
-    transform: rotate(8deg); /* final position */
+
+  .letter-header {
+    flex-direction: column;
+    align-items: flex-end;
   }
-  
-  .page,
-  .newspaper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 4px;
-    height: 100%;
-    background: white;
-    border: 1.5px solid rgba(0, 0, 0, 0.48);
-    backface-visibility: hidden;
+
+  .postmark {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
   }
-  
-  /* Background blank pages */
-  .page-1 {
-    z-index: 1;
-    transform: translate(-12px, -12px);
+}
+
+@media screen and (max-width: 480px) {
+  .airmail-letter {
+    padding: 20px;
+    border-width: 8px;
   }
-  
-  .page-2 {
-    z-index: 2;
-    transform: translate(-6px, -6px);
+
+  .airmail-letter::before {
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    background: repeating-linear-gradient(
+      45deg,
+      #e53935,
+      #e53935 6px,
+      white 6px,
+      white 12px,
+      #1e88e5,
+      #1e88e5 18px,
+      white 18px,
+      white 24px
+    );
   }
-  
-  /* Main newspaper layout */
-  .newspaper {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 15% 24% auto;
-    z-index: 3;
-    //display: none; // optional
+
+  .postmark {
+    width: 60px;
+    height: 60px;
   }
-  
-  .title {
-    grid-column: 1 / 5;
-    grid-row: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 4px solid $col-black;
+
+  .stamp {
+    width: 40px;
+    height: 50px;
   }
-  
-  .headline {
-    grid-column: 1 / 5;
-    grid-row: 2;
-  }
-  
-  .coverimage {
-    grid-column: 3 / 5;
-    grid-row: 3 / 5;
-    padding: 0 0.5rem;
-  
-    img {
-      width: 100%;
-      height: 28vw;
-      object-fit: cover;
-    }
-  }
-  
-  .copy {
-    grid-column: 1 / 3;
-    grid-row: 3 / 5;
-    column-count: 2;
-    padding: 1vw;
-    font-family: "Domine", serif;
-    font-weight: 400;
-  }
-  
-  h1 {
-    font-family: "Domine", serif;
-    font-weight: 700;
-    font-size: 4.8vw;
-    margin: 0;
-  }
-  
-  h2 {
-    font-family: "Domine", serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 4vw;
-    margin: 0;
+}
+
+  .build-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
     text-align: center;
-    line-height: 1.1;
+    font-size: 1.2em;
+    margin-top: 5rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #1c1c1e;
   }
-  
-  p {
-    font-family: "Domine", serif;
-    font-weight: 400;
-    font-size: 1vw;
-    line-height: 1.2;
-    margin: 0;
-  }
-  
-  .pullquote {
-    font-family: "Domine", serif;
-    font-weight: 400;
-    font-size: 1.2vw;
-    border-top: 0.2vw solid $col-black;
-    border-bottom: 0.2vw solid $col-black;
-    margin: 1vw 0;
-    padding: 1vw 0;
-  }
-  
-  button {
-    padding: 0.5rem 1rem;
-    position: absolute;
-    bottom: 1em;
-    right: 1rem;
-    z-index: 4;
-    background: #0b310a;
-    color: white;
-    border: 1px solid white;
-    font-size: 1.2rem;
-    font-family: $font-body;
-  }
-  </style>
-  <div class="passageContent">
-  
-  <div class="paper-stack playing">
-    <!-- Blank pages behind -->
-    <div class="page page-1"></div>
-    <div class="page page-2"></div>
-  
-    <!-- Actual front page -->
-    <div class="newspaper">
-      <div class="title">
-        <h1>The Daily Sun</h1>
-      </div>
-  
-      <div class="headline">
-        <h2>Local Paperboy Swept-Up By Mini Tornado</h2>
-      </div>
-  
-      <div class="coverimage">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/96252/bike.jpg" alt="Paperboy on bike">
-      </div>
-  
-      <div class="copy">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-  
-        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  
-        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-        <p class="pullquote">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.</p>
-  
-        <p>Adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam?</p>
-      </div>
+.button {
+  background-color: rgb(32, 117, 202);
+  background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+  border: 1px solid rgb(38, 111, 185); /* ✔ Correct border color */
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  max-width: 420px;
+  margin: 0.9rem auto;
+  position: relative;
+  top: -0.25rem;
+}
+
+.button:hover {
+  background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 2px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on hover */
+}
+
+.button:active {
+  transform: scale(0.98);
+  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 1px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on click */
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+  border-color: rgb(44, 123, 202); /* ✔ Keep border consistent on focus */
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  border-color: #2a5a87; /* ✔ Still visible, but dimmed */
+}
+
+.button:disabled:hover,
+.button:disabled:active {
+  pointer-events: none;
+  box-shadow: none;
+}
+.button:first-of-type {
+  margin-top: 1rem;
+}
+</style>
+
+<div class="container">
+  <div class="airmail-letter">
+    <div class="letter-header">
+      <div class="postmark"></div>
+      <div class="stamp">AIRMAIL</div>
     </div>
+
+    <<if $bchChoice is "affordable">>
+      <div class="letter-content font-homemade">
+        <div class="letter-date">April 9, 2025</div>
+        <div class="greeting">To Whom It May Concern,</div>
+        <p>
+          We, the residents of Old Town, are writing to express our deep concern regarding the recent apartment development plans announced in our neighbourhood. These buildings are far too large for our quiet streets and threaten to change the character of our community.
+        </p>
+        <p>
+          We understand the need for housing, but this kind of density will bring traffic, noise, and infrastructure strain. We urge you to reconsider or at least consult us meaningfully before moving forward.
+        </p>
+        <div class="signature">Respectfully,<div class="break"> </div>The Old Town Residents’ Association</div>
+       
+      </div>
+    <</if>>
+
+    <<if $bchChoice is "starter">>
+      <div class="letter-content font-nothing">
+        <div class="letter-date">April 9, 2025</div>
+        <div class="greeting">To Whom It May Concern,</div>
+        <p>
+          We are concerned about the continued expansion into the suburbs at the cost of our environment and future generations. Car-dependent sprawl is not the answer to the housing crisis, it only deepens our reliance on fossil fuels and fragments communities.
+        </p>
+        <p>
+          We urge your office to prioritize density, transit, and sustainability, not 1980s-style subdivisions.
+        </p>
+        <div class="signature">In Solidarity,<div class="break"> </div>Green Growth Coalition</div>
+       
+      </div>
+    <</if>>
+
+    <<if $bchChoice is "modular">>
+      <div class="letter-content font-gochi">
+        <div class="letter-date">April 9, 2025</div>
+        <div class="greeting">To Whom It May Concern,</div>
+        <p>
+          We appreciate the urgency to build, but the prefabricated buildings being built in our area are a step backwards. Their one size fits all appearance is boxy, out of place, and lacking in dignity. Their mere existence is deteriorating our property values. Is this really what our community deserves?
+        </p>
+        <p>
+          Please don’t sacrifice quality in the name of speed. Let’s work together on something that fits into the character of our neighbourhood.
+        </p>
+        <div class="signature">Sincerely,<div class="break"> </div>Concerned Neighbours of Cedar Lane</div>
+
+      </div>
+    <</if>>
+ <button class="button" onclick="SugarCube.Engine.play('PIT1');">Continue</button>
   </div>
-  
-  
-  
-  
-  
-    <h2>!!!</h2>
-    <p>
-      It's mid-July and your city is experiencing an extreme heat wave. Temperatures are topping 40°C with high humidity. Shelters are over capacity, cooling centers are limited, and unhoused residents are reporting heat-related illness.
-    </p>
-  
-    <p><strong>Select all the actions you want to take:</strong></p>
-  
-    <form id="heatwave-form">
-      <ul>
-        <li>
-          <label>
-            <input type="checkbox" name="response" value="cooling_centres">
-            Open temporary cooling centres
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" name="response" value="water_kits">
-            Distribute water & hygiene kits via outreach
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" name="response" value="transport_passes">
-            Provide transit passes for access to indoor spaces
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" name="response" value="hotel_vouchers">
-            Issue hotel vouchers to medically vulnerable people
-          </label>
-        </li>
-      </ul>
+</div>
+
+
+:: Heatwave {"position":"700,1800","size":"100,100"}
+<canvas id="sunCanvas"></canvas>
+
+<style>
+html[data-outlines] input:focus, html[data-outlines] select:focus, html[data-outlines] textarea:focus, input:hover, select:hover, textarea:hover
+{
+background-color: rgba(255, 166, 0, .5) !important;
+}
+  body, html {
+    background: #fff6dc !important; /* Sun pastel, matches sun's range */
+    transition: background 0.8s linear;
+  }
+  canvas#sunCanvas {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 220px;
+    z-index: 0; pointer-events: none; background: transparent; display: block;
+  }
+  .passage-content { position:relative; z-index:1; }
+  #timeline { background: #fff6dc !important }
+  .button {
+    background-color: rgb(255,183,44);
+    background-image: linear-gradient(90deg, #ffc14d, #ffb94d, #ff9336);
+    border: 1px solid #ffbb2a;
+    border-radius: 12px; color: #fff;
+    padding: .65rem 1rem; font-size: 1rem;
+    display: block; margin: .9rem auto;
+    cursor: pointer; max-width: 420px;
+  }
+  .button:hover {
+    background-image: linear-gradient(90deg, #ffd17a, #ffc05e, #ffb300);
+    border-color: #ffbb2a; /* keep border gold on hover */
+  }
+  label.checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0.75em 0;
+    user-select: none;
+  }
+  label.checkbox input {
+    -webkit-appearance: none; appearance: none;
+    margin: 0;
+    width: 1.2em; height: 1.2em;
+    border: 2px solid #e0ddca;
+    border-radius: 0.25rem;
+    position: relative;
+    transition: background-color 0.2s, border-color 0.2s;
+    display: inline-block;
+    outline: none;
+  }
+  label.checkbox input:checked {
+    background-color: #ffba2b;
+    border-color: #ffba2b;
+  }
+  label.checkbox input:focus {
+    border-color: #ffba2b !important; /* prevent blue on focus */
+    box-shadow: 0 0 0 2px #ffeab7;
+  }
+  label.checkbox input:checked::after {
+    content: "";
+    position: absolute;
+    top: 0.15em;
+    left: 0.35em;
+    width: 0.25em; height: 0.6em;
+    border: solid white;
+    border-width: 0 0.2em 0.2em 0;
+    transform: rotate(45deg);
+  }
+  label.checkbox span {
+    margin-left: 0.5em;
+    font-size: 1em;
+    color: #6b3700;
+  }
+</style>
+
+<<script>>
+// Animate sun & pastel background
+setTimeout(function(){
+  const canvas = document.getElementById('sunCanvas'),
+        ctx    = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = 220;
+
+  const cx = canvas.width/2, cy = 110, baseRadius = 68;
+  let time = 0;
+
+  function pastelColor(hue) {
+    // Gentle light pastel background (use similar hue, very high lightness)
+    return `hsl(${hue}, 92%, 94%)`;
+  }
+
+  function drawSun(t) {
+    // Only use hues from 35–55 (yellow–gold–orange), never green or red
+    const hue = 45 + Math.sin(t/2400)*10; // much slower, and very small range
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // Sun glow gradient
+    const grad = ctx.createRadialGradient(cx, cy, 15, cx, cy, baseRadius*1.8);
+    grad.addColorStop(0, `hsl(${hue},98%,60%)`);
+    grad.addColorStop(0.15, `hsl(${hue},98%,80%)`);
+    grad.addColorStop(0.5, `hsla(${hue},98%,70%,.22)`);
+    grad.addColorStop(1, `hsla(${hue},98%,97%,0)`);
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseRadius*1.6, 0, 2*Math.PI);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Sun center
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseRadius, 0, 2*Math.PI);
+    ctx.fillStyle = `hsl(${hue},98%,56%)`;
+    ctx.shadowColor = `hsl(${hue},98%,70%)`;
+    ctx.shadowBlur = 40;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Animate the body bg
+    document.body.style.background = pastelColor(hue);
+    const timeline = document.getElementById('timeline');
+    if(timeline) timeline.style.background = pastelColor(hue);
+  }
+
+  function animate() {
+    time += 16; // ~60fps
+    drawSun(time);
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  window.addEventListener("resize",()=>{
+    canvas.width=window.innerWidth;
+  });
+
+  // Continue button logic
+  window.handleContinue = function(){
+    const any = document.querySelectorAll('label.checkbox input:checked').length;
+    const w   = document.getElementById('warning');
+    if(!any) w.style.display='block';
+    else    SugarCube.Engine.play('Heatwave_Response_Centres');
+  };
+}, 0);
+<</script>>
+
+<div class="passage-content">
+  <div class="build-intro" style="max-width: 700px; margin: 5rem auto 2rem; padding: 40px 20px; text-align: center; font-size: 1.2em; line-height: 1.6; color: #6b3700; background-color: rgba(255,240,212,0.55); border-radius: 10px;">
+    <p>heatwave</p>
+    <form id="heatChoices">
+      <label class="checkbox">
+        <input type="checkbox" id="opt1"/>
+        <span>Open community centres as cooling shelters</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" id="opt2"/>
+        <span>Distribute bottled water at major transit stops</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" id="opt3"/>
+        <span>something else</span>
+      </label>
     </form>
-  
-  
-    <p id="error-msg" style="color: red; display: none;">Please select at least one option before continuing.</p>
-    <p>* [[Continue|PIT]]</p>
-  
+    <div id="warning" style="display:none;color:#b91c1c;margin-top:1em;">
+      ⚠️ You must choose at least one response before continuing.
+    </div>
+    <button class="button" onclick="handleContinue()">Continue</button>
   </div>
-  
+</div>
 
 
-:: NewArrivalKits {"position":"1200,1225","size":"100,100"}
+:: HeatwaveInfo {"position":"700,1900","size":"100,100"}
+history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness. 
+
+
+:: Loop {"position":"1100,1550","size":"100,100"}
+<<script>>window.PolicyManager.tick();<</script>>
+
+
+
+<div class="passageContent"> 
+
+
+
+  <<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
+<!-- CSS Styling -->
+<style>
+  .build-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 5rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #1c1c1e;
+  }
+.button {
+  background-color: rgb(32, 117, 202);
+  background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+  border: 1px solid rgb(38, 111, 185); /* ✔ Correct border color */
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.25;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  max-width: 420px;
+  margin: 0.9rem auto;
+  position: relative;
+  top: -0.25rem;
+}
+
+.button:hover {
+  background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 2px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on hover */
+}
+
+.button:active {
+  transform: scale(0.98);
+  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+              rgba(0, 0, 0, 0.4) 0 1px 1px;
+  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on click */
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+  border-color: rgb(44, 123, 202); /* ✔ Keep border consistent on focus */
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  border-color: #2a5a87; /* ✔ Still visible, but dimmed */
+}
+
+.button:disabled:hover,
+.button:disabled:active {
+  pointer-events: none;
+  box-shadow: none;
+}
+.button:first-of-type {
+  margin-top: 1rem;
+}
+</style>
+<div style="margin:2rem 0; padding:1em; 
+            background:#fdfdfd; border:1px solid #ccc; 
+            font-family:monospace; font-size:0.9em; line-height:1.4;">
+  <strong>🔍 FULL DEBUG SNAPSHOT</strong>
+  <hr>
+
+  <strong>⏱️ Game Time</strong><br>
+  Turn: <<print $turn || 0>><br>
+  Year: <<print $year || 0>><br>
+  Calendar Year: <<print $currentYear || '–'>><br><br>
+
+  <strong>💰 Budget & Inflow</strong><br>
+  Budget: $<<print $budget || 0>><br>
+  Inflow Base: <<print $inflowBase || 0>><br><br>
+
+  <strong>📈 Inflow Counts This Turn</strong><br>
+  <<for _demo range Object.keys($inflowShare)>>
+    <<set _share = $inflowShare[_demo] || 0>>
+    <<set _count = Math.round($inflowBase * _share)>>
+    • <<print _demo>>: <<print _count>><br>
+  <</for>>
+  <br>
+
+  <strong>🚸 Homeless Population</strong><br>
+  Total: <<print $homelessTotal || 0>><br>
+  <<for _demo range Object.keys($pop)>>
+    • <<print _demo>>: <<print ($pop[_demo] || 0)>><br>
+  <</for>>
+  <br>
+
+  <strong>⚙️ System Metrics</strong><br>
+  System Capacity: <<print ($systemCapacity != null ? systemCapacity.toFixed(2) + '%' : '0%')>><br>
+  Service Coordination: <<print $serviceCoordination || 0>><br>
+  Public Opinion: <<print $publicOpinion || 0>><br>
+  Political Capital: <<print $politicalCapital || 0>><br><br>
+
+  <strong>📋 Active Policies</strong><br>
+  <<script>>
+    const policies = window.PolicyManager.active;
+    const html = policies.length
+      ? policies.map(p =>
+          `• ${p.name} (age ${p.age}, costUpfront ${p.costUpfront}, costPerTurn ${p.costPerTurn||0})`
+        ).join('<br>')
+      : '<em>None</em>';
+    jQuery('.debug-active').html(html);
+  <</script>>
+  <div class="debug-active" style="margin-left:1em;"></div>
+</div>
+  <<button "Loop">>
+    <<run (()=>{
+   
+      Engine.play("Loop");
+    })()>>
+  <</button>>
+    [[Choose|ChooseProjectProposal1]]
+
+</div>
+
+
+
+
+
+
+:: NewArrivalKits {"position":"1275,1200","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Renoviction Awareness",
@@ -1609,7 +2271,7 @@ PolicyManager.register({
 
 
 
-:: NextYear {"position":"625,1475","size":"100,100"}
+:: NextYear {"position":"1325,1400","size":"100,100"}
 <<set $turn += 1>>
 <<set $year += 1>>
 
@@ -1636,7 +2298,7 @@ PolicyManager.register({
 
 
 
-:: PIT {"position":"625,1275","size":"100,100"}
+:: PIT {"position":"1125,1200","size":"100,100"}
 <<set $turn += 1>>
 
 <<script>>window.PolicyManager.tick();<</script>>
@@ -1674,12 +2336,15 @@ PolicyManager.register({
   <p><em>This snapshot will help guide your next set of decisions in the evolving response. </em></p>
 
   <p>📌 [[Continue|NextYear]]</p>
-    <p>📌 [[PIT1|PointInTime1]]</p>
+    <p>📌 [[PIT1|PIT1]]</p>
 
 </div>
 
 
-:: PointInTime1 {"position":"750,1400","size":"100,100"}
+:: PIT1 {"position":"1125,1375","size":"100,100"}
+  <<set $turn += 1>>
+<<set $year += 1>>
+
   <div class="passage-content">
 
   <div class="chart-section">
@@ -1821,10 +2486,15 @@ PolicyManager.register({
 
   });
   <</script>>
+  [[Choose|ChooseProjectProposal1]]
+
+[[Continue|Loop]]
 
 
 
 :: PreServiceFunding {"position":"600,800","size":"100,100"}
+  <<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
 <!-- CSS Styling -->
 <style>
   .build-intro {
@@ -1970,6 +2640,7 @@ PolicyManager.register({
 
 
 :: ServiceFunding1 {"position":"600,900","size":"100,100"}
+
 <div class="puzzle-layout">
     <div id="game-area">
       <!-- The plugin will create its canvas inside this div -->
@@ -2003,7 +2674,7 @@ PolicyManager.register({
               -
             </button>
             <span class="dollar-sign">$</span>
-            <span class="digits2" id="budget-val">100</span>M
+            <span class="digits2" id="budget-val1">100</span>M
             <button
               id="inner-square-increase"
               class="control-btn"
@@ -3017,7 +3688,7 @@ PolicyManager.register({
         _updateBudgetValue: function () {
            const size  = this._innerSquare.size;
   const value = size * 5 + 15;   // 3→30, 5→40, 7→50, 9→60, 11→70
-  $("#budget-val").text(value);
+  $("#budget-val1").text(value);
         },
         _setupPiecePrototype: function () {
           var self = this; // 'self' is the plugin instance for use in prototype methods
@@ -3797,14 +4468,14 @@ $(document).on("click", "#submit-button", function () {
       },
     });
 
-    const allocated = parseInt($("#budget-val").text(), 10);
+    const allocated = parseInt($("#budget-val1").text(), 10);
     PolicyManager.register({
       name: "Budget Allocation",
       costUpfront: allocated,
       duration: 1, 
     });
 
-    Engine.play("ChooseProposal");
+    Engine.play("ChooseC4Project1");
 });
 
   <</script>>
@@ -3991,6 +4662,154 @@ body {
   </style>
 
 
+:: SnowStorm {"position":"500,1800","size":"100,100"}
+<canvas id="snowCanvas"></canvas>
+
+
+
+<style>
+  canvas#snowCanvas {
+    position: fixed; top:0; left:0; z-index:0;
+    width:100%; height:100%; pointer-events:none;
+    background:#e5f5ff;
+  }
+  .passage-content { position:relative; z-index:1; }
+  #timeline{
+      background:#e5f5ff !important
+  }
+.button {
+    background-color: rgb(32,117,202);
+    background-image: linear-gradient(rgb(41,122,202),rgb(30,104,178));
+    border: 1px solid rgb(38,111,185);
+    border-radius: 12px; color: #fff;
+    padding: .65rem 1rem; font-size: 1rem;
+    display: block; margin: .9rem auto;
+    cursor: pointer; max-width: 420px;
+  }
+  .button:hover {
+    background-image: linear-gradient(rgb(51,130,210),rgb(39,121,202));
+  }
+  label.checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0.75em 0;
+    user-select: none;
+  }
+  label.checkbox input {
+    /* remove default look */
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 1.2em;
+    height: 1.2em;
+    border: 2px solid #cbd5e1;
+    border-radius: 0.25rem;
+    position: relative;
+    transition: background-color 0.2s, border-color 0.2s;
+    display: inline-block;
+  }
+  label.checkbox input:checked {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+  }
+  label.checkbox input:checked::after {
+    content: "";
+    position: absolute;
+    top: 0.15em;
+    left: 0.35em;
+    width: 0.25em;
+    height: 0.6em;
+    border: solid white;
+    border-width: 0 0.2em 0.2em 0;
+    transform: rotate(45deg);
+  }
+  label.checkbox span {
+    margin-left: 0.5em;
+    font-size: 1em;
+    color: #1f2937;
+  }
+</style>
+
+
+<<script>>
+// Defer until the canvas is in the DOM
+setTimeout(function(){
+  const canvas = document.getElementById('snowCanvas'),
+        ctx    = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const numFlakes = 300, flakes = [];
+  function Flake(x,y,r,d){
+    this.x=x; this.y=y; this.r=r; this.d=d;
+    this.update=()=>{
+      this.y+=Math.cos(this.d)+1+this.r/2;
+      this.x+=Math.sin(this.d)*2;
+      if(this.y>canvas.height){ this.y=-10; this.x=Math.random()*canvas.width; }
+    };
+    this.draw=()=>{
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle="#fff"; ctx.fill();
+    };
+  }
+  for(let i=0;i<numFlakes;i++){
+    flakes.push(new Flake(
+      Math.random()*canvas.width,
+      Math.random()*canvas.height,
+      Math.random()*3+1,
+      Math.random()*Math.PI
+    ));
+  }
+  function drawFlakes(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    flakes.forEach(f=>{ f.update(); f.draw(); });
+    requestAnimationFrame(drawFlakes);
+  }
+  drawFlakes();
+  window.addEventListener("resize",()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+  });
+  window.handleContinue = function(){
+    const any = document.querySelectorAll('.checkbox-wrapper-4 input:checked').length;
+    const w   = document.getElementById('warning');
+    if(!any) w.style.display='block';
+    else    SugarCube.Engine.play('Snow_Response_Centres');
+  };
+}, 0);
+<</script>>
+
+<div class="passage-content">
+ <div class="build-intro" style="max-width: 700px; margin: 5rem auto 2rem; padding: 40px 20px; text-align: center; font-size: 1.2em; line-height: 1.6; color: #1c1c1e; background-color: rgba(255,255,255,0.35); border-radius: 10px;">
+    <p>snowstorm</p>
+    <form id="snowChoices">
+      <label class="checkbox">
+        <input type="checkbox" id="opt1"/>
+        <span>Open community centres as emergency warming shelters</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" id="opt2"/>
+        <span>Issue emergency motel stay vouchers</span>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" id="opt3"/>
+        <span>do something else lol</span>
+      </label>
+    </form>
+    <div id="warning" style="display:none;color:#b91c1c;margin-top:1em;">
+      ⚠️ You must choose at least one response before continuing.
+    </div>
+    <button class="button" onclick="handleContinue()">Continue</button>
+  </div>
+</div>
+
+
+:: SnowstormInfo {"position":"500,1900","size":"100,100"}
+history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside? 
+
+
 :: Start {"position":"600,100","size":"100,100"}
 <<set $history = []>>
 <div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
@@ -4091,6 +4910,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 
 
 * [[Start|ChooseCityPolicy1]]
+    [[Choose|ChooseProjectProposal1]]
 
 </div>
 
@@ -4221,6 +5041,11 @@ You've been brought into the city halls at a pivotal moment, right before the ne
   <!--  =====  END UI  =====  -->
 
 
+:: SupportiveOffice {"position":"400,1400","size":"100,100"}
+[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]
+
+
 :: StoryScript [script]
 importScripts(
 "https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
@@ -4263,6 +5088,9 @@ window.Util = {
 
 window.PolicyManager = {
   active: [],
+  has(name) {
+    return this.active.some(p => p.name === name);
+  },
   register(cfg) {
     const p = Object.assign({
       age: 0,
