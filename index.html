@@ -236,6 +236,11 @@ br {
   left: calc(5px + 1%) !important;
   left: -webkit-calc(5px + 1%) !important;
 }
+.break {
+  display: block;
+  height: 1rem; /* Adjust as needed for vertical spacing */
+  content: "";
+}
 
 #timeline .day {
   font-family: "Spectral", serif !important;
@@ -1403,37 +1408,7 @@ $(function() {
       setTimeout(() => $tip.remove(), 250);
     }, 2500);
   });
-});</script><tw-passagedata pid="1" name="Bill 1" tags="" position="325,500" size="100,100">&lt;&lt;script&gt;&gt;
-PolicyManager.register({
-  name: &quot;Emergency Shelter Expansion&quot;,
-  costUpfront: 10,
-  costPerTurn: 0,
-  duration: 3, // heavy up-front push
-
-  immediate(v) {
-    v.unsheltered        -= 500;
-    v.sheltered        += 500;
-    v.staffMorale        -= 10;
-    v.publicOpinion      += 1;
-  },
-
-  tick(v, Util, age) {
-    // One-quarter later, about 30% return
-    if (age === 2) {
-      const reenter = Math.round(500 * 0.3);
-      v.sheltered        -= reenter;
-      v.unsheltered += reenter;
-      v.homelessTotal += reenter;
-    }
-  }
-});
-&lt;&lt;/script&gt;&gt;
-
-&lt;div class=&quot;passageContent&quot;&gt; 
-&lt;p&gt;You open 300 beds and clear two major encampments. The media love the “huge action,” but by Quarter 3 about 150 people have cycled back out.&lt;/p&gt;
-
-[[Continue|BuildCanadaHomes]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Bill 2" tags="" position="500,500" size="100,100">&lt;&lt;script&gt;&gt;
+});</script><tw-passagedata pid="1" name="AcquisitionFund" tags="" position="725,500" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Build City Affordable Housing&quot;,
   costUpfront: 10,
@@ -1469,67 +1444,19 @@ PolicyManager.register({
 &lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
+
 &lt;div class=&quot;animated-box&quot;&gt;
-  &lt;p&gt;Building is complete&lt;/p&gt;
 &lt;/div&gt;
-
-[[Continue|BuildCanadaHomes]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Bill 3" tags="" position="700,500" size="100,100">&lt;&lt;script&gt;&gt;
-PolicyManager.register({
-  name: &quot;Frontline Mental Health &amp; Addiction Support&quot;,
-  costUpfront: 4,
-  costPerTurn: 2,
-  duration: 20,
-
-  immediate(v) {
-    v.staffMorale        += 10;
-    v.unsheltered        -= 300;
-    v.publicOpinion  -= 50;
-    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
-  },
-
-  tick(v, Util, age) {
-    // Each quarter, 3% of chronic population exit through wrap-around care
-    const chronicPop = v.pop.chronic;
-        v.publicOpinion  += 20;
-    const exits     = Math.round(chronicPop * 0.03);
-    window.Util.exitPeople(exits, { chronic: 1 });
-  }
-});
-&lt;&lt;/script&gt;&gt;
 &lt;div class=&quot;passageContent&quot;&gt; 
-&lt;p&gt;You fund mobile response teams and a low-barrier detox centre. ER visits drop immediately, and by year’s end the chronically homeless count is noticeably down.&lt;/p&gt;
+In November 2024, a motion to establish an affordable housing acquisition fund in Ottawa failed to pass at the city’s planning and housing committee. The proposal, introduced by College Ward Councillor Laine Johnson, would have redirected surplus revenue from the city’s vacant unit tax into a fund dedicated to preserving at-risk affordable housing. Johnson argued that Ottawa’s current housing plan focused too narrowly on new construction, ignoring the ongoing loss of existing affordable units. She warned that without a strategy to acquire and protect aging rental stock, the city was “bailing out a leaky rowboat.”
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+Despite support from tenant advocates and several councillors — including Ariel Troster, Jeff Leiper, and Riley Brockington — the motion was voted down eight to four. City staff and senior officials opposed the plan, citing fears it could jeopardize eligibility for federal and provincial housing funds, which are tied to aggressive construction targets. They also raised concerns about rising market prices, renovation costs, and the risk of diverting limited municipal resources away from shovel-ready builds.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 
+Supporters of the fund pointed to success stories in cities like Toronto and Vancouver, and to local pilots like the Ottawa Community Land Trust, which had already acquired two properties using a mix of municipal support, community bonds, and donations. However, city leadership insisted that until more federal guidance was available on the Canada Rental Protection Fund — a $1.5 billion national acquisition initiative still under development — Ottawa would stick with its current approach. 
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 [[Continue|BuildCanadaHomes]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="Bill 4" tags="" position="900,500" size="100,100">&lt;&lt;script&gt;&gt;
-PolicyManager.register({
-  name: &quot;Lived Experience Consultation&quot;,
-  costUpfront: 10,
-  costPerTurn: 2,
-  duration: 20, // lasts 4 turns (1 year)
-
-  immediate(v) {
-    v.systemCoordination += 5;
-    v.publicOpinion    += 15;
-  },
-
-  tick(v, Util, age) {
-    // After two quarters, you start to see people move out:
-    if (age &gt;= 2) {
-     v.systemCoordination += 1;
-     v.publicOpinion += 1;
-      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
-      window.Util.exitPeople(exits);
-    }
-  }
-});
-&lt;&lt;/script&gt;&gt;
-&lt;div class=&quot;passageContent&quot;&gt; 
-&lt;p&gt;You bring together people with lived experience, service providers, and city departments for co-design. It doesn’t look flashy, but by mid-year your plans have become smarter and more targeted. &lt;/p&gt;
-
-[[Continue|BuildCanadaHomes]]
-
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="Bills" tags="" position="1225,175" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Bills" tags="" position="1225,175" size="100,100">&lt;&lt;script&gt;&gt;
 // run on *every* time this passage finishes displaying
 $(document).on(&#39;:passagedisplay&#39;, function (ev) {
   // 1) inject the CSS if we haven&#39;t already
@@ -1964,7 +1891,7 @@ zoom: 1.1;
   &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="BuildCanadaHomes" tags="" position="600,700" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="BuildCanadaHomes" tags="" position="600,700" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -2137,7 +2064,7 @@ zoom: 1.1;
     SugarCube.Engine.play(&quot;PreServiceFunding&quot;);
   }
 &lt;/script&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="ChooseC4Project1" tags="" position="600,1000" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="ChooseC4Project1" tags="" position="600,1000" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;!-- CSS Styling --&gt;
@@ -2247,7 +2174,7 @@ zoom: 1.1;
     SugarCube.Engine.play(&quot;Event1&quot;);
   }
   &lt;/script&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="ChooseCityPolicy1" tags="" position="600,300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="ChooseCityPolicy1" tags="" position="600,300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;&lt;script&gt;&gt;
@@ -2615,10 +2542,10 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   &lt;&lt;button &quot;Adopt&quot;&gt;&gt;
     &lt;&lt;run (()=&gt;{
       const map = [
-        &quot;Bill 1&quot;,
-        &quot;Bill 2&quot;,
-        &quot;Bill 3&quot;,
-        &quot;Bill 4&quot;
+        &quot;ShelterZones&quot;,
+        &quot;Renovictions&quot;,
+        &quot;AcquisitionFund&quot;,
+        &quot;LeaseSpace&quot;
       ];
       // get the active slide index
       const idx = window.mySwiper.activeIndex;
@@ -2630,11 +2557,11 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 &lt;/div&gt;
     &lt;/div&gt;
 &lt;div style=&quot;display: none;&quot;&gt;
-  * [[Emergency Shelter Expansion ($30M)|Bill 1]]  
-  * [[Housing First Pilot ($50M)|Bill 2]]  
-  * [[Frontline Mental Health + Addiction Support ($40M)|Bill 3]]  
-  * [[Lived Experience Consultation &amp; Strategic Planning ($10M)|Bill 4]]  
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="ChooseProjectProposal1" tags="" position="600,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+  * [[Emergency Shelter Expansion ($30M)|ShelterZones]]  
+  * [[Housing First Pilot ($50M)|AcquisitionFund]]  
+  * [[Frontline Mental Health + Addiction Support ($40M)|Renovictions]]  
+  * [[Lived Experience Consultation &amp; Strategic Planning ($10M)|LeaseSpace]]  
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="ChooseProjectProposal1" tags="" position="600,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -2793,8 +2720,8 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
     });
     SugarCube.Engine.play(&quot;EncampmentTaskForce&quot;);
   }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="10" name="DataLab" tags="" position="600,1400" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="11" name="Dish out funding" tags="" position="1050,1000" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="7" name="DataLab" tags="" position="600,1400" size="100,100">[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="8" name="Dish out funding" tags="" position="1050,1000" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt;
@@ -2870,8 +2797,8 @@ $(document).on(&#39;:passagedisplay&#39;, function () {
     });
   }, 0);
 });
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="EncampmentTaskForce" tags="" position="800,1400" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="13" name="Event1" tags="" position="600,1100" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="9" name="EncampmentTaskForce" tags="" position="800,1400" size="100,100">[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="10" name="Event1" tags="" position="600,1100" size="100,100">&lt;&lt;script&gt;&gt;
 if (PolicyManager.has(&quot;Build City Affordable Housing&quot;)) {
   State.variables.bchChoice = &quot;affordable&quot;;
 } else if (PolicyManager.has(&quot;Starter Homes Expansion&quot;)) {
@@ -3255,7 +3182,7 @@ color: #333;
     &lt;&lt;/if&gt;&gt;
  &lt;button class=&quot;button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PIT1&#39;);&quot;&gt;Continue&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="Heatwave" tags="" position="700,1800" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="11" name="Heatwave" tags="" position="700,1800" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
 
 &lt;style&gt;
 html[data-outlines] input:focus, html[data-outlines] select:focus, html[data-outlines] textarea:focus, input:hover, select:hover, textarea:hover
@@ -3418,7 +3345,44 @@ setTimeout(function(){
     &lt;/div&gt;
     &lt;button class=&quot;button&quot; onclick=&quot;handleContinue()&quot;&gt;Continue&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="HeatwaveInfo" tags="" position="700,1900" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="16" name="Loop" tags="" position="1100,1550" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="HeatwaveInfo" tags="" position="700,1900" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="13" name="LeaseSpace" tags="" position="900,500" size="100,100">&lt;&lt;script&gt;&gt;
+PolicyManager.register({
+  name: &quot;Lived Experience Consultation&quot;,
+  costUpfront: 10,
+  costPerTurn: 2,
+  duration: 20, // lasts 4 turns (1 year)
+
+  immediate(v) {
+    v.systemCoordination += 5;
+    v.publicOpinion    += 15;
+  },
+
+  tick(v, Util, age) {
+    // After two quarters, you start to see people move out:
+    if (age &gt;= 2) {
+     v.systemCoordination += 1;
+     v.publicOpinion += 1;
+      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
+      window.Util.exitPeople(exits);
+    }
+  }
+});
+&lt;&lt;/script&gt;&gt;
+&lt;div class=&quot;passageContent&quot;&gt; 
+&lt;p&gt;In early 2024, Ottawa city councillors unanimously approved a plan to lease and retrofit underused downtown office space into transitional housing, part of a growing shift in the city’s strategy to move away from temporary overflow shelters and toward more stable, supportive environments. The approach responds to dual pressures: an overwhelmed shelter system and an ongoing influx of asylum seekers, many of whom were sleeping in chairs or makeshift spaces.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+
+Unlike emergency shelters, transitional housing provides stability: residents can stay during the day, access caseworkers on-site, and begin planning their move into permanent housing. Councillors described the move as both urgent and strategic — helping return recreation centres to public use while testing a new model for housing service delivery.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+
+While the first Queen Street lease cost nearly $6 million, councillors and staff suggested it could become a broader strategy. With much of downtown’s commercial real estate underused post-pandemic, office-to-housing conversions offer a potential win-win. However, some cautioned that not every space is easily adaptable and the cost to retrofit can strain limited budgets.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+
+City leadership, alongside advocacy groups like the Alliance to End Homelessness, framed the move as a necessary innovation. They stressed the importance of pairing this transitional model with continued investment in permanent supportive housing and called on the federal government to step up with funding for a dedicated welcome centre for newcomers.&lt;/p&gt;
+
+[[Continue|BuildCanadaHomes]]
+
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="Loop" tags="" position="1100,1550" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 
 
@@ -3560,7 +3524,7 @@ setTimeout(function(){
   &lt;&lt;/button&gt;&gt;
     [[Choose|ChooseProjectProposal1]]
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="NewArrivalKits" tags="" position="1275,1200" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="NewArrivalKits" tags="" position="1275,1200" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Renoviction Awareness&quot;,
   costUpfront: 4,
@@ -3580,7 +3544,7 @@ PolicyManager.register({
 &lt;p&gt;Info &lt;/p&gt;
 
 [[Continue|Dish out funding]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="NextYear" tags="" position="1325,1400" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="NextYear" tags="" position="1325,1400" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;set $year += 1&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -3602,7 +3566,7 @@ PolicyManager.register({
 
 &lt;p&gt;
 &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="PIT" tags="" position="1125,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="PIT" tags="" position="1125,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
@@ -3641,7 +3605,7 @@ PolicyManager.register({
   &lt;p&gt;📌 [[Continue|NextYear]]&lt;/p&gt;
     &lt;p&gt;📌 [[PIT1|PIT1]]&lt;/p&gt;
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="PIT1" tags="" position="1125,1375" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="PIT1" tags="" position="1125,1375" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;set $year += 1&gt;&gt;
 
   &lt;div class=&quot;passage-content&quot;&gt;
@@ -3787,7 +3751,7 @@ PolicyManager.register({
   &lt;&lt;/script&gt;&gt;
   [[Choose|ChooseProjectProposal1]]
 
-[[Continue|Loop]]</tw-passagedata><tw-passagedata pid="21" name="PreServiceFunding" tags="" position="600,800" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+[[Continue|Loop]]</tw-passagedata><tw-passagedata pid="19" name="PreServiceFunding" tags="" position="600,800" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -3832,7 +3796,7 @@ PolicyManager.register({
     &lt;/p&gt;
     &lt;button class=&quot;button&quot; onclick=&quot;SugarCube.Engine.play(&#39;ServiceFunding1&#39;)&quot;&gt;Fund Services&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="22" name="QuarterFour" tags="" position="75,1300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="QuarterFour" tags="" position="75,1300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -3854,7 +3818,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[See End-of-Year Summary|QuarterTwo]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="QuarterThree" tags="" position="175,1100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="QuarterThree" tags="" position="175,1100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -3874,7 +3838,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[Proceed to Q4|QuarterFour]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="QuarterTwo" tags="" position="0,1100" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="22" name="QuarterTwo" tags="" position="0,1100" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
   &lt;h2&gt;Quarter 2 Report&lt;/h2&gt;
@@ -3893,7 +3857,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[Proceed to Q3|QuarterThree]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="25" name="RenovictionAwareness" tags="" position="1300,1050" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="RenovictionAwareness" tags="" position="1300,1050" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Renoviction Awareness&quot;,
   costUpfront: 4,
@@ -3913,7 +3877,39 @@ PolicyManager.register({
 &lt;p&gt;Info &lt;/p&gt;
 
 [[Continue|Dish out funding]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="26" name="ServiceFunding1" tags="" position="600,900" size="100,100">&lt;div class=&quot;puzzle-layout&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="Renovictions" tags="" position="500,500" size="100,100">&lt;&lt;script&gt;&gt;
+PolicyManager.register({
+  name: &quot;Frontline Mental Health &amp; Addiction Support&quot;,
+  costUpfront: 4,
+  costPerTurn: 2,
+  duration: 20,
+
+  immediate(v) {
+    v.staffMorale        += 10;
+    v.unsheltered        -= 300;
+    v.publicOpinion  -= 50;
+    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
+  },
+
+  tick(v, Util, age) {
+    // Each quarter, 3% of chronic population exit through wrap-around care
+    const chronicPop = v.pop.chronic;
+        v.publicOpinion  += 20;
+    const exits     = Math.round(chronicPop * 0.03);
+    window.Util.exitPeople(exits, { chronic: 1 });
+  }
+});
+&lt;&lt;/script&gt;&gt;
+&lt;div class=&quot;passageContent&quot;&gt; 
+&lt;p&gt;In January 2025, Ottawa City Council voted to move forward with developing a renovictions bylaw, following intense advocacy from tenant groups and mounting evidence of widespread misuse of eviction laws. The motion, introduced by Councillor Ariel Troster, came in response to a sharp increase—nearly 500% over three years—in N13 “renoviction” notices, where landlords evict tenants under the pretense of major renovations, only to re-rent the units at significantly higher rates.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+Despite a staff recommendation to delay action, the Planning and Housing Committee was swayed by powerful public delegations from renters across the city, as well as data showing a parallel rise in homelessness. Troster argued that municipal action was essential, especially in the absence of provincial vacancy control or enforcement. Her motion called on staff to explore a bylaw modeled after Hamilton’s, which requires landlords to obtain renovation licenses, provide engineering reports, and offer relocation assistance.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+The vote marked a rare instance where councillors pushed back against a staff recommendation, signalling the strength of local organizing. Groups like ACORN Ottawa played a key role in mobilizing tenants, gathering testimonies, and holding the city accountable. The issue will return to council in 2026 for a final vote on what the bylaw will look like. In the meantime, Troster and other councillors continue to press the province for stronger tenant protections, while warning that the current legal framework leaves far too many renters vulnerable to displacement. &lt;/p&gt;
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+
+[[Continue|BuildCanadaHomes]]
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="25" name="ServiceFunding1" tags="" position="600,900" size="100,100">&lt;div class=&quot;puzzle-layout&quot;&gt;
     &lt;div id=&quot;game-area&quot;&gt;
       &lt;!-- The plugin will create its canvas inside this div --&gt;
     &lt;/div&gt;
@@ -5931,7 +5927,41 @@ body {
   width: 100% !important;
 }
 
-  &lt;/style&gt;</tw-passagedata><tw-passagedata pid="27" name="SnowStorm" tags="" position="500,1800" size="100,100">&lt;canvas id=&quot;snowCanvas&quot;&gt;&lt;/canvas&gt;
+  &lt;/style&gt;</tw-passagedata><tw-passagedata pid="26" name="ShelterZones" tags="" position="325,500" size="100,100">&lt;&lt;script&gt;&gt;
+PolicyManager.register({
+  name: &quot;Shelter Zones TODO change me&quot;,
+  costUpfront: 10,
+  costPerTurn: 0,
+  duration: 3, 
+
+  immediate(v) {
+    v.unsheltered        -= 500;
+    v.sheltered        += 500;
+    v.staffMorale        -= 10;
+    v.publicOpinion      += 1;
+  },
+
+  tick(v, Util, age) {
+    if (age === 2) {
+      const reenter = Math.round(500 * 0.3);
+      v.sheltered        -= reenter;
+      v.unsheltered += reenter;
+      v.homelessTotal += reenter;
+    }
+  }
+});
+&lt;&lt;/script&gt;&gt;
+
+&lt;div class=&quot;passageContent&quot;&gt; 
+&lt;p&gt;In February 2025, Ottawa City Council passed a motion allowing shelters in all urban zones, amending the city’s zoning bylaw ahead of a broader review. Brought forward by Councillor Jeff Leiper and backed by Councillor Ariel Troster, the move aimed to align zoning rules with the city’s Official Plan and respond more quickly to the growing homelessness crisis.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+Previously, shelter projects faced delays due to restrictive zoning, particularly in suburban areas. The new rule lets emergency shelters bypass re-zoning processes, making it easier to access time-sensitive provincial and federal funding. Supporters, including the Alliance to End Homelessness Ottawa, said the change was critical to decentralizing services and reducing community backlash that had become increasingly hostile—even threatening—toward shelter staff and housing providers.
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+Some suburban councillors opposed the motion, arguing it weakened public consultation and risked entrenching shelters over long-term housing solutions. Despite these concerns, the motion passed, with implementation expected before summer. Advocates stressed the need to pair this zoning reform with urgent investment in supportive and transitional housing, warning that expanding shelter access alone could deepen the city’s reliance on temporary responses.&lt;/p&gt;
+&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
+TODO: add image of cbc news headline? / format that shows info is being displayed.
+[[Continue|BuildCanadaHomes]]
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="27" name="SnowStorm" tags="" position="500,1800" size="100,100">&lt;canvas id=&quot;snowCanvas&quot;&gt;&lt;/canvas&gt;
 
 
 
