@@ -12,42 +12,7 @@ simulator
 }
 
 
-:: Bill 1 {"position":"325,500","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Emergency Shelter Expansion",
-  costUpfront: 10,
-  costPerTurn: 0,
-  duration: 3, // heavy up-front push
-
-  immediate(v) {
-    v.unsheltered        -= 500;
-    v.sheltered        += 500;
-    v.staffMorale        -= 10;
-    v.publicOpinion      += 1;
-  },
-
-  tick(v, Util, age) {
-    // One-quarter later, about 30% return
-    if (age === 2) {
-      const reenter = Math.round(500 * 0.3);
-      v.sheltered        -= reenter;
-      v.unsheltered += reenter;
-      v.homelessTotal += reenter;
-    }
-  }
-});
-<</script>>
-
-<div class="passageContent"> 
-<p>You open 300 beds and clear two major encampments. The media love the “huge action,” but by Quarter 3 about 150 people have cycled back out.</p>
-
-[[Continue|BuildCanadaHomes]]
-</div>
-
-
-
-:: Bill 2 {"position":"500,500","size":"100,100"}
+:: AcquisitionFund {"position":"725,500","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Build City Affordable Housing",
@@ -84,76 +49,18 @@ PolicyManager.register({
 <</script>>
 
 <div class="passageContent"> 
+
 <div class="animated-box">
-  <p>Building is complete</p>
 </div>
-
-[[Continue|BuildCanadaHomes]]
-</div>
-
-
-
-:: Bill 3 {"position":"700,500","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Frontline Mental Health & Addiction Support",
-  costUpfront: 4,
-  costPerTurn: 2,
-  duration: 20,
-
-  immediate(v) {
-    v.staffMorale        += 10;
-    v.unsheltered        -= 300;
-    v.publicOpinion  -= 50;
-    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
-  },
-
-  tick(v, Util, age) {
-    // Each quarter, 3% of chronic population exit through wrap-around care
-    const chronicPop = v.pop.chronic;
-        v.publicOpinion  += 20;
-    const exits     = Math.round(chronicPop * 0.03);
-    window.Util.exitPeople(exits, { chronic: 1 });
-  }
-});
-<</script>>
 <div class="passageContent"> 
-<p>You fund mobile response teams and a low-barrier detox centre. ER visits drop immediately, and by year’s end the chronically homeless count is noticeably down.</p>
+In November 2024, a motion to establish an affordable housing acquisition fund in Ottawa failed to pass at the city’s planning and housing committee. The proposal, introduced by College Ward Councillor Laine Johnson, would have redirected surplus revenue from the city’s vacant unit tax into a fund dedicated to preserving at-risk affordable housing. Johnson argued that Ottawa’s current housing plan focused too narrowly on new construction, ignoring the ongoing loss of existing affordable units. She warned that without a strategy to acquire and protect aging rental stock, the city was “bailing out a leaky rowboat.”
+<div class="break"> </div>
+Despite support from tenant advocates and several councillors — including Ariel Troster, Jeff Leiper, and Riley Brockington — the motion was voted down eight to four. City staff and senior officials opposed the plan, citing fears it could jeopardize eligibility for federal and provincial housing funds, which are tied to aggressive construction targets. They also raised concerns about rising market prices, renovation costs, and the risk of diverting limited municipal resources away from shovel-ready builds.
+<div class="break"> </div>
 
+Supporters of the fund pointed to success stories in cities like Toronto and Vancouver, and to local pilots like the Ottawa Community Land Trust, which had already acquired two properties using a mix of municipal support, community bonds, and donations. However, city leadership insisted that until more federal guidance was available on the Canada Rental Protection Fund — a $1.5 billion national acquisition initiative still under development — Ottawa would stick with its current approach. 
+<div class="break"> </div>
 [[Continue|BuildCanadaHomes]]
-</div>
-
-
-
-:: Bill 4 {"position":"900,500","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Lived Experience Consultation",
-  costUpfront: 10,
-  costPerTurn: 2,
-  duration: 20, // lasts 4 turns (1 year)
-
-  immediate(v) {
-    v.systemCoordination += 5;
-    v.publicOpinion    += 15;
-  },
-
-  tick(v, Util, age) {
-    // After two quarters, you start to see people move out:
-    if (age >= 2) {
-     v.systemCoordination += 1;
-     v.publicOpinion += 1;
-      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
-      window.Util.exitPeople(exits);
-    }
-  }
-});
-<</script>>
-<div class="passageContent"> 
-<p>You bring together people with lived experience, service providers, and city departments for co-design. It doesn’t look flashy, but by mid-year your plans have become smarter and more targeted. </p>
-
-[[Continue|BuildCanadaHomes]]
-
 </div>
 
 
@@ -1260,10 +1167,10 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   <<button "Adopt">>
     <<run (()=>{
       const map = [
-        "Bill 1",
-        "Bill 2",
-        "Bill 3",
-        "Bill 4"
+        "ShelterZones",
+        "Renovictions",
+        "AcquisitionFund",
+        "LeaseSpace"
       ];
       // get the active slide index
       const idx = window.mySwiper.activeIndex;
@@ -1275,10 +1182,10 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 </div>
     </div>
 <div style="display: none;">
-  * [[Emergency Shelter Expansion ($30M)|Bill 1]]  
-  * [[Housing First Pilot ($50M)|Bill 2]]  
-  * [[Frontline Mental Health + Addiction Support ($40M)|Bill 3]]  
-  * [[Lived Experience Consultation & Strategic Planning ($10M)|Bill 4]]  
+  * [[Emergency Shelter Expansion ($30M)|ShelterZones]]  
+  * [[Housing First Pilot ($50M)|AcquisitionFund]]  
+  * [[Frontline Mental Health + Addiction Support ($40M)|Renovictions]]  
+  * [[Lived Experience Consultation & Strategic Planning ($10M)|LeaseSpace]]  
 </div>
 
 
@@ -2096,6 +2003,48 @@ setTimeout(function(){
 history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness. 
 
 
+:: LeaseSpace {"position":"900,500","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Lived Experience Consultation",
+  costUpfront: 10,
+  costPerTurn: 2,
+  duration: 20, // lasts 4 turns (1 year)
+
+  immediate(v) {
+    v.systemCoordination += 5;
+    v.publicOpinion    += 15;
+  },
+
+  tick(v, Util, age) {
+    // After two quarters, you start to see people move out:
+    if (age >= 2) {
+     v.systemCoordination += 1;
+     v.publicOpinion += 1;
+      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
+      window.Util.exitPeople(exits);
+    }
+  }
+});
+<</script>>
+<div class="passageContent"> 
+<p>In early 2024, Ottawa city councillors unanimously approved a plan to lease and retrofit underused downtown office space into transitional housing, part of a growing shift in the city’s strategy to move away from temporary overflow shelters and toward more stable, supportive environments. The approach responds to dual pressures: an overwhelmed shelter system and an ongoing influx of asylum seekers, many of whom were sleeping in chairs or makeshift spaces.
+<div class="break"> </div>
+
+Unlike emergency shelters, transitional housing provides stability: residents can stay during the day, access caseworkers on-site, and begin planning their move into permanent housing. Councillors described the move as both urgent and strategic — helping return recreation centres to public use while testing a new model for housing service delivery.
+<div class="break"> </div>
+
+While the first Queen Street lease cost nearly $6 million, councillors and staff suggested it could become a broader strategy. With much of downtown’s commercial real estate underused post-pandemic, office-to-housing conversions offer a potential win-win. However, some cautioned that not every space is easily adaptable and the cost to retrofit can strain limited budgets.
+<div class="break"> </div>
+
+City leadership, alongside advocacy groups like the Alliance to End Homelessness, framed the move as a necessary innovation. They stressed the importance of pairing this transitional model with continued investment in permanent supportive housing and called on the federal government to step up with funding for a dedicated welcome centre for newcomers.</p>
+
+[[Continue|BuildCanadaHomes]]
+
+</div>
+
+
+
 :: Loop {"position":"1100,1550","size":"100,100"}
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -2635,6 +2584,43 @@ PolicyManager.register({
 <p>Info </p>
 
 [[Continue|Dish out funding]]
+</div>
+
+
+
+:: Renovictions {"position":"500,500","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Frontline Mental Health & Addiction Support",
+  costUpfront: 4,
+  costPerTurn: 2,
+  duration: 20,
+
+  immediate(v) {
+    v.staffMorale        += 10;
+    v.unsheltered        -= 300;
+    v.publicOpinion  -= 50;
+    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
+  },
+
+  tick(v, Util, age) {
+    // Each quarter, 3% of chronic population exit through wrap-around care
+    const chronicPop = v.pop.chronic;
+        v.publicOpinion  += 20;
+    const exits     = Math.round(chronicPop * 0.03);
+    window.Util.exitPeople(exits, { chronic: 1 });
+  }
+});
+<</script>>
+<div class="passageContent"> 
+<p>In January 2025, Ottawa City Council voted to move forward with developing a renovictions bylaw, following intense advocacy from tenant groups and mounting evidence of widespread misuse of eviction laws. The motion, introduced by Councillor Ariel Troster, came in response to a sharp increase—nearly 500% over three years—in N13 “renoviction” notices, where landlords evict tenants under the pretense of major renovations, only to re-rent the units at significantly higher rates.
+<div class="break"> </div>
+Despite a staff recommendation to delay action, the Planning and Housing Committee was swayed by powerful public delegations from renters across the city, as well as data showing a parallel rise in homelessness. Troster argued that municipal action was essential, especially in the absence of provincial vacancy control or enforcement. Her motion called on staff to explore a bylaw modeled after Hamilton’s, which requires landlords to obtain renovation licenses, provide engineering reports, and offer relocation assistance.
+<div class="break"> </div>
+The vote marked a rare instance where councillors pushed back against a staff recommendation, signalling the strength of local organizing. Groups like ACORN Ottawa played a key role in mobilizing tenants, gathering testimonies, and holding the city accountable. The issue will return to council in 2026 for a final vote on what the bylaw will look like. In the meantime, Troster and other councillors continue to press the province for stronger tenant protections, while warning that the current legal framework leaves far too many renters vulnerable to displacement. </p>
+<div class="break"> </div>
+
+[[Continue|BuildCanadaHomes]]
 </div>
 
 
@@ -4662,6 +4648,45 @@ body {
   </style>
 
 
+:: ShelterZones {"position":"325,500","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Shelter Zones TODO change me",
+  costUpfront: 10,
+  costPerTurn: 0,
+  duration: 3, 
+
+  immediate(v) {
+    v.unsheltered        -= 500;
+    v.sheltered        += 500;
+    v.staffMorale        -= 10;
+    v.publicOpinion      += 1;
+  },
+
+  tick(v, Util, age) {
+    if (age === 2) {
+      const reenter = Math.round(500 * 0.3);
+      v.sheltered        -= reenter;
+      v.unsheltered += reenter;
+      v.homelessTotal += reenter;
+    }
+  }
+});
+<</script>>
+
+<div class="passageContent"> 
+<p>In February 2025, Ottawa City Council passed a motion allowing shelters in all urban zones, amending the city’s zoning bylaw ahead of a broader review. Brought forward by Councillor Jeff Leiper and backed by Councillor Ariel Troster, the move aimed to align zoning rules with the city’s Official Plan and respond more quickly to the growing homelessness crisis.
+<div class="break"> </div>
+Previously, shelter projects faced delays due to restrictive zoning, particularly in suburban areas. The new rule lets emergency shelters bypass re-zoning processes, making it easier to access time-sensitive provincial and federal funding. Supporters, including the Alliance to End Homelessness Ottawa, said the change was critical to decentralizing services and reducing community backlash that had become increasingly hostile—even threatening—toward shelter staff and housing providers.
+<div class="break"> </div>
+Some suburban councillors opposed the motion, arguing it weakened public consultation and risked entrenching shelters over long-term housing solutions. Despite these concerns, the motion passed, with implementation expected before summer. Advocates stressed the need to pair this zoning reform with urgent investment in supportive and transitional housing, warning that expanding shelter access alone could deepen the city’s reliance on temporary responses.</p>
+<div class="break"> </div>
+TODO: add image of cbc news headline? / format that shows info is being displayed.
+[[Continue|BuildCanadaHomes]]
+</div>
+
+
+
 :: SnowStorm {"position":"500,1800","size":"100,100"}
 <canvas id="snowCanvas"></canvas>
 
@@ -5498,6 +5523,11 @@ br {
 #balance-meter {
   left: calc(5px + 1%) !important;
   left: -webkit-calc(5px + 1%) !important;
+}
+.break {
+  display: block;
+  height: 1rem; /* Adjust as needed for vertical spacing */
+  content: "";
 }
 
 #timeline .day {
