@@ -65,7 +65,7 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 
 
 
-:: Affordable {"position":"500,800","size":"100,100"}
+:: Affordable {"position":"500,850","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -89,10 +89,14 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
     </div>
   </div>
 </div>
-<p>With land scarce and demand high, you chose to densify. Construction begins on mid-rise apartments designed for affordability, sustainability, and access to transit </p>
+<p style="padding: 0 6rem;">
+  With land scarce and demand high, you chose to densify. Construction begins on mid-rise apartments designed for affordability, sustainability, and access to transit.
+</p>
 <div class="break"> </div>
 
-[[Continue|PreServiceFunding]]
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
+</div>
 
 <style>
 .policy-impact-screen {
@@ -2555,7 +2559,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 
 
 
-:: Modular {"position":"700,800","size":"100,100"}
+:: Modular {"position":"700,850","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -2579,11 +2583,12 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
     </div>
   </div>
 </div>
-<p>Your team selects prefabricated modular homes to jumpstart supply. Quick to build and cost-efficient, they’ll deliver rapid housing relief in both urban and suburban zones.
+<p style="padding: 0 6rem;">Your team selects prefabricated modular homes to jumpstart supply. Quick to build and cost-efficient, they’ll deliver rapid housing relief in both urban and suburban zones.
 </p>
 <div class="break"> </div>
-
-[[Continue|PreServiceFunding]]
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
+</div>
 
 <style>
 .policy-impact-screen {
@@ -5197,7 +5202,7 @@ Previously, shelter projects faced delays due to restrictive zoning, particularl
 Some suburban councillors opposed the motion, arguing it weakened public consultation and risked entrenching shelters over long-term housing solutions. Despite these concerns, the motion passed, with implementation expected before summer. Advocates stressed the need to pair this zoning reform with urgent investment in supportive and transitional housing, warning that expanding shelter access alone could deepen the city’s reliance on temporary responses.</p>
 <div class="break"> </div>
 TODO: add image of cbc news headline? / format that shows info is being displayed.
-[[Continue|BuildCanadaHomes]]
+<<link "">><button class="continue-button">Continue</button><</link>><<goto "BuildCanadaHomes">>
 </div>
 
 
@@ -5456,7 +5461,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 </div>
 
 
-:: Starter {"position":"600,800","size":"100,100"}
+:: Starter {"position":"600,850","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -5480,11 +5485,13 @@ You've been brought into the city halls at a pivotal moment, right before the ne
     </div>
   </div>
 </div>
-<p>A familiar playbook returns: low-cost, fast-track starter homes on the urban fringe. It won’t solve sprawl, but it will help hundreds of families buy their first home.
+<p style="padding: 0 6rem;">A familiar playbook returns: low-cost, fast-track starter homes on the urban fringe. It won’t solve sprawl, but it will help hundreds of families buy their first home.
 </p>
-<div class="break"> </div>
 
-[[Continue|PreServiceFunding]]
+<div class="break"> </div>
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
+</div>
 
 <style>
 .policy-impact-screen {
@@ -5717,7 +5724,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 [[Heatwave|Heatwave]]
 
 
-:: metricsscreen {"position":"900,700","size":"100,100"}
+:: metricsscreen {"position":"1200,675","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -6182,6 +6189,31 @@ $(function() {
 @import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
 
+.centered-btn {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.continue-button {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  margin: 0.3rem !important;
+  position: relative !important;
+  top: -0.25rem !important;
+  text-align: center !important;
+  margin: 0.3rem auto; /* centers it */
+  position: relative;
+
+}
 
 sl-drawer[placement="bottom"] {
   --size: 70vh;
