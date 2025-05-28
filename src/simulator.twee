@@ -1617,7 +1617,7 @@ $(document).on(':passagedisplay', function () {
 [[Heatwave|Heatwave]]
 
 
-:: Endgame {"position":"800,100","size":"100,100"}
+:: Endgame {"position":"800,25","size":"100,100"}
 <<set $finalScore = 823>>
 <<set $insights = [
   "Your city reduced homeless inflow by 34% over 10 years.",
@@ -5402,6 +5402,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 
 * [[Start|ChooseCityPolicy1]]
     [[Endgame|Endgame]]
+    [[Zoning|Zoning]]
 
 </div>
 
@@ -5669,6 +5670,160 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 [[Heatwave|Heatwave]]
 
 
+:: Zoning {"position":"800,150","size":"100,100"}
+<style>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: system-ui, sans-serif;
+  }
+
+  #container {
+    position: relative;
+    height: 90vh;
+    margin: auto;
+    top: 5vh;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  #map {
+    width: 100%;
+    height: 100%;
+  }
+
+  #menu {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 6px;
+    width: 220px;
+  }
+
+  #menu h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+  }
+
+  .layer-option {
+    margin: 0.5rem 0;
+  }
+
+  .layer-option label {
+    margin-left: 0.3rem;
+  }
+  .mapboxgl-control-container {
+    display: none;
+  }
+</style>
+
+<div id="container">
+  <div id="map"></div>
+  <div id="menu">
+    <h3>ZONING CHOICES</h3>
+    <div class="layer-option">
+      <input type="checkbox" id="expand" />
+      <label for="expand">Expand Suburbia</label>
+    </div>
+    <div class="layer-option">
+      <input type="checkbox" id="transit" />
+      <label for="transit">Transit Oriented</label>
+    </div>
+    <div class="layer-option">
+      <input type="checkbox" id="reserve" />
+      <label for="reserve">Develop Reserved Zones</label>
+    </div>
+    <div class="layer-option">
+      <input type="checkbox" id="single" />
+      <label for="single">Remove Single Family Zoning</label>
+    </div>
+  </div>
+</div>
+
+<script>
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoicWRvZ2dlcjY5IiwiYSI6ImNseDd1MWZ4ZzBrdmsyanB2d3E4MHY4ejQifQ.aXV61OY1jofAOXK_28omhA";
+
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/qdogger69/cmb87asdd012t01qy67cn6dn7",
+    center: [-75.7003, 45.4141],
+    zoom: 13.5,
+    antialias: true,
+    maxZoom: 17.5,
+    minZoom: 10,
+  });
+
+  const layerConfigs = {
+    expand: {
+      center: [-75.84776, 45.33199],
+      zoom: 12,
+    },
+    transit: {
+      center: [-75.72607, 45.40851],
+      zoom: 15.5,
+    },
+    reserve: {
+      center: [-75.6658, 45.40836],
+      zoom: 15.5,
+    },
+    single: {
+      center: [-75.7003, 45.4141],
+      zoom: 14.5,
+    },
+  };
+
+  map.on("load", () => {
+    // Hide layers initially (if they exist)
+    Object.keys(layerConfigs).forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setPaintProperty(layerId, "fill-opacity", 0);
+      }
+    });
+
+    // Set up checkbox handlers
+    Object.keys(layerConfigs).forEach((layerId) => {
+      const checkbox = document.getElementById(layerId);
+      checkbox.addEventListener("change", () => {
+        const config = layerConfigs[layerId];
+        if (checkbox.checked) {
+          map.flyTo({
+            center: config.center,
+            zoom: config.zoom,
+            essential: true,
+          });
+
+          // Smooth opacity ramp-up
+          let opacity = 0;
+          const fadeIn = setInterval(() => {
+            opacity += 0.05;
+            if (opacity >= 1) {
+              opacity = 1;
+              clearInterval(fadeIn);
+            }
+            if (map.getLayer(layerId)) {
+              map.setPaintProperty(layerId, "fill-opacity", opacity);
+            }
+          }, 50);
+        } else {
+          if (map.getLayer(layerId)) {
+            map.setPaintProperty(layerId, "fill-opacity", 0);
+          }
+        }
+      });
+    });
+  });
+</script>
+
+
+
 :: metricsscreen {"position":"1000,100","size":"100,100"}
 
 <div class="policy-impact-screen" >
@@ -5810,6 +5965,7 @@ importScripts(
 		type : "module",
 		src  :  "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/drawer/drawer.js"
 	},
+  "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"
 );
 
 
@@ -6129,6 +6285,8 @@ $(function() {
 @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
 
 @import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
+
+@import url("https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css");
 
 @import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
