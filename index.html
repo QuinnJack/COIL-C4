@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://F2594C19-2B1A-436C-A749-C92E439252F0// --><tw-storydata name="simulator" startnode="33" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="F2594C19-2B1A-436C-A749-C92E439252F0" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
+	<!-- UUID://F2594C19-2B1A-436C-A749-C92E439252F0// --><tw-storydata name="simulator" startnode="36" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="F2594C19-2B1A-436C-A749-C92E439252F0" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
 
 @import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
 
@@ -112,6 +112,9 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 
 @import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
+
+@import url("https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css");
+
 
 .centered-btn {
   text-align: center;
@@ -248,13 +251,29 @@ sl-drawer[placement="bottom"]::part(close-button__base):hover {
   width: 100%;
 }
 
+.impact-unit {
+  font-family: "Spectral", serif;
+  font-weight: 600;
+  font-size: 2em;
+  color: #0066cc !important;
+}
+.impact-subtitle {
+  font-family: "Spectral", serif;
+  font-weight: 600;
+  font-size: .65em;
+}
+.impact-value {
+  font-family: "Spectral", serif;
+  font-weight: 600;
+    font-size: 2em;
+  color: #1c1c1e; /* dark neutral for contrast */
+}
 .impact-number {
   font-family: "Spectral", serif;
   font-weight: 600;
   font-size: 2em;
-  color: #0066cc;
+  color: #1c1c1e; /* dark neutral for contrast */
 }
-
 .impact-graph {
   width: 100%;
   height: 120px;
@@ -264,7 +283,12 @@ sl-drawer[placement="bottom"]::part(close-button__base):hover {
   font-size: 2em;
   line-height: 1;
 }
+.impact-icon {
+  font-size: 3em;
+  line-height: 1;
+    color: #0066cc !important;
 
+}
 .million {
   font-size: 24px;
   margin-left: -.5em;
@@ -1253,7 +1277,8 @@ body .wrap {
 		type : "module",
 		src  :  "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/drawer/drawer.js"
 	},
-  "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"
+  "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js",
+  "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js",
 );
 
 
@@ -1452,6 +1477,35 @@ function updateUI() {
   else staticUIUpdater();
 }
 
+ /* === 🏃‍♂️ Impact‑box number animation === */
+function animateImpactValues () {
+    // Grab every .impact-value inside .impact-box
+    document.querySelectorAll('.impact-box .impact-value').forEach(el => {
+
+      /* ── 1️⃣ Work out the target number ───────────────────────────── */
+      // Strip out everything that isn’t 0‑9 or “.”
+      const target = parseFloat(el.textContent.replace(/[^0-9.]/g, ''));
+      if (isNaN(target)) return;           // ignore boxes without a number
+
+      /* ── 2️⃣ If there’s a subtitle ( ‘ M / year’ etc.), park it ───── */
+      const subtitle = el.querySelector('.impact-subtitle');
+      if (subtitle) subtitle.remove();     // temporarily take it out
+      el.textContent = '0';                // start counting from 0
+      if (subtitle) el.appendChild(subtitle); // put subtitle back after “0”
+
+      /* ── 3️⃣ Animate 0 → target with Motion.animate ───────────────── */
+      Motion.animate(0, target, {
+        duration : 0.8,
+        ease     : 'circOut',
+        onUpdate (x) {
+          /* round big numbers, keep one decimal for small ones */
+          const value = Number.isInteger(target) ? Math.round(x) : x.toFixed(1);
+          el.firstChild.textContent = value;
+        }
+      });
+    });
+  }
+
 $(window).on('load', updateUI);
 $(document).on(':passagestart :passagedisplay', () => setTimeout(updateUI, 0));
 $(window).on('resize', updateUI);
@@ -1462,6 +1516,7 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
   .done(() => {
     const animate = Motion.animate;
 
+ 
     animateUIUpdater = function() {
       const v = State.variables;
 
@@ -1519,6 +1574,7 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
       });
     };
 
+  
     updateUI(); // initial animated run
   })
   .fail(() => {
@@ -1552,6 +1608,10 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
   .fail(() => {
     console.warn('⚠️ Motion.js failed to load.');
   });
+
+$(document).on(':passagedisplay', (ev) => {
+    animateImpactValues();
+});
 
 /* === 📱 MOBILE TOOLTIP SUPPORT === */
 $(function() {
@@ -1616,36 +1676,42 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Affordable" tags="" position="500,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Affordable" tags="" position="500,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div id=&quot;impact-chart-1&quot; class=&quot;impact-graph&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Public Opinion&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-number&quot;&gt;+5%&lt;/span&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Service Coordination&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div class=&quot;impact-widget&quot;&gt;★ ★ ★ ☆ ☆&lt;/div&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-&lt;p style=&quot;padding: 0 6rem;&quot;&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
   With land scarce and demand high, you chose to densify. Construction begins on mid-rise apartments designed for affordability, sustainability, and access to transit.
 &lt;/p&gt;
-&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Bills" tags="" position="1225,175" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Bills" tags="" position="1100,100" size="100,100">&lt;&lt;script&gt;&gt;
 // run on *every* time this passage finishes displaying
 $(document).on(&#39;:passagedisplay&#39;, function (ev) {
   // 1) inject the CSS if we haven&#39;t already
@@ -2386,7 +2452,284 @@ zoom: 1.1;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;Event1&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="ChooseC4Project1" tags="" position="600,800" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="ChoiceTemplate" tags="" position="100,100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+  &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+  
+  &lt;!-- CSS Styling --&gt;
+  &lt;style&gt;
+    .build-intro {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 5rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #1c1c1e;
+    }
+    .drawer-content {
+     padding: 10px;
+      padding-left: 25%;
+      padding-right: 25%;
+    }
+    .button-wrapper {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      margin: 0.9rem auto;
+      position: relative;
+      top: -0.25rem;
+    }
+  
+    .button {
+      flex: 1;
+      background-color: rgb(32, 117, 202);
+      background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+      border: 1px solid rgb(38, 111, 185);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      padding: 0.65rem 1rem;
+      text-align: center;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+  
+    .button:hover {
+      background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+      box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 2px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:active {
+      transform: scale(0.98);
+      box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 1px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+      border-color: #2a5a87;
+    }
+  
+    .button:disabled:hover,
+    .button:disabled:active {
+      pointer-events: none;
+      box-shadow: none;
+    }
+  
+    .button:first-of-type {
+      margin-top: 1rem;
+    }
+  
+    .info-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+  
+    .info-btn img {
+      width: 1.2rem;
+      height: 1.2rem;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+  
+    .info-btn:hover img {
+      opacity: 1;
+    }
+  
+  
+  &lt;/style&gt;
+  &lt;!-- Intro Text &amp; Buttons --&gt;
+  &lt;div class=&quot;passage-content&quot;&gt;
+    &lt;div class=&quot;build-intro&quot;&gt;
+      &lt;p&gt;
+        The federal government launches &lt;strong&gt;Build Canada Homes&lt;/strong&gt;, its most ambitious housing program since WWII.
+        The program offers billions in financing, standardized housing designs, and land access for cities ready to build.
+        Your city has been invited to submit a proposal. Do you focus on mass affordable units, starter homes, or innovative pilots?
+      &lt;/p&gt;
+  
+      &lt;div class=&quot;button-wrapper&quot;&gt;
+        &lt;button class=&quot;button&quot; onclick=&quot;buildAffordable();&quot;&gt;
+          Densify existing neighbourhoods with new mid-rise apartments
+        &lt;/button&gt;
+        &lt;button id=&quot;info-affordable&quot; class=&quot;info-btn&quot;&gt;
+          &lt;img src=&quot;https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg&quot; alt=&quot;Info&quot; /&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+  
+      &lt;div class=&quot;button-wrapper&quot;&gt;
+        &lt;button class=&quot;button&quot; onclick=&quot;buildStarter();&quot;&gt;
+          Expand suburban development with starter homes for low and middle-income families
+        &lt;/button&gt;
+        &lt;button id=&quot;info-starter&quot; class=&quot;info-btn&quot;&gt;
+          &lt;img src=&quot;https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg&quot; alt=&quot;Info&quot; /&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+  
+      &lt;div class=&quot;button-wrapper&quot;&gt;
+        &lt;button class=&quot;button&quot; onclick=&quot;buildModular();&quot;&gt;
+          Accelerate housing construction through prefabricated, factory-built homes
+        &lt;/button&gt;
+        &lt;button id=&quot;info-modular&quot; class=&quot;info-btn&quot;&gt;
+          &lt;img src=&quot;https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg&quot; alt=&quot;Info&quot; /&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;!-- Drawers --&gt;
+&lt;sl-drawer placement=&quot;bottom&quot; label=&quot; &quot; class=&quot;drawer-affordable&quot;&gt;
+  &lt;div class=&quot;drawer-content&quot;&gt;
+    &lt;h3&gt;Mass-Transit &amp; Community&lt;/h3&gt;
+    &lt;p&gt;
+      Building mid-rise apartments near transit hubs reduces car dependence, promotes mixed-use sidewalks, and shortens construction time in dense zones.
+    &lt;/p&gt;
+
+    &lt;h4&gt;Missing Middle Housing&lt;/h4&gt;
+    &lt;p&gt;
+      “Missing middle” refers to housing types between detached homes and high-rises—such as triplexes, townhomes, and mid-rise apartments. These help meet demand while blending with existing neighborhoods.
+    &lt;/p&gt;
+
+    &lt;h4&gt;Transit-Oriented Development&lt;/h4&gt;
+    &lt;p&gt;
+      Concentrating homes near bus and rail stations reduces sprawl, increases transit ridership, and encourages walkable, vibrant streetscapes. These areas often see higher retail activity and better air quality.
+    &lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/sl-drawer&gt;
+
+&lt;sl-drawer placement=&quot;bottom&quot; label=&quot; &quot; class=&quot;drawer-starter&quot;&gt;
+  &lt;div class=&quot;drawer-content&quot;&gt;
+    &lt;h3&gt;Suburban Starter Homes&lt;/h3&gt;
+    &lt;p&gt;
+      New subdivisions on the city’s edge offer turnkey homes for working families—with parks, schools, and roads built into the plan.
+    &lt;/p&gt;
+
+    &lt;h4&gt;Starter Homes&lt;/h4&gt;
+    &lt;p&gt;
+      Starter homes are smaller, affordable detached houses aimed at first-time buyers. These homes provide paths to ownership and long-term stability.
+    &lt;/p&gt;
+
+    &lt;h4&gt;Incremental Growth&lt;/h4&gt;
+    &lt;p&gt;
+      Inspired by post-war developments like Levittown, these neighborhoods prioritize fast approvals and modular planning, balancing cost with liveability.
+    &lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/sl-drawer&gt;
+
+&lt;sl-drawer placement=&quot;bottom&quot; label=&quot; &quot; class=&quot;drawer-modular&quot;&gt;
+  &lt;div class=&quot;drawer-content&quot;&gt;
+    &lt;h3&gt;Factory-Built Efficiency&lt;/h3&gt;
+    &lt;p&gt;
+      Prefabricated housing shortens timelines and lowers costs. Homes are assembled in factories, then installed on-site—ideal for both suburban and urban infill.
+    &lt;/p&gt;
+
+    &lt;h4&gt;Modular &amp; Panel Systems&lt;/h4&gt;
+    &lt;p&gt;
+      Components like walls and plumbing come prebuilt, allowing rapid assembly. Projects range from tiny homes to multi-storey apartment blocks and office conversions.
+    &lt;/p&gt;
+
+    &lt;h4&gt;Digital Manufacturing&lt;/h4&gt;
+    &lt;p&gt;
+      Modern factories use digital design, robotic cutting, and climate-controlled precision to reduce waste and labor dependency—especially useful in remote or high-demand areas.
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/sl-drawer&gt;
+  
+  &lt;!-- Wiring &amp; Policy Logic --&gt;
+  &lt;script&gt;
+    // Info-icon → drawer
+    document.getElementById(&#39;info-affordable&#39;).addEventListener(&#39;click&#39;, () =&gt; {
+      document.querySelector(&#39;.drawer-affordable&#39;).show();
+    });
+    document.getElementById(&#39;info-starter&#39;).addEventListener(&#39;click&#39;, () =&gt; {
+      document.querySelector(&#39;.drawer-starter&#39;).show();
+    });
+    document.getElementById(&#39;info-modular&#39;).addEventListener(&#39;click&#39;, () =&gt; {
+      document.querySelector(&#39;.drawer-modular&#39;).show();
+    });
+  
+    // Drawer close buttons
+    document.querySelectorAll(&#39;sl-drawer sl-button[slot=&quot;footer&quot;]&#39;).forEach(btn =&gt; {
+      btn.addEventListener(&#39;click&#39;, () =&gt; btn.closest(&#39;sl-drawer&#39;).hide());
+    });
+  
+    // Policy registration functions
+    function buildAffordable() {
+      PolicyManager.register({
+        name: &quot;Build City Affordable Housing&quot;,
+        costUpfront: 10,
+        duration: 999999,
+        immediate(v) { v.publicOpinion -= 15; },
+        tick(v, Util, age) {
+          let cost = 8;
+          if (age &gt;= 2) cost = 0.42;
+          if (age &gt;= 5) cost = 0.12;
+          if (age &gt;= 7) cost = -0.5;
+          v.budget -= cost;
+          if (age &gt;= 2) window.Util.exitPeople(100 + Math.floor(25 * (age - 2)));
+          if (age &gt;= 10 &amp;&amp; age &lt; 30) v.serviceCoordination += 2;
+        }
+      });
+      SugarCube.Engine.play(&quot;Affordable&quot;);
+    }
+  
+    function buildStarter() {
+      PolicyManager.register({
+        name: &quot;Starter Homes Expansion&quot;,
+        costUpfront: 8,
+        duration: 999999,
+        immediate(v) { v.publicOpinion += 10; v.inflow -= 5; },
+        tick(v) {
+          let cost = 5;
+          if (v.age &gt;= 3) cost = 1;
+          if (v.age &gt;= 6) cost = -0.25;
+          v.budget -= cost;
+          if (v.age &gt;= 3) v.housingSupply += 150;
+        }
+      });
+      SugarCube.Engine.play(&quot;Starter&quot;);
+    }
+  
+    function buildModular() {
+      PolicyManager.register({
+        name: &quot;Modular Housing &amp; Office Conversions&quot;,
+        costUpfront: 6,
+        duration: 999999,
+        immediate(v) { v.publicOpinion += 5; v.systemCapacity += 10; },
+        tick(v, Util, age) {
+          let cost = 3;
+          if (age &gt;= 2) cost = 0.8;
+          if (age &gt;= 4) cost = 0.2;
+          v.budget -= cost;
+          if (age &gt;= 2) window.Util.exitPeople(80 + Math.floor(15 * (age - 2)));
+          if (age &gt;= 6) v.systemCapacity += 3;
+        }
+      });
+      SugarCube.Engine.play(&quot;Modular&quot;);
+    }
+  &lt;/script&gt;</tw-passagedata><tw-passagedata pid="7" name="ChooseC4Project1" tags="" position="600,800" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;!-- CSS Styling --&gt;
@@ -2496,7 +2839,7 @@ zoom: 1.1;
     SugarCube.Engine.play(&quot;C4Project1&quot;);
   }
   &lt;/script&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="ChooseCityPolicy1" tags="" position="600,200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="ChooseCityPolicy1" tags="" position="600,200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;&lt;script&gt;&gt;
@@ -2877,7 +3220,7 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="ChooseProjectProposal1" tags="" position="600,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="ChooseProjectProposal1" tags="" position="600,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -3036,8 +3379,8 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
     });
     SugarCube.Engine.play(&quot;EncampmentTaskForce&quot;);
   }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="9" name="DataLab" tags="" position="600,1300" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="10" name="Dish out funding" tags="" position="1100,775" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="10" name="DataLab" tags="" position="600,1300" size="100,100">[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="11" name="Dish out funding" tags="" position="1100,775" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt;
@@ -3113,8 +3456,8 @@ $(document).on(&#39;:passagedisplay&#39;, function () {
     });
   }, 0);
 });
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="11" name="EncampmentTaskForce" tags="" position="700,1300" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="12" name="Endgame" tags="" position="800,25" size="100,100">&lt;&lt;set $finalScore = 823&gt;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="EncampmentTaskForce" tags="" position="700,1300" size="100,100">[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="13" name="Endgame" tags="" position="800,0" size="100,100">&lt;&lt;set $finalScore = 823&gt;&gt;
 &lt;&lt;set $insights = [
   &quot;Your city reduced homeless inflow by 34% over 10 years.&quot;,
   &quot;You met 5 of 8 targeted SDGs, including Clean Water, Affordable Housing, and Reduced Inequalities.&quot;,
@@ -3237,7 +3580,7 @@ $(document).on(&#39;:passagedisplay&#39;, function () {
 }
 
 /* “Back to Menu” button reuses your .button style */
-&lt;/style&gt;</tw-passagedata><tw-passagedata pid="13" name="Event1" tags="" position="600,1000" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="14" name="Event1" tags="" position="600,1000" size="100,100">&lt;&lt;script&gt;&gt;
 if (PolicyManager.has(&quot;Build City Affordable Housing&quot;)) {
   State.variables.bchChoice = &quot;affordable&quot;;
 } else if (PolicyManager.has(&quot;Starter Homes Expansion&quot;)) {
@@ -3621,7 +3964,111 @@ color: #333;
     &lt;&lt;/if&gt;&gt;
  &lt;button class=&quot;button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PIT1&#39;);&quot;&gt;Continue&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="Heatwave" tags="" position="700,1500" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="Gantt" tags="" position="800,100" size="100,100">&lt;div id=&quot;gantt&quot;&gt;&lt;/div&gt;
+
+&lt;&lt;script&gt;&gt;
+(function () {
+  // 1) inject CSS &amp; base styling (unchanged)
+  if (!document.querySelector(&#39;link[href*=&quot;frappe-gantt&quot;]&#39;)) {
+    const link = document.createElement(&#39;link&#39;);
+    link.rel  = &#39;stylesheet&#39;;
+    link.href = &#39;https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css&#39;;
+    document.head.appendChild(link);
+  }
+  if (!document.getElementById(&#39;GanttStyle&#39;)) {
+    const style = document.createElement(&#39;style&#39;);
+    style.id = &#39;GanttStyle&#39;;
+    style.textContent = `
+      #gantt {
+        width: 100%;
+        height: auto;       /* let the library size it */
+        margin: 1em 0;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  let currentGantt = null;
+
+  setTimeout(() =&gt; {
+    const ganttEl = document.getElementById(&#39;gantt&#39;);
+    if (!ganttEl) return;
+
+    const renderGantt = () =&gt; {
+      const MS_DAY = 86400000;
+      const fmt    = d =&gt; d.toISOString().slice(0,10);
+
+      const placeholder = [
+        { id: &#39;1&#39;, name: &#39;Alpha&#39;, duration: 60, progress: 10 },
+        { id: &#39;2&#39;, name: &#39;Beta&#39;,  duration: 45, progress:  0 },
+        { id: &#39;3&#39;, name: &#39;Gamma&#39;, duration: 30, progress: 50 },
+        { id: &#39;4&#39;, name: &#39;Delta&#39;, duration: 75, progress: 25 },
+        { id: &#39;5&#39;, name: &#39;El&#39;, duration: 75, progress: 25 },
+        { id: &#39;6&#39;, name: &#39;El&#39;, duration: 75, progress: 25 },
+        { id: &#39;7&#39;, name: &#39;El&#39;, duration: 75, progress: 25 },
+
+      ];
+
+      let cursor = new Date();
+      cursor.setHours(0,0,0,0);
+
+      const tasks = placeholder.map(p =&gt; {
+        const start = new Date(cursor);
+        const end   = new Date(start.getTime() + p.duration * MS_DAY);
+        cursor = new Date(end.getTime() + MS_DAY);
+        return {
+          id:       p.id,
+          name:     p.name,
+          start:    fmt(start),
+          end:      fmt(end),
+          progress: p.progress
+        };
+      });
+
+      // 2) clean up old chart
+      if (currentGantt &amp;&amp; typeof currentGantt.unmount === &#39;function&#39;) {
+        currentGantt.unmount();
+      }
+
+      // 3) compute a container height: e.g.  (rows × (bar+padding)) + header
+      const rowHeight    = 60;   // bar_height + padding
+      const padding      = 40;
+      const headerHeight = 100;   // upper + lower header
+      const chartHeight  = placeholder.length * rowHeight + headerHeight;
+
+      try {
+        currentGantt = new Gantt(&#39;#gantt&#39;, tasks, {
+          view_mode:        &#39;Year&#39;,
+          date_format:      &#39;YYYY-MM-DD&#39;,
+
+          // ↑ make each bar taller
+          bar_height:       30,     // px of the bar itself
+          padding:          10,     // px of space around each bar
+
+          // ↑ force the svg container to this px height
+          container_height: chartHeight,
+
+          // keep the left/right ends tight
+          infinite_padding: false,
+          scroll_to:        &#39;start&#39;,
+          popup_on:         &#39;hover&#39;,
+        });
+      } catch (err) {
+        console.error(&quot;⚠️ Gantt rendering failed:&quot;, err);
+      }
+    };
+
+    if (window.Gantt) {
+      renderGantt();
+    } else {
+      const s = document.createElement(&#39;script&#39;);
+      s.src   = &#39;https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js&#39;;
+      s.onload = renderGantt;
+      document.head.appendChild(s);
+    }
+  }, 0);
+})();
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="Heatwave" tags="" position="700,1500" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
 
 &lt;style&gt;
 html[data-outlines] input:focus, html[data-outlines] select:focus, html[data-outlines] textarea:focus, input:hover, select:hover, textarea:hover
@@ -3784,7 +4231,42 @@ setTimeout(function(){
     &lt;/div&gt;
     &lt;button class=&quot;button&quot; onclick=&quot;handleContinue()&quot;&gt;Continue&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="HeatwaveInfo" tags="" position="700,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="16" name="LeaseSpace" tags="" position="800,300" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="HeatwaveInfo" tags="" position="700,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="18" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+  With land scarce and demand high, you chose to densify. Construction begins on mid-rise apartments designed for affordability, sustainability, and access to transit.
+&lt;/p&gt;
+
+&lt;div class=&quot;centered-btn&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="LeaseSpace" tags="" position="800,300" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Lived Experience Consultation&quot;,
   costUpfront: 10,
@@ -3822,7 +4304,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="Loop" tags="" position="1200,1000" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="Loop" tags="" position="1200,1000" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 
 
@@ -3963,29 +4445,36 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
     })()&gt;&gt;
   &lt;&lt;/button&gt;&gt;
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="Modular" tags="" position="700,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="Modular" tags="" position="700,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Housing Supply&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div id=&quot;impact-chart-1&quot; class=&quot;impact-graph&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Public Opinion&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-number&quot;&gt;+5%&lt;/span&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;1&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Service Coordination&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div class=&quot;impact-widget&quot;&gt;★ ★ ★ ☆ ☆&lt;/div&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;5&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-&lt;p style=&quot;padding: 0 6rem;&quot;&gt;Your team selects prefabricated modular homes to jumpstart supply. Quick to build and cost-efficient, they’ll deliver rapid housing relief in both urban and suburban zones.
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em;&quot;&gt;Your team selects prefabricated modular homes to jumpstart supply. Quick to build and cost-efficient, they’ll deliver rapid housing relief in both urban and suburban zones.
 &lt;/p&gt;
 &lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 &lt;div class=&quot;centered-btn&quot;&gt;
@@ -4089,7 +4578,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
   font-size: 2em;
   line-height: 1;
 }
-&lt;/style&gt;</tw-passagedata><tw-passagedata pid="19" name="NewArrivalKits" tags="" position="1300,800" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="22" name="NewArrivalKits" tags="" position="1300,800" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Renoviction Awareness&quot;,
   costUpfront: 4,
@@ -4109,7 +4598,7 @@ PolicyManager.register({
 &lt;p&gt;Info &lt;/p&gt;
 
 [[Continue|Dish out funding]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="NextYear" tags="" position="1200,1300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="NextYear" tags="" position="1200,1300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;set $year += 1&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -4131,7 +4620,7 @@ PolicyManager.register({
 
 &lt;p&gt;
 &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="PIT" tags="" position="1200,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="PIT" tags="" position="1200,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
@@ -4170,7 +4659,7 @@ PolicyManager.register({
   &lt;p&gt;📌 [[Continue|NextYear]]&lt;/p&gt;
     &lt;p&gt;📌 [[PIT1|PIT1]]&lt;/p&gt;
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="22" name="PIT1" tags="" position="600,1100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="25" name="PIT1" tags="" position="600,1100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;set $year += 1&gt;&gt;
 
   &lt;div class=&quot;passage-content&quot;&gt;
@@ -4321,7 +4810,7 @@ PolicyManager.register({
 &lt;/div&gt;
 
 
-[[Continue|Loop]]</tw-passagedata><tw-passagedata pid="23" name="PreServiceFunding" tags="" position="600,600" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+[[Continue|Loop]]</tw-passagedata><tw-passagedata pid="26" name="PreServiceFunding" tags="" position="600,600" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -4366,7 +4855,7 @@ PolicyManager.register({
     &lt;/p&gt;
     &lt;button class=&quot;button&quot; onclick=&quot;SugarCube.Engine.play(&#39;ServiceFunding1&#39;)&quot;&gt;Fund Services&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="QuarterFour" tags="" position="1500,1125" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="27" name="QuarterFour" tags="" position="1500,1125" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -4388,7 +4877,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[See End-of-Year Summary|QuarterTwo]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="25" name="QuarterThree" tags="" position="1600,925" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="QuarterThree" tags="" position="1600,925" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -4408,7 +4897,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[Proceed to Q4|QuarterFour]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="26" name="QuarterTwo" tags="" position="1425,925" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="29" name="QuarterTwo" tags="" position="1425,925" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
   &lt;h2&gt;Quarter 2 Report&lt;/h2&gt;
@@ -4427,7 +4916,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[Proceed to Q3|QuarterThree]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="27" name="RenovictionAwareness" tags="" position="1300,600" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="30" name="RenovictionAwareness" tags="" position="1300,600" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Renoviction Awareness&quot;,
   costUpfront: 4,
@@ -4447,7 +4936,7 @@ PolicyManager.register({
 &lt;p&gt;Info &lt;/p&gt;
 
 [[Continue|Dish out funding]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="Renovictions" tags="" position="500,300" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="31" name="Renovictions" tags="" position="500,300" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Frontline Mental Health &amp; Addiction Support&quot;,
   costUpfront: 4,
@@ -4481,7 +4970,7 @@ The vote marked a rare instance where councillors pushed back against a staff re
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="29" name="ServiceFunding1" tags="" position="600,700" size="100,100">&lt;div class=&quot;puzzle-layout&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="ServiceFunding1" tags="" position="600,700" size="100,100">&lt;div class=&quot;puzzle-layout&quot;&gt;
     &lt;div id=&quot;game-area&quot;&gt;
       &lt;!-- The plugin will create its canvas inside this div --&gt;
     &lt;/div&gt;
@@ -6499,7 +6988,7 @@ body {
   width: 100% !important;
 }
 
-  &lt;/style&gt;</tw-passagedata><tw-passagedata pid="30" name="ShelterZones" tags="" position="400,300" size="100,100">&lt;&lt;script&gt;&gt;
+  &lt;/style&gt;</tw-passagedata><tw-passagedata pid="33" name="ShelterZones" tags="" position="400,300" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Shelter Zones TODO change me&quot;,
   costUpfront: 10,
@@ -6560,7 +7049,7 @@ TODO: add image of cbc news headline? / format that shows info is being displaye
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="31" name="SnowStorm" tags="" position="500,1500" size="100,100">&lt;canvas id=&quot;snowCanvas&quot;&gt;&lt;/canvas&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="SnowStorm" tags="" position="500,1500" size="100,100">&lt;canvas id=&quot;snowCanvas&quot;&gt;&lt;/canvas&gt;
 
 
 
@@ -6700,7 +7189,7 @@ setTimeout(function(){
     &lt;/div&gt;
     &lt;button class=&quot;button&quot; onclick=&quot;handleContinue()&quot;&gt;Continue&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="SnowstormInfo" tags="" position="500,1600" size="100,100">history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="33" name="Start" tags="" position="600,75" size="100,100">&lt;&lt;set $history = []&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="35" name="SnowstormInfo" tags="" position="500,1600" size="100,100">history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="36" name="Start" tags="" position="600,75" size="100,100">&lt;&lt;set $history = []&gt;&gt;
 &lt;div class=&quot;passageContent&quot;&gt; In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: &lt;span title=&quot;A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed.&quot;&gt; ensuring everyone has a home&lt;/span&gt;, &lt;span title=&quot;People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.&quot;&gt;people get the support they need &lt;/span&gt; and &lt;span title=&quot;Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people&#39;s needs.&quot;&gt;working together / collaboration &lt;/span&gt;.
 
 Despite these goals, the nation&#39;s capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city&#39;s history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what&#39;s working, what&#39;s missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
@@ -6801,135 +7290,44 @@ You&#39;ve been brought into the city halls at a pivotal moment, right before th
 * [[Start|ChooseCityPolicy1]]
     [[Endgame|Endgame]]
     [[Zoning|Zoning]]
+    [[Gantt|Gantt]]
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="37" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Housing Supply&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div id=&quot;impact-chart-1&quot; class=&quot;impact-graph&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Public Opinion&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Cost&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-number&quot;&gt;+5%&lt;/span&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Service Coordination&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div class=&quot;impact-widget&quot;&gt;★ ★ ★ ☆ ☆&lt;/div&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;10&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-&lt;p style=&quot;padding: 0 6rem;&quot;&gt;A familiar playbook returns: low-cost, fast-track starter homes on the urban fringe. It won’t solve sprawl, but it will help hundreds of families buy their first home.
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+A familiar playbook returns: low-cost, fast-track starter homes on the urban fringe. It won’t solve sprawl, but it will help hundreds of families buy their first home.
 &lt;/p&gt;
 
-&lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;
-
-&lt;style&gt;
-.policy-impact-screen {
-  position: relative;        
-  margin: 10vh auto 2em;     content */
- 
-  border-radius: 14px;
-  width: 80%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 1.5em;
-  font-family: &quot;Inter&quot;, sans-serif;
-  box-sizing: border-box;   
-}
-
-/* Close button still sits inside relative parent */
-.policy-impact-screen .impact-close {
-  position: absolute;
-  right: 0.75em;
-  background: none;
-  border: none;
-  font-size: 1.25em;
-  cursor: pointer;
-  line-height: 1;
-}
-
-/* Flex row of impacts */
-.policy-impact-screen .impact-container {
-  display: flex;
-  gap: 1.5em;
-  justify-content: center;
-}
-
-/* On small screens: stack and bring even higher */
-@media (max-width: 979px) {
-  .policy-impact-screen {
-    margin: 5vh auto 1.5em;   /* only 5 vh top margin */
-    width: 90%;
-    padding: 1em;
-  }
-  .policy-impact-screen .impact-container {
-    flex-direction: column;
-    gap: 1em;
-  }
-}
-
-/* Individual impact box */
-.impact-box {
-  background: #fff;
-  border: 1px solid #e2e2e8;
-  border-radius: 8px;
-  flex: 1;
-  min-width: 170px;
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Subtitle styling (uppercase Inter with a bottom dotted line) */
-.impact-title {
-  font-family: &quot;Inter&quot;, sans-serif;
-  font-weight: 400;
-  font-size: 1em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5em;
-  text-align: center;
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
-  padding-bottom: 0.25em;
-}
-
-/* Content area */
-.impact-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.impact-number {
-  font-family: &quot;Spectral&quot;, serif;
-  font-weight: 600;
-  font-size: 2em;
-  color: #0066cc;
-}
-
-.impact-graph {
-  width: 100%;
-  height: 120px;
-}
-
-.impact-widget {
-  font-size: 2em;
-  line-height: 1;
-}
-&lt;/style&gt;</tw-passagedata><tw-passagedata pid="35" name="StoryInterface" tags="" position="1225,275" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="38" name="StoryInterface" tags="" position="1100,200" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
 
 &lt;div id=&quot;spent-ui&quot;&gt;
   &lt;div id=&quot;passages&quot;&gt;
@@ -7051,8 +7449,8 @@ You&#39;ve been brought into the city halls at a pivotal moment, right before th
     &lt;/div&gt;
   &lt;/div&gt;
 
-  &lt;!--  =====  END UI  =====  --&gt;</tw-passagedata><tw-passagedata pid="36" name="SupportiveOffice" tags="" position="500,1300" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="37" name="Zoning" tags="" position="800,150" size="100,100">&lt;style&gt;
+  &lt;!--  =====  END UI  =====  --&gt;</tw-passagedata><tw-passagedata pid="39" name="SupportiveOffice" tags="" position="500,1300" size="100,100">[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="40" name="Zoning" tags="" position="600,1800" size="100,100">&lt;style&gt;
   html,
   body {
     margin: 0;
@@ -7091,6 +7489,7 @@ You&#39;ve been brought into the city halls at a pivotal moment, right before th
     font-size: 1rem;
     font-weight: 600;
     font-family: &quot;Inter&quot;, sans-serif;
+      border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
   }
 
   .layer-option {
@@ -7201,7 +7600,7 @@ You&#39;ve been brought into the city halls at a pivotal moment, right before th
       });
     });
   });
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="38" name="metricsscreen" tags="" position="1000,100" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="41" name="metricsscreen" tags="" position="100,400" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
