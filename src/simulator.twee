@@ -12,7 +12,7 @@ simulator
 }
 
 
-:: AcquisitionFund {"position":"725,500","size":"100,100"}
+:: AcquisitionFund {"position":"700,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Build City Affordable Housing",
@@ -60,12 +60,15 @@ Despite support from tenant advocates and several councillors — including Arie
 
 Supporters of the fund pointed to success stories in cities like Toronto and Vancouver, and to local pilots like the Ottawa Community Land Trust, which had already acquired two properties using a mix of municipal support, community bonds, and donations. However, city leadership insisted that until more federal guidance was available on the Canada Rental Protection Fund — a $1.5 billion national acquisition initiative still under development — Ottawa would stick with its current approach. 
 <div class="break"> </div>
-[[Continue|BuildCanadaHomes]]
+<div class="centered-btn">
+ <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
+</div>
 </div>
 
 
 
-:: Affordable {"position":"500,850","size":"100,100"}
+
+:: Affordable {"position":"500,500","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -98,104 +101,7 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
   <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
 </div>
 
-<style>
-.policy-impact-screen {
-  position: relative;        
-  margin: 10vh auto 2em;     content */
- 
-  border-radius: 14px;
-  width: 80%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 1.5em;
-  font-family: "Inter", sans-serif;
-  box-sizing: border-box;   
-}
 
-/* Close button still sits inside relative parent */
-.policy-impact-screen .impact-close {
-  position: absolute;
-  right: 0.75em;
-  background: none;
-  border: none;
-  font-size: 1.25em;
-  cursor: pointer;
-  line-height: 1;
-}
-
-/* Flex row of impacts */
-.policy-impact-screen .impact-container {
-  display: flex;
-  gap: 1.5em;
-  justify-content: center;
-}
-
-/* On small screens: stack and bring even higher */
-@media (max-width: 979px) {
-  .policy-impact-screen {
-    margin: 5vh auto 1.5em;   /* only 5 vh top margin */
-    width: 90%;
-    padding: 1em;
-  }
-  .policy-impact-screen .impact-container {
-    flex-direction: column;
-    gap: 1em;
-  }
-}
-
-/* Individual impact box */
-.impact-box {
-  background: #fff;
-  border: 1px solid #e2e2e8;
-  border-radius: 8px;
-  flex: 1;
-  min-width: 170px;
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Subtitle styling (uppercase Inter with a bottom dotted line) */
-.impact-title {
-  font-family: "Inter", sans-serif;
-  font-weight: 400;
-  font-size: 1em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5em;
-  text-align: center;
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
-  padding-bottom: 0.25em;
-}
-
-/* Content area */
-.impact-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.impact-number {
-  font-family: "Spectral", serif;
-  font-weight: 600;
-  font-size: 2em;
-  color: #0066cc;
-}
-
-.impact-graph {
-  width: 100%;
-  height: 120px;
-}
-
-.impact-widget {
-  font-size: 2em;
-  line-height: 1;
-}
-</style>
 
 
 :: Bills {"position":"1225,175","size":"100,100"}
@@ -640,7 +546,7 @@ zoom: 1.1;
 
 
 
-:: BuildCanadaHomes {"position":"600,700","size":"100,100"}
+:: BuildCanadaHomes {"position":"600,400","size":"100,100"}
 <<set $turn += 1>>
   <<script>>window.PolicyManager.tick();<</script>>
   
@@ -921,7 +827,43 @@ zoom: 1.1;
   </script>
 
 
-:: ChooseC4Project1 {"position":"600,1200","size":"100,100"}
+:: C4Project1 {"position":"600,900","size":"100,100"}
+
+<div class="policy-impact-screen" >
+  <div class="impact-container">
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Economic Growth</div>
+      <div class="impact-content">
+        <div id="impact-chart-1" class="impact-graph"></div>
+      </div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Public Opinion</div>
+      <div class="impact-content">
+        <span class="impact-number">+5%</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="3">
+      <div class="impact-title">Service Coordination</div>
+      <div class="impact-content">
+        <div class="impact-widget">★ ★ ★ ☆ ☆</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p style="padding: 0 6rem;">
+  C4 Project Impact short description. TODO: source from groups
+</p>
+<div class="break"> </div>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
+</div>
+
+
+
+
+:: ChooseC4Project1 {"position":"600,800","size":"100,100"}
   <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -1029,13 +971,13 @@ zoom: 1.1;
         // Optional: Add ongoing effects here
       }
     });
-    SugarCube.Engine.play("Event1");
+    SugarCube.Engine.play("C4Project1");
   }
   </script>
 </div>
 
 
-:: ChooseCityPolicy1 {"position":"600,300","size":"100,100"}
+:: ChooseCityPolicy1 {"position":"600,200","size":"100,100"}
   <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -1418,16 +1360,11 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 </div>
 </div>
     </div>
-<div style="display: none;">
-  * [[Emergency Shelter Expansion ($30M)|ShelterZones]]  
-  * [[Housing First Pilot ($50M)|AcquisitionFund]]  
-  * [[Frontline Mental Health + Addiction Support ($40M)|Renovictions]]  
-  * [[Lived Experience Consultation & Strategic Planning ($10M)|LeaseSpace]]  
-</div>
 
 
 
-:: ChooseProjectProposal1 {"position":"600,1500","size":"100,100"}
+
+:: ChooseProjectProposal1 {"position":"600,1200","size":"100,100"}
   <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 <!-- CSS Styling -->
@@ -1590,12 +1527,12 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 </script>
 
 
-:: DataLab {"position":"600,1600","size":"100,100"}
+:: DataLab {"position":"600,1300","size":"100,100"}
 [[SnowStorm|SnowStorm]]
 [[Heatwave|Heatwave]]
 
 
-:: Dish out funding {"position":"1050,1000","size":"100,100"}
+:: Dish out funding {"position":"1100,775","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -1625,7 +1562,7 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   <p><strong>Total Allocated:</strong> <span id="total">0</span>M of $<<= $budget >>M</p>
   <p id="warning" style="color: red; display: none;">⚠️ You've reached your funding limit.</p>
 
-  <p>* [[Continue|Event1]]</p>
+  <p>* </p>
 </div>
 <<script>>
 $(document).on(':passagedisplay', function () {
@@ -1675,12 +1612,12 @@ $(document).on(':passagedisplay', function () {
 <</script>>
 
 
-:: EncampmentTaskForce {"position":"800,1600","size":"100,100"}
+:: EncampmentTaskForce {"position":"700,1300","size":"100,100"}
 [[SnowStorm|SnowStorm]]
 [[Heatwave|Heatwave]]
 
 
-:: Endgame {"position":"800,200","size":"100,100"}
+:: Endgame {"position":"800,100","size":"100,100"}
 <<set $finalScore = 823>>
 <<set $insights = [
   "Your city reduced homeless inflow by 34% over 10 years.",
@@ -1807,7 +1744,7 @@ $(document).on(':passagedisplay', function () {
 </style>
 
 
-:: Event1 {"position":"600,1400","size":"100,100"}
+:: Event1 {"position":"600,1000","size":"100,100"}
 
 <<script>>
 if (PolicyManager.has("Build City Affordable Housing")) {
@@ -2196,7 +2133,7 @@ color: #333;
 </div>
 
 
-:: Heatwave {"position":"700,1900","size":"100,100"}
+:: Heatwave {"position":"700,1500","size":"100,100"}
 <canvas id="sunCanvas"></canvas>
 
 <style>
@@ -2363,11 +2300,11 @@ setTimeout(function(){
 </div>
 
 
-:: HeatwaveInfo {"position":"700,2000","size":"100,100"}
+:: HeatwaveInfo {"position":"700,1600","size":"100,100"}
 history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness. 
 
 
-:: LeaseSpace {"position":"900,500","size":"100,100"}
+:: LeaseSpace {"position":"800,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Lived Experience Consultation",
@@ -2403,13 +2340,14 @@ While the first Queen Street lease cost nearly $6 million, councillors and staff
 
 City leadership, alongside advocacy groups like the Alliance to End Homelessness, framed the move as a necessary innovation. They stressed the importance of pairing this transitional model with continued investment in permanent supportive housing and called on the federal government to step up with funding for a dedicated welcome centre for newcomers.</p>
 
-[[Continue|BuildCanadaHomes]]
-
+<div class="centered-btn">
+ <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
+</div>
 </div>
 
 
 
-:: Loop {"position":"1100,1550","size":"100,100"}
+:: Loop {"position":"1200,1000","size":"100,100"}
 <<script>>window.PolicyManager.tick();<</script>>
 
 
@@ -2550,7 +2488,6 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
       Engine.play("Loop");
     })()>>
   <</button>>
-    [[Choose|ChooseProjectProposal1]]
 
 </div>
 
@@ -2559,7 +2496,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 
 
 
-:: Modular {"position":"700,850","size":"100,100"}
+:: Modular {"position":"700,500","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -2690,7 +2627,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 </style>
 
 
-:: NewArrivalKits {"position":"1275,1200","size":"100,100"}
+:: NewArrivalKits {"position":"1300,800","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Renoviction Awareness",
@@ -2715,7 +2652,7 @@ PolicyManager.register({
 
 
 
-:: NextYear {"position":"1325,1400","size":"100,100"}
+:: NextYear {"position":"1200,1300","size":"100,100"}
 <<set $turn += 1>>
 <<set $year += 1>>
 
@@ -2742,7 +2679,7 @@ PolicyManager.register({
 
 
 
-:: PIT {"position":"1125,1200","size":"100,100"}
+:: PIT {"position":"1200,1200","size":"100,100"}
 <<set $turn += 1>>
 
 <<script>>window.PolicyManager.tick();<</script>>
@@ -2785,8 +2722,8 @@ PolicyManager.register({
 </div>
 
 
-:: PIT1 {"position":"1125,1375","size":"100,100"}
-  <<set $turn += 1>>
+:: PIT1 {"position":"600,1100","size":"100,100"}
+<<set $turn += 1>>
 <<set $year += 1>>
 
   <div class="passage-content">
@@ -2930,13 +2867,18 @@ PolicyManager.register({
 
   });
   <</script>>
-  [[Choose|ChooseProjectProposal1]]
+
+<div class="centered-btn">
+ <button class="continue-button" onclick="SugarCube.Engine.play('ChooseProjectProposal1');">Continue</button>
+</div>
+</div>
+
 
 [[Continue|Loop]]
 
 
 
-:: PreServiceFunding {"position":"600,1000","size":"100,100"}
+:: PreServiceFunding {"position":"600,600","size":"100,100"}
   <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 <!-- CSS Styling -->
@@ -2985,7 +2927,7 @@ PolicyManager.register({
 </div>
 
 
-:: QuarterFour {"position":"75,1300","size":"100,100"}
+:: QuarterFour {"position":"1500,1125","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -3011,7 +2953,7 @@ PolicyManager.register({
 </div>
 
 
-:: QuarterThree {"position":"175,1100","size":"100,100"}
+:: QuarterThree {"position":"1600,925","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -3035,7 +2977,7 @@ PolicyManager.register({
 </div>
 
 
-:: QuarterTwo {"position":"0,1100","size":"100,100"}
+:: QuarterTwo {"position":"1425,925","size":"100,100"}
 <<script>>window.PolicyManager.tick();<</script>>
 
 <div class="passageContent"> 
@@ -3058,7 +3000,7 @@ PolicyManager.register({
 </div>
 
 
-:: RenovictionAwareness {"position":"1300,1050","size":"100,100"}
+:: RenovictionAwareness {"position":"1300,600","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Renoviction Awareness",
@@ -3083,7 +3025,7 @@ PolicyManager.register({
 
 
 
-:: Renovictions {"position":"500,500","size":"100,100"}
+:: Renovictions {"position":"500,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Frontline Mental Health & Addiction Support",
@@ -3115,12 +3057,14 @@ Despite a staff recommendation to delay action, the Planning and Housing Committ
 The vote marked a rare instance where councillors pushed back against a staff recommendation, signalling the strength of local organizing. Groups like ACORN Ottawa played a key role in mobilizing tenants, gathering testimonies, and holding the city accountable. The issue will return to council in 2026 for a final vote on what the bylaw will look like. In the meantime, Troster and other councillors continue to press the province for stronger tenant protections, while warning that the current legal framework leaves far too many renters vulnerable to displacement. </p>
 <div class="break"> </div>
 
-[[Continue|BuildCanadaHomes]]
+<div class="centered-btn">
+ <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
+</div>
 </div>
 
 
 
-:: ServiceFunding1 {"position":"600,1100","size":"100,100"}
+:: ServiceFunding1 {"position":"600,700","size":"100,100"}
 
 <div class="puzzle-layout">
     <div id="game-area">
@@ -5143,7 +5087,7 @@ body {
   </style>
 
 
-:: ShelterZones {"position":"325,500","size":"100,100"}
+:: ShelterZones {"position":"400,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
   name: "Shelter Zones TODO change me",
@@ -5202,12 +5146,14 @@ Previously, shelter projects faced delays due to restrictive zoning, particularl
 Some suburban councillors opposed the motion, arguing it weakened public consultation and risked entrenching shelters over long-term housing solutions. Despite these concerns, the motion passed, with implementation expected before summer. Advocates stressed the need to pair this zoning reform with urgent investment in supportive and transitional housing, warning that expanding shelter access alone could deepen the city’s reliance on temporary responses.</p>
 <div class="break"> </div>
 TODO: add image of cbc news headline? / format that shows info is being displayed.
-<<link "">><button class="continue-button">Continue</button><</link>><<goto "BuildCanadaHomes">>
+<div class="centered-btn">
+ <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
+</div>
 </div>
 
 
 
-:: SnowStorm {"position":"500,1900","size":"100,100"}
+:: SnowStorm {"position":"500,1500","size":"100,100"}
 <canvas id="snowCanvas"></canvas>
 
 
@@ -5351,11 +5297,11 @@ setTimeout(function(){
 </div>
 
 
-:: SnowstormInfo {"position":"500,2000","size":"100,100"}
+:: SnowstormInfo {"position":"500,1600","size":"100,100"}
 history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside? 
 
 
-:: Start {"position":"600,100","size":"100,100"}
+:: Start {"position":"600,75","size":"100,100"}
 <<set $history = []>>
 <div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
 
@@ -5455,13 +5401,12 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 
 
 * [[Start|ChooseCityPolicy1]]
-    [[Choose|ChooseProjectProposal1]]
     [[Endgame|Endgame]]
 
 </div>
 
 
-:: Starter {"position":"600,850","size":"100,100"}
+:: Starter {"position":"600,500","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -5719,12 +5664,12 @@ You've been brought into the city halls at a pivotal moment, right before the ne
   <!--  =====  END UI  =====  -->
 
 
-:: SupportiveOffice {"position":"400,1600","size":"100,100"}
+:: SupportiveOffice {"position":"500,1300","size":"100,100"}
 [[SnowStorm|SnowStorm]]
 [[Heatwave|Heatwave]]
 
 
-:: metricsscreen {"position":"1200,675","size":"100,100"}
+:: metricsscreen {"position":"1000,100","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -5755,7 +5700,6 @@ Despite a staff recommendation to delay action, the Planning and Housing Committ
 The vote marked a rare instance where councillors pushed back against a staff recommendation, signalling the strength of local organizing. Groups like ACORN Ottawa played a key role in mobilizing tenants, gathering testimonies, and holding the city accountable. The issue will return to council in 2026 for a final vote on what the bylaw will look like. In the meantime, Troster and other councillors continue to press the province for stronger tenant protections, while warning that the current legal framework leaves far too many renters vulnerable to displacement. </p>
 <div class="break"> </div>
 
-[[Continue|BuildCanadaHomes]]
 
 <style>
 .policy-impact-screen {
