@@ -508,180 +508,247 @@ zoom: 1.1;
 
 
 :: BuildCanadaHomes {"position":"600,700","size":"100,100"}
-  <<set $turn += 1>>
-<<script>>window.PolicyManager.tick();<</script>>
-<!-- CSS Styling -->
-<style>
-  .build-intro {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    text-align: center;
-    font-size: 1.2em;
-    margin-top: 5rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    color: #1c1c1e;
-  }
-.button {
-  background-color: rgb(32, 117, 202);
-  background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
-  border: 1px solid rgb(38, 111, 185); /* ✔ Correct border color */
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: block;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.25;
-  padding: 0.65rem 1rem;
-  text-align: center;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: 100%;
-  max-width: 420px;
-  margin: 0.9rem auto;
-  position: relative;
-  top: -0.25rem;
-}
-
-.button:hover {
-  background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
-  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
-              rgba(0, 0, 0, 0.4) 0 1px 2px;
-  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on hover */
-}
-
-.button:active {
-  transform: scale(0.98);
-  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
-              rgba(0, 0, 0, 0.4) 0 1px 1px;
-  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on click */
-}
-
-.button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
-  border-color: rgb(44, 123, 202); /* ✔ Keep border consistent on focus */
-}
-
-.button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-  box-shadow: none;
-  border-color: #2a5a87; /* ✔ Still visible, but dimmed */
-}
-
-.button:disabled:hover,
-.button:disabled:active {
-  pointer-events: none;
-  box-shadow: none;
-}
-.button:first-of-type {
-  margin-top: 1rem;
-}
-</style>
-<!-- Intro Text -->
-<div class="passage-content">
-<div class="build-intro">
-  <p>
-    The federal government launches <strong>Build Canada Homes</strong>, its most ambitious housing program since WWII.
-    The program offers billions in financing, standardized housing designs, and land access for cities ready to build.
-    Your city has been invited to submit a proposal. Do you focus on mass affordable units, starter homes, or innovative pilots?
-  </p>
-
-  <!-- Buttons with individual policy registration and passage jump -->
-  <button class="button" onclick="buildAffordable();">Densify existing neighbourhoods with new mid-rise apartments</button>
-  <button class="button" onclick="buildStarter();"> Expand suburban development with starter homes for low and middle-income families.</button>
-  <button class="button" onclick="buildModular();">Accelerate housing construction through prefabricated, factory-built homes.</button>
-</div>
-
-<!-- Policy Scripts -->
-<script>
-  function buildAffordable() {
-    PolicyManager.register({
-      name: "Build City Affordable Housing",
-      costUpfront: 10,
-      duration: 999999,
-      immediate(v) {
-        v.publicOpinion -= 15;
-      },
-      tick(v, Util, age) {
-        let cost = 8;
-        if (age >= 2) cost = 0.42;
-        if (age >= 5) cost = 0.12;
-        if (age >= 7) cost = -0.5;
-        v.budget -= cost;
-
-        if (age >= 2) {
-          const exits = 100 + Math.floor(25 * (age - 2));
-          window.Util.exitPeople(exits);
-        }
-
-        if (age >= 10 && age < 30) {
-          v.serviceCoordination += 2;
-        }
-      }
+<<set $turn += 1>>
+  <<script>>window.PolicyManager.tick();<</script>>
+  
+  <!-- CSS Styling -->
+  <style>
+    .build-intro {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 5rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #1c1c1e;
+    }
+    .drawer-content {
+     padding: 10px;
+      padding-left: 25%;
+      padding-right: 25%;
+    }
+    .button-wrapper {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      margin: 0.9rem auto;
+      position: relative;
+      top: -0.25rem;
+    }
+  
+    .button {
+      flex: 1;
+      background-color: rgb(32, 117, 202);
+      background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+      border: 1px solid rgb(38, 111, 185);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      padding: 0.65rem 1rem;
+      text-align: center;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+  
+    .button:hover {
+      background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+      box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 2px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:active {
+      transform: scale(0.98);
+      box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 1px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+      border-color: #2a5a87;
+    }
+  
+    .button:disabled:hover,
+    .button:disabled:active {
+      pointer-events: none;
+      box-shadow: none;
+    }
+  
+    .button:first-of-type {
+      margin-top: 1rem;
+    }
+  
+    .info-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+  
+    .info-btn img {
+      width: 1.2rem;
+      height: 1.2rem;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+  
+    .info-btn:hover img {
+      opacity: 1;
+    }
+  
+  
+  </style>
+  <!-- Intro Text & Buttons -->
+  <div class="passage-content">
+    <div class="build-intro">
+      <p>
+        The federal government launches <strong>Build Canada Homes</strong>, its most ambitious housing program since WWII.
+        The program offers billions in financing, standardized housing designs, and land access for cities ready to build.
+        Your city has been invited to submit a proposal. Do you focus on mass affordable units, starter homes, or innovative pilots?
+      </p>
+  
+      <div class="button-wrapper">
+        <button class="button" onclick="buildAffordable();">
+          Densify existing neighbourhoods with new mid-rise apartments
+        </button>
+        <button id="info-affordable" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <div class="button-wrapper">
+        <button class="button" onclick="buildStarter();">
+          Expand suburban development with starter homes for low and middle-income families
+        </button>
+        <button id="info-starter" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <div class="button-wrapper">
+        <button class="button" onclick="buildModular();">
+          Accelerate housing construction through prefabricated, factory-built homes
+        </button>
+        <button id="info-modular" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Drawers -->
+  <sl-drawer placement="bottom" label=" " class="drawer-affordable">
+    <div class="drawer-content">
+      <h3>Mass-Transit & Community</h3>
+      <p>Building mid-rise apartments near transit hubs reduces car dependence, promotes mixed-use sidewalks, and tumbles construction time in dense zones.</p>
+    </div>
+  </sl-drawer>
+  
+  <sl-drawer placement="bottom" label=" " class="drawer-starter">
+    <div class="drawer-content">
+      <h3>Greenfield Expansion</h3>
+      <p>New subdivisions on the urban fringe—affordable plots, turnkey mortgages, parks, and schools planned from day one.</p>
+    </div>
+  </sl-drawer>
+  
+  <sl-drawer placement="bottom" label=" " class="drawer-modular">
+    <div class="drawer-content">
+      <h3>Factory-Built Efficiency</h3>
+      <p>Homes pre-cut and assembled offsite—weather-proof, quick-install, minimal labor costs, with potential to convert office towers into apartments.</p>
+    </div>
+  </sl-drawer>
+  
+  <!-- Wiring & Policy Logic -->
+  <script>
+    // Info-icon → drawer
+    document.getElementById('info-affordable').addEventListener('click', () => {
+      document.querySelector('.drawer-affordable').show();
     });
-    SugarCube.Engine.play("PreServiceFunding");
-  }
-
-  function buildStarter() {
-    PolicyManager.register({
-      name: "Starter Homes Expansion",
-      costUpfront: 8,
-      duration: 999999,
-      immediate(v) {
-        v.publicOpinion += 10;
-        v.inflow -= 5;
-      },
-      tick(v, Util, age) {
-        let cost = 5;
-        if (age >= 3) cost = 1;
-        if (age >= 6) cost = -0.25;
-        v.budget -= cost;
-
-        if (age >= 3) {
-          v.housingSupply += 150;
-        }
-      }
+    document.getElementById('info-starter').addEventListener('click', () => {
+      document.querySelector('.drawer-starter').show();
     });
-    SugarCube.Engine.play("PreServiceFunding");
-  }
-
-  function buildModular() {
-    PolicyManager.register({
-      name: "Modular Housing & Office Conversions",
-      costUpfront: 6,
-      duration: 999999,
-      immediate(v) {
-        v.publicOpinion += 5;
-        v.systemCapacity += 10;
-      },
-      tick(v, Util, age) {
-        let cost = 3;
-        if (age >= 2) cost = 0.8;
-        if (age >= 4) cost = 0.2;
-        v.budget -= cost;
-
-        if (age >= 2) {
-          const exits = 80 + Math.floor(15 * (age - 2));
-          window.Util.exitPeople(exits);
-        }
-
-        if (age >= 6) {
-          v.systemCapacity += 3;
-        }
-      }
+    document.getElementById('info-modular').addEventListener('click', () => {
+      document.querySelector('.drawer-modular').show();
     });
-    SugarCube.Engine.play("PreServiceFunding");
-  }
-</script>
-</div>
+  
+    // Drawer close buttons
+    document.querySelectorAll('sl-drawer sl-button[slot="footer"]').forEach(btn => {
+      btn.addEventListener('click', () => btn.closest('sl-drawer').hide());
+    });
+  
+    // Policy registration functions
+    function buildAffordable() {
+      PolicyManager.register({
+        name: "Build City Affordable Housing",
+        costUpfront: 10,
+        duration: 999999,
+        immediate(v) { v.publicOpinion -= 15; },
+        tick(v, Util, age) {
+          let cost = 8;
+          if (age >= 2) cost = 0.42;
+          if (age >= 5) cost = 0.12;
+          if (age >= 7) cost = -0.5;
+          v.budget -= cost;
+          if (age >= 2) window.Util.exitPeople(100 + Math.floor(25 * (age - 2)));
+          if (age >= 10 && age < 30) v.serviceCoordination += 2;
+        }
+      });
+      SugarCube.Engine.play("PreServiceFunding");
+    }
+  
+    function buildStarter() {
+      PolicyManager.register({
+        name: "Starter Homes Expansion",
+        costUpfront: 8,
+        duration: 999999,
+        immediate(v) { v.publicOpinion += 10; v.inflow -= 5; },
+        tick(v) {
+          let cost = 5;
+          if (v.age >= 3) cost = 1;
+          if (v.age >= 6) cost = -0.25;
+          v.budget -= cost;
+          if (v.age >= 3) v.housingSupply += 150;
+        }
+      });
+      SugarCube.Engine.play("PreServiceFunding");
+    }
+  
+    function buildModular() {
+      PolicyManager.register({
+        name: "Modular Housing & Office Conversions",
+        costUpfront: 6,
+        duration: 999999,
+        immediate(v) { v.publicOpinion += 5; v.systemCapacity += 10; },
+        tick(v, Util, age) {
+          let cost = 3;
+          if (age >= 2) cost = 0.8;
+          if (age >= 4) cost = 0.2;
+          v.budget -= cost;
+          if (age >= 2) window.Util.exitPeople(80 + Math.floor(15 * (age - 2)));
+          if (age >= 6) v.systemCapacity += 3;
+        }
+      });
+      SugarCube.Engine.play("PreServiceFunding");
+    }
+  </script>
 
 
 :: ChooseC4Project1 {"position":"600,1000","size":"100,100"}
@@ -4674,7 +4741,32 @@ PolicyManager.register({
 });
 <</script>>
 
+
+
 <div class="passageContent"> 
+<div class="policy-impact-screen" >
+  <div class="impact-container">
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Economic Growth</div>
+      <div class="impact-content">
+        <div id="impact-chart-1" class="impact-graph"></div>
+      </div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Public Opinion</div>
+      <div class="impact-content">
+        <span class="impact-number">+5%</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="3">
+      <div class="impact-title">Service Coordination</div>
+      <div class="impact-content">
+        <div class="impact-widget">★ ★ ★ ☆ ☆</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <p>In February 2025, Ottawa City Council passed a motion allowing shelters in all urban zones, amending the city’s zoning bylaw ahead of a broader review. Brought forward by Councillor Jeff Leiper and backed by Councillor Ariel Troster, the move aimed to align zoning rules with the city’s Official Plan and respond more quickly to the growing homelessness crisis.
 <div class="break"> </div>
 Previously, shelter projects faced delays due to restrictive zoning, particularly in suburban areas. The new rule lets emergency shelters bypass re-zoning processes, making it easier to access time-sensitive provincial and federal funding. Supporters, including the Alliance to End Homelessness Ottawa, said the change was critical to decentralizing services and reducing community backlash that had become increasingly hostile—even threatening—toward shelter staff and housing providers.
@@ -5071,11 +5163,148 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 [[Heatwave|Heatwave]]
 
 
+:: metricsscreen {"position":"900,675","size":"100,100"}
+
+<div class="policy-impact-screen" >
+  <div class="impact-container">
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Economic Growth</div>
+      <div class="impact-content">
+        <div id="impact-chart-1" class="impact-graph"></div>
+      </div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Public Opinion</div>
+      <div class="impact-content">
+        <span class="impact-number">+5%</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="3">
+      <div class="impact-title">Service Coordination</div>
+      <div class="impact-content">
+        <div class="impact-widget">★ ★ ★ ☆ ☆</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p>In January 2025, Ottawa City Council voted to move forward with developing a renovictions bylaw, following intense advocacy from tenant groups and mounting evidence of widespread misuse of eviction laws. The motion, introduced by Councillor Ariel Troster, came in response to a sharp increase—nearly 500% over three years—in N13 “renoviction” notices, where landlords evict tenants under the pretense of major renovations, only to re-rent the units at significantly higher rates.
+<div class="break"> </div>
+Despite a staff recommendation to delay action, the Planning and Housing Committee was swayed by powerful public delegations from renters across the city, as well as data showing a parallel rise in homelessness. Troster argued that municipal action was essential, especially in the absence of provincial vacancy control or enforcement. Her motion called on staff to explore a bylaw modeled after Hamilton’s, which requires landlords to obtain renovation licenses, provide engineering reports, and offer relocation assistance.
+<div class="break"> </div>
+The vote marked a rare instance where councillors pushed back against a staff recommendation, signalling the strength of local organizing. Groups like ACORN Ottawa played a key role in mobilizing tenants, gathering testimonies, and holding the city accountable. The issue will return to council in 2026 for a final vote on what the bylaw will look like. In the meantime, Troster and other councillors continue to press the province for stronger tenant protections, while warning that the current legal framework leaves far too many renters vulnerable to displacement. </p>
+<div class="break"> </div>
+
+[[Continue|BuildCanadaHomes]]
+
+<style>
+.policy-impact-screen {
+  position: relative;          /* no longer fixed to viewport */
+  margin: 10vh auto 2em;       /* sit 10 vh down, center horizontally, gap below for next content */
+ 
+  border-radius: 14px;
+  width: 80%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5em;
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;      /* include padding in width calculations */
+}
+
+/* Close button still sits inside relative parent */
+.policy-impact-screen .impact-close {
+  position: absolute;
+  right: 0.75em;
+  background: none;
+  border: none;
+  font-size: 1.25em;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Flex row of impacts */
+.policy-impact-screen .impact-container {
+  display: flex;
+  gap: 1.5em;
+  justify-content: center;
+}
+
+/* On small screens: stack and bring even higher */
+@media (max-width: 979px) {
+  .policy-impact-screen {
+    margin: 5vh auto 1.5em;   /* only 5 vh top margin */
+    width: 90%;
+    padding: 1em;
+  }
+  .policy-impact-screen .impact-container {
+    flex-direction: column;
+    gap: 1em;
+  }
+}
+
+/* Individual impact box */
+.impact-box {
+  background: #fff;
+  border: 1px solid #e2e2e8;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 170px;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Subtitle styling (uppercase Inter with a bottom dotted line) */
+.impact-title {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5em;
+  text-align: center;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
+  padding-bottom: 0.25em;
+}
+
+/* Content area */
+.impact-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.impact-number {
+  font-family: "Spectral", serif;
+  font-weight: 600;
+  font-size: 2em;
+  color: #0066cc;
+}
+
+.impact-graph {
+  width: 100%;
+  height: 120px;
+}
+
+.impact-widget {
+  font-size: 2em;
+  line-height: 1;
+}
+</style>
+
+
 :: StoryScript [script]
 importScripts(
 "https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
   "https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js",
-  "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+  "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+  {
+		type : "module",
+		src  :  "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/drawer/drawer.js"
+	},
 );
 
 
@@ -5399,6 +5628,38 @@ $(function() {
 @import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
 
+
+/* make all bottom drawers 70vh tall */
+sl-drawer[placement="bottom"] {
+  --size: 70vh;
+  z-index: 1000;
+  background: #f7f7f7;
+}
+
+sl-drawer[placement="bottom"]::part(panel) {
+  background: #f7f7f7;
+    z-index: 1000;
+}
+
+/* Height and panel background */
+sl-drawer[placement="bottom"] {
+  --size: 70vh;
+}
+
+sl-drawer[placement="bottom"]::part(panel) {
+  background: #fff;
+  border-top: 1px solid #e2e8f0;   /* shadcn-style thin top border */
+  border-radius: 8px 8px 0 0;      /* rounded top corners */
+  padding: 20px 80px;              /* your horizontal padding */
+}
+
+/* Style the built-in close button */
+sl-drawer[placement="bottom"]::part(close-button__base) {
+  color: #6b7280; /* gray-500 */
+}
+sl-drawer[placement="bottom"]::part(close-button__base):hover {
+  color: #111827; /* gray-900 */
+}
 
 .million {
   font-size: 24px;
