@@ -115,6 +115,10 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 
 @import url("https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css");
 
+\::selection {
+  background-color: #0871d9;   /* Deep blue */
+  color: white;             /* Optional: makes text readable */
+}
 
 .centered-btn {
   text-align: center;
@@ -1661,11 +1665,37 @@ PolicyManager.register({
 });
 &lt;&lt;/script&gt;&gt;
 
-&lt;div class=&quot;passageContent&quot;&gt; 
 
-&lt;div class=&quot;animated-box&quot;&gt;
+
+
+&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class=&quot;passageContent&quot;&gt; 
+
 In November 2024, a motion to establish an affordable housing acquisition fund in Ottawa failed to pass at the city’s planning and housing committee. The proposal, introduced by College Ward Councillor Laine Johnson, would have redirected surplus revenue from the city’s vacant unit tax into a fund dedicated to preserving at-risk affordable housing. Johnson argued that Ottawa’s current housing plan focused too narrowly on new construction, ignoring the ongoing loss of existing affordable units. She warned that without a strategy to acquire and protect aging rental stock, the city was “bailing out a leaky rowboat.”
 &lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 Despite support from tenant advocates and several councillors — including Ariel Troster, Jeff Leiper, and Riley Brockington — the motion was voted down eight to four. City staff and senior officials opposed the plan, citing fears it could jeopardize eligibility for federal and provincial housing funds, which are tied to aggressive construction targets. They also raised concerns about rising market prices, renovation costs, and the risk of diverting limited municipal resources away from shovel-ready builds.
@@ -1675,7 +1705,6 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 &lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Affordable" tags="" position="500,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
@@ -4071,167 +4100,317 @@ color: #333;
 &lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="Heatwave" tags="" position="700,1500" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
 
 &lt;style&gt;
-html[data-outlines] input:focus, html[data-outlines] select:focus, html[data-outlines] textarea:focus, input:hover, select:hover, textarea:hover
-{
-background-color: rgba(255, 166, 0, .5) !important;
-}
+  /* Highlight on focus/hover */
+  html[data-outlines] input:focus,
+  html[data-outlines] select:focus,
+  html[data-outlines] textarea:focus,
+  input:hover,
+  select:hover,
+  textarea:hover {
+    background-color: rgba(255,166,0,0.5) !important;
+  }
+  /* Base pastel background */
   body, html {
-    background: #fff6dc !important; /* Sun pastel, matches sun&#39;s range */
+    background: #fff6dc !important;
     transition: background 0.8s linear;
   }
+  /* Sun canvas */
   canvas#sunCanvas {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 220px;
-    z-index: 0; pointer-events: none; background: transparent; display: block;
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 220px;
+    z-index: 0; pointer-events: none;
+    background: transparent;
   }
-  .passage-content { position:relative; z-index:1; }
-  #timeline { background: #fff6dc !important }
+  /* Timeline bar */
+  #timeline { background: #fff6dc !important; }
+  /* Button */
   .button {
     background-color: rgb(255,183,44);
-    background-image: linear-gradient(90deg, #ffc14d, #ffb94d, #ff9336);
+    background-image: linear-gradient(90deg,#ffc14d,#ffb94d,#ff9336);
     border: 1px solid #ffbb2a;
-    border-radius: 12px; color: #fff;
-    padding: .65rem 1rem; font-size: 1rem;
-    display: block; margin: .9rem auto;
-    cursor: pointer; max-width: 420px;
+    border-radius: 12px;
+    color: #fff;
+    padding: .65rem 1rem;
+    font-size: 1rem;
+    display: block;
+    margin: .9rem auto;
+    cursor: pointer;
+    max-width: 420px;
   }
   .button:hover {
-    background-image: linear-gradient(90deg, #ffd17a, #ffc05e, #ffb300);
-    border-color: #ffbb2a; /* keep border gold on hover */
+    background-image: linear-gradient(90deg,#ffd17a,#ffc05e,#ffb300);
+    border-color: #ffbb2a;
   }
+  /* Checkbox */
   label.checkbox {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin: 0.75em 0;
+    display: flex; align-items: center;
+    margin: .75em 0; cursor: pointer;
     user-select: none;
   }
   label.checkbox input {
-    -webkit-appearance: none; appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
     margin: 0;
     width: 1.2em; height: 1.2em;
     border: 2px solid #e0ddca;
-    border-radius: 0.25rem;
-    position: relative;
-    transition: background-color 0.2s, border-color 0.2s;
+    border-radius: .25rem;
+    transition: background-color .2s, border-color .2s;
     display: inline-block;
     outline: none;
+    position: relative;
   }
   label.checkbox input:checked {
     background-color: #ffba2b;
     border-color: #ffba2b;
   }
   label.checkbox input:focus {
-    border-color: #ffba2b !important; /* prevent blue on focus */
+    border-color: #ffba2b !important;
     box-shadow: 0 0 0 2px #ffeab7;
   }
   label.checkbox input:checked::after {
     content: &quot;&quot;;
     position: absolute;
-    top: 0.15em;
-    left: 0.35em;
-    width: 0.25em; height: 0.6em;
+    top: .15em; left: .35em;
+    width: .25em; height: .6em;
     border: solid white;
-    border-width: 0 0.2em 0.2em 0;
+    border-width: 0 .2em .2em 0;
     transform: rotate(45deg);
   }
   label.checkbox span {
-    margin-left: 0.5em;
+    margin-left: .5em;
     font-size: 1em;
     color: #6b3700;
   }
+  /* Impact boxes */
+  .impact-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+  }
+  .impact-box {
+    background-color: rgba(255,255,255,0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 110px;
+  }
+  .impact-title {
+    font-weight: bold;
+    margin-bottom: .5rem;
+  }
+  .impact-content {
+    font-size: 1.5rem;
+  }
+  #balance-meter .balance .dollar-sign {
+      color: #FDA121 !important;
+  }
+.balance-meter .balance .bar-fill,
+.balance-meter .circle.filled,
+#balance-meter .balance .unit,
+#balance-meter .balance .dollar-sign,
+\::selection {
+  color: #FDA121 !important;
+}
+  ::selection {
+        color: #FDA121 !important;
+  }
+  .impact-unit {
+    font-weight: 600 !important;
+    color: #FDA121 !important;
+  }
+  /* No-movement placeholder for tick */
+  @keyframes tick { from {} to {} }
+  .animate-number { display: inline-block; }
 &lt;/style&gt;
 
+&lt;div class=&quot;policy-impact-screen&quot; id=&quot;heatMetrics&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Lives at Risk Averted&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-lives&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;impact-subtitle&quot;&gt;&amp;nbsp; people&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;System Strain&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;% &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-strain&quot;&gt;0&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Vulnerable Reach&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;% &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-reach&quot;&gt;0&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+   &lt;div class=&quot;question-wrapper&quot;&gt;
+    &lt;p&gt;A heatwave is bearing down—what emergency measures will you implement?&lt;/p&gt;
+    &lt;form id=&quot;heatChoices&quot;&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt1&quot; /&gt;
+        &lt;span&gt;Open libraries and community centres as cooling shelters with extended hours&lt;/span&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt2&quot; /&gt;
+        &lt;span&gt;Deploy mobile cooling stations to high-risk areas&lt;/span&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt3&quot; /&gt;
+        &lt;span&gt;Provide portable fans and ice packs&lt;/span&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt4&quot; /&gt;
+        &lt;span&gt;Subsidize utility bills to support increased air-conditioning use&lt;/span&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt5&quot; /&gt;
+        &lt;span&gt;Implement a citywide SMS heat alert and health-tip broadcast&lt;/span&gt;
+      &lt;/label&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+
+  &lt;div id=&quot;warning&quot; style=&quot;display: none; color: #b91c1c; margin-top: 1em&quot;&gt;
+    ⚠️ You must choose at least one response before continuing.
+  &lt;/div&gt;
+  &lt;button class=&quot;button&quot; onclick=&quot;handleContinue()&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;
+
 &lt;&lt;script&gt;&gt;
-// Animate sun &amp; pastel background
+// Sun glow &amp; background animation
 setTimeout(function(){
   const canvas = document.getElementById(&#39;sunCanvas&#39;),
-        ctx    = canvas.getContext(&#39;2d&#39;);
+        ctx = canvas.getContext(&#39;2d&#39;);
   canvas.width = window.innerWidth;
   canvas.height = 220;
+  const cx = canvas.width/2, cy = 110, baseR = 68;
+  let t = 0;
 
-  const cx = canvas.width/2, cy = 110, baseRadius = 68;
-  let time = 0;
+  function pastel(h) { return `hsl(${h},92%,94%)`; }
 
-  function pastelColor(hue) {
-    // Gentle light pastel background (use similar hue, very high lightness)
-    return `hsl(${hue}, 92%, 94%)`;
-  }
-
-  function drawSun(t) {
-    // Only use hues from 35–55 (yellow–gold–orange), never green or red
-    const hue = 45 + Math.sin(t/2400)*10; // much slower, and very small range
+  function drawSun(time){
+    const hue = 45 + Math.sin(time/2400)*10;
     ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // Sun glow gradient
-    const grad = ctx.createRadialGradient(cx, cy, 15, cx, cy, baseRadius*1.8);
-    grad.addColorStop(0, `hsl(${hue},98%,60%)`);
-    grad.addColorStop(0.15, `hsl(${hue},98%,80%)`);
+    // Glow
+    const grad = ctx.createRadialGradient(cx,cy,15,cx,cy,baseR*1.8);
+    grad.addColorStop(0,   `hsl(${hue},98%,60%)`);
+    grad.addColorStop(0.15,`hsl(${hue},98%,80%)`);
     grad.addColorStop(0.5, `hsla(${hue},98%,70%,.22)`);
-    grad.addColorStop(1, `hsla(${hue},98%,97%,0)`);
+    grad.addColorStop(1,   `hsla(${hue},98%,97%,0)`);
     ctx.beginPath();
-    ctx.arc(cx, cy, baseRadius*1.6, 0, 2*Math.PI);
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // Sun center
+    ctx.arc(cx,cy,baseR*1.6,0,2*Math.PI);
+    ctx.fillStyle = grad; ctx.fill();
+    // Core
     ctx.beginPath();
-    ctx.arc(cx, cy, baseRadius, 0, 2*Math.PI);
+    ctx.arc(cx,cy,baseR,0,2*Math.PI);
     ctx.fillStyle = `hsl(${hue},98%,56%)`;
     ctx.shadowColor = `hsl(${hue},98%,70%)`;
     ctx.shadowBlur = 40;
     ctx.fill();
     ctx.shadowBlur = 0;
-
-    // Animate the body bg
-    document.body.style.background = pastelColor(hue);
-    const timeline = document.getElementById(&#39;timeline&#39;);
-    if(timeline) timeline.style.background = pastelColor(hue);
+    // BG
+    document.body.style.background = pastel(hue);
+    const tl = document.getElementById(&#39;timeline&#39;);
+    if(tl) tl.style.background = pastel(hue);
   }
 
-  function animate() {
-    time += 16; // ~60fps
-    drawSun(time);
-    requestAnimationFrame(animate);
+  function animateFrame(){
+    t += 16;
+    drawSun(t);
+    requestAnimationFrame(animateFrame);
   }
-  animate();
+  animateFrame();
+  window.addEventListener(&#39;resize&#39;, ()=&gt; canvas.width = window.innerWidth);
 
-  window.addEventListener(&quot;resize&quot;,()=&gt;{
-    canvas.width=window.innerWidth;
+  // Number-tick helper
+  function animateNumber(el, start, end){
+    if(start===end){ el.textContent = end; return; }
+    let cur = start;
+    const step = end&gt;start?1:-1,
+          dur  = 500,
+          iv   = Math.max(Math.floor(dur/Math.abs(end-start)),16);
+    el.classList.add(&#39;animate-number&#39;);
+    const timer = setInterval(()=&gt;{
+      cur += step;
+      el.textContent = cur;
+      if(cur===end){
+        clearInterval(timer);
+        el.classList.remove(&#39;animate-number&#39;);
+      }
+    }, iv);
+  }
+
+  // Heatwave impacts
+  const heatImpacts = {
+   &quot;heat-opt1&quot;: { lives: 60, strain: 35, reach: 45 },
+    &quot;heat-opt2&quot;: { lives: 50, strain: 35, reach: 55 },
+    &quot;heat-opt3&quot;: { lives: 25, strain: 20, reach: 35 },
+    &quot;heat-opt4&quot;: { lives: 30, strain: 15, reach: 30 },
+    &quot;heat-opt5&quot;: { lives: 10, strain: 5,  reach: 30 }
+  };
+
+  function updateHeatMetrics(){
+    const eL = document.getElementById(&#39;metric-lives&#39;),
+          eS = document.getElementById(&#39;metric-strain&#39;),
+          eR = document.getElementById(&#39;metric-reach&#39;);
+    const pL = parseInt(eL.textContent,10),
+          pS = parseInt(eS.textContent,10),
+          pR = parseInt(eR.textContent,10);
+    let tL=0, tS=0, tR=0;
+    Object.entries(heatImpacts).forEach(([id,imp])=&gt;{
+      if(document.getElementById(id).checked){
+        tL += imp.lives;
+        tS += imp.strain;
+        tR += imp.reach;
+      }
+    });
+    tS = Math.min(tS,100);
+    tR = Math.min(Math.max(tR,0),100);
+
+    animateNumber(eL,pL,tL);
+    animateNumber(eS,pS,tS);
+    animateNumber(eR,pR,tR);
+
+    document.querySelector(&#39;#metric-strain&#39;).nextElementSibling.textContent = &#39; %&#39;;
+    document.querySelector(&#39;#metric-reach&#39;).nextElementSibling.textContent = &#39; %&#39;;
+  }
+
+  // Hook checkbox changes
+  document.querySelectorAll(&#39;#heatChoices input[type=checkbox]&#39;).forEach(cb=&gt;{
+    cb.addEventListener(&#39;change&#39;, e=&gt;{
+      const w = document.getElementById(&#39;warning&#39;);
+      w.style.display = &#39;none&#39;;
+      if(document.querySelectorAll(&#39;#heatChoices input:checked&#39;).length &gt; 3){
+        e.target.checked = false;
+        w.textContent = &#39;⚠️ You can only select up to 3 options.&#39;;
+        w.style.display = &#39;block&#39;;
+        setTimeout(()=&gt;w.style.display=&#39;none&#39;,3000);
+      }
+      updateHeatMetrics();
+    });
   });
 
-  // Continue button logic
-  window.handleContinue = function(){
-    const any = document.querySelectorAll(&#39;label.checkbox input:checked&#39;).length;
-    const w   = document.getElementById(&#39;warning&#39;);
-    if(!any) w.style.display=&#39;block&#39;;
-    else    SugarCube.Engine.play(&#39;Heatwave_Response_Centres&#39;);
-  };
-}, 0);
-&lt;&lt;/script&gt;&gt;
+  // Initial tick
+  updateHeatMetrics();
 
-&lt;div class=&quot;passage-content&quot;&gt;
-  &lt;div class=&quot;build-intro&quot; style=&quot;max-width: 700px; margin: 5rem auto 2rem; padding: 40px 20px; text-align: center; font-size: 1.2em; line-height: 1.6; color: #6b3700; background-color: rgba(255,240,212,0.55); border-radius: 10px;&quot;&gt;
-    &lt;p&gt;heatwave&lt;/p&gt;
-    &lt;form id=&quot;heatChoices&quot;&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;opt1&quot;/&gt;
-        &lt;span&gt;Open community centres as cooling shelters&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;opt2&quot;/&gt;
-        &lt;span&gt;Distribute bottled water at major transit stops&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;opt3&quot;/&gt;
-        &lt;span&gt;something else&lt;/span&gt;
-      &lt;/label&gt;
-    &lt;/form&gt;
-    &lt;div id=&quot;warning&quot; style=&quot;display:none;color:#b91c1c;margin-top:1em;&quot;&gt;
-      ⚠️ You must choose at least one response before continuing.
-    &lt;/div&gt;
-    &lt;button class=&quot;button&quot; onclick=&quot;handleContinue()&quot;&gt;Continue&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="HeatwaveInfo" tags="" position="700,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="18" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  // Continue logic
+  window.handleContinue = function(){
+    const w = document.getElementById(&#39;warning&#39;);
+    if(!document.querySelectorAll(&#39;#heatChoices input:checked&#39;).length){
+      w.style.display = &#39;block&#39;;
+    } else {
+      SugarCube.Engine.play(&#39;Heatwave_Response_Centres&#39;);
+    }
+  };
+
+}, 0);
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="HeatwaveInfo" tags="" position="700,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="18" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
@@ -4289,7 +4468,36 @@ PolicyManager.register({
   }
 });
 &lt;&lt;/script&gt;&gt;
-&lt;div class=&quot;passageContent&quot;&gt; 
+
+
+&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
 &lt;p&gt;In early 2024, Ottawa city councillors unanimously approved a plan to lease and retrofit underused downtown office space into transitional housing, part of a growing shift in the city’s strategy to move away from temporary overflow shelters and toward more stable, supportive environments. The approach responds to dual pressures: an overwhelmed shelter system and an ongoing influx of asylum seekers, many of whom were sleeping in chairs or makeshift spaces.
 &lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 
@@ -4303,7 +4511,6 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="Loop" tags="" position="1200,1000" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 
@@ -4807,10 +5014,7 @@ PolicyManager.register({
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;ChooseProjectProposal1&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-
-
-[[Continue|Loop]]</tw-passagedata><tw-passagedata pid="26" name="PreServiceFunding" tags="" position="600,600" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="26" name="PreServiceFunding" tags="" position="600,600" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -4959,7 +5163,37 @@ PolicyManager.register({
   }
 });
 &lt;&lt;/script&gt;&gt;
-&lt;div class=&quot;passageContent&quot;&gt; 
+
+
+&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
 &lt;p&gt;In January 2025, Ottawa City Council voted to move forward with developing a renovictions bylaw, following intense advocacy from tenant groups and mounting evidence of widespread misuse of eviction laws. The motion, introduced by Councillor Ariel Troster, came in response to a sharp increase—nearly 500% over three years—in N13 “renoviction” notices, where landlords evict tenants under the pretense of major renovations, only to re-rent the units at significantly higher rates.
 &lt;div class=&quot;break&quot;&gt; &lt;/div&gt;
 Despite a staff recommendation to delay action, the Planning and Housing Committee was swayed by powerful public delegations from renters across the city, as well as data showing a parallel rise in homelessness. Troster argued that municipal action was essential, especially in the absence of provincial vacancy control or enforcement. Her motion called on staff to explore a bylaw modeled after Hamilton’s, which requires landlords to obtain renovation licenses, provide engineering reports, and offer relocation assistance.
@@ -4969,7 +5203,6 @@ The vote marked a rare instance where councillors pushed back against a staff re
 
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="ServiceFunding1" tags="" position="600,700" size="100,100">&lt;div class=&quot;puzzle-layout&quot;&gt;
     &lt;div id=&quot;game-area&quot;&gt;
       &lt;!-- The plugin will create its canvas inside this div --&gt;
@@ -7015,25 +7248,30 @@ PolicyManager.register({
 
 
 
-&lt;div class=&quot;passageContent&quot;&gt; 
-&lt;div class=&quot;policy-impact-screen&quot; &gt;
+
+&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div id=&quot;impact-chart-1&quot; class=&quot;impact-graph&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Public Opinion&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-number&quot;&gt;+5%&lt;/span&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
+
     &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Service Coordination&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;div class=&quot;impact-widget&quot;&gt;★ ★ ★ ☆ ☆&lt;/div&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
@@ -7048,32 +7286,41 @@ Some suburban councillors opposed the motion, arguing it weakened public consult
 TODO: add image of cbc news headline? / format that shows info is being displayed.
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="SnowStorm" tags="" position="500,1500" size="100,100">&lt;canvas id=&quot;snowCanvas&quot;&gt;&lt;/canvas&gt;
-
-
 
 &lt;style&gt;
   canvas#snowCanvas {
-    position: fixed; top:0; left:0; z-index:0;
-    width:100%; height:100%; pointer-events:none;
-    background:#e5f5ff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: #e5f5ff;
   }
-  .passage-content { position:relative; z-index:1; }
-  #timeline{
-      background:#e5f5ff !important
+  .passage-content {
+    position: relative;
+    z-index: 1;
   }
-.button {
-    background-color: rgb(32,117,202);
-    background-image: linear-gradient(rgb(41,122,202),rgb(30,104,178));
-    border: 1px solid rgb(38,111,185);
-    border-radius: 12px; color: #fff;
-    padding: .65rem 1rem; font-size: 1rem;
-    display: block; margin: .9rem auto;
-    cursor: pointer; max-width: 420px;
+  #timeline {
+    background: #e5f5ff !important;
+  }
+  .button {
+    background-color: rgb(32, 117, 202);
+    background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+    border: 1px solid rgb(38, 111, 185);
+    border-radius: 12px;
+    color: #fff;
+    padding: 0.65rem 1rem;
+    font-size: 1rem;
+    display: block;
+    margin: 0.9rem auto;
+    cursor: pointer;
+    max-width: 420px;
   }
   .button:hover {
-    background-image: linear-gradient(rgb(51,130,210),rgb(39,121,202));
+    background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
   }
   label.checkbox {
     display: flex;
@@ -7083,7 +7330,6 @@ TODO: add image of cbc news headline? / format that shows info is being displaye
     user-select: none;
   }
   label.checkbox input {
-    /* remove default look */
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
@@ -7115,81 +7361,265 @@ TODO: add image of cbc news headline? / format that shows info is being displaye
     font-size: 1em;
     color: #1f2937;
   }
+  .impact-box {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+  .impact-unit {
+    font-weight: 700 !important;
+  }
+  .question-wrapper {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  @keyframes tick {
+    from {
+    }
+    to {
+    }
+  }
+  .animate-number {
+    display: inline-block;
+    /* animation: tick 0.5s ease-out; */
+  }
 &lt;/style&gt;
 
+&lt;div
+  class=&quot;build-intro&quot;
+  style=&quot;
+    color: #1c1c1e;
+    background-color: rgba(255, 255, 255, 0.35);
+    border-radius: 10px;
+  &quot;
+&gt;
 
-&lt;&lt;script&gt;&gt;
-// Defer until the canvas is in the DOM
-setTimeout(function(){
-  const canvas = document.getElementById(&#39;snowCanvas&#39;),
-        ctx    = canvas.getContext(&#39;2d&#39;);
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  &lt;div class=&quot;policy-impact-screen&quot; id=&quot;snowMetrics&quot;&gt;
+  
+    &lt;div class=&quot;impact-container&quot;&gt;
+      &lt;div class=&quot;impact-box&quot;&gt;
+        &lt;div class=&quot;impact-title&quot;&gt;Lives at Risk Averted&lt;/div&gt;
+        &lt;div class=&quot;impact-content&quot;&gt;
+          &lt;span class=&quot;impact-value&quot; id=&quot;metric-lives&quot;&gt;0&lt;/span&gt;
+          &lt;span class=&quot;impact-subtitle&quot;&gt;&amp;nbsp; people&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
 
-  const numFlakes = 300, flakes = [];
-  function Flake(x,y,r,d){
-    this.x=x; this.y=y; this.r=r; this.d=d;
-    this.update=()=&gt;{
-      this.y+=Math.cos(this.d)+1+this.r/2;
-      this.x+=Math.sin(this.d)*2;
-      if(this.y&gt;canvas.height){ this.y=-10; this.x=Math.random()*canvas.width; }
-    };
-    this.draw=()=&gt;{
-      ctx.beginPath();
-      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-      ctx.fillStyle=&quot;#fff&quot;; ctx.fill();
-    };
-  }
-  for(let i=0;i&lt;numFlakes;i++){
-    flakes.push(new Flake(
-      Math.random()*canvas.width,
-      Math.random()*canvas.height,
-      Math.random()*3+1,
-      Math.random()*Math.PI
-    ));
-  }
-  function drawFlakes(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    flakes.forEach(f=&gt;{ f.update(); f.draw(); });
-    requestAnimationFrame(drawFlakes);
-  }
-  drawFlakes();
-  window.addEventListener(&quot;resize&quot;,()=&gt;{
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
-  });
-  window.handleContinue = function(){
-    const any = document.querySelectorAll(&#39;.checkbox-wrapper-4 input:checked&#39;).length;
-    const w   = document.getElementById(&#39;warning&#39;);
-    if(!any) w.style.display=&#39;block&#39;;
-    else    SugarCube.Engine.play(&#39;Snow_Response_Centres&#39;);
-  };
-}, 0);
-&lt;&lt;/script&gt;&gt;
+      &lt;div class=&quot;impact-box&quot;&gt;
+        &lt;div class=&quot;impact-title&quot;&gt;System Strain&lt;/div&gt;
+        &lt;div class=&quot;impact-content&quot;&gt;
+          &lt;span class=&quot;impact-unit&quot;&gt;% &amp;nbsp;&lt;/span&gt;
+          &lt;span class=&quot;impact-value&quot; id=&quot;metric-strain&quot;&gt;0&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
 
-&lt;div class=&quot;passage-content&quot;&gt;
- &lt;div class=&quot;build-intro&quot; style=&quot;max-width: 700px; margin: 5rem auto 2rem; padding: 40px 20px; text-align: center; font-size: 1.2em; line-height: 1.6; color: #1c1c1e; background-color: rgba(255,255,255,0.35); border-radius: 10px;&quot;&gt;
-    &lt;p&gt;snowstorm&lt;/p&gt;
-    &lt;form id=&quot;snowChoices&quot;&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;opt1&quot;/&gt;
-        &lt;span&gt;Open community centres as emergency warming shelters&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;opt2&quot;/&gt;
-        &lt;span&gt;Issue emergency motel stay vouchers&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;opt3&quot;/&gt;
-        &lt;span&gt;do something else lol&lt;/span&gt;
-      &lt;/label&gt;
-    &lt;/form&gt;
-    &lt;div id=&quot;warning&quot; style=&quot;display:none;color:#b91c1c;margin-top:1em;&quot;&gt;
+      &lt;div class=&quot;impact-box&quot;&gt;
+        &lt;div class=&quot;impact-title&quot;&gt;Vulnerable Reach&lt;/div&gt;
+        &lt;div class=&quot;impact-content&quot;&gt;
+          &lt;span class=&quot;impact-unit&quot;&gt;% &amp;nbsp;&lt;/span&gt;
+          &lt;span class=&quot;impact-value&quot; id=&quot;metric-reach&quot;&gt;0&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- ✅ Choices Form --&gt;
+    &lt;div class=&quot;question-wrapper&quot;&gt;
+    &lt;p&gt; A severe snowstorm has struck the city. Which emergency measures will you put in place? &lt;/p&gt;
+      &lt;form id=&quot;snowChoices&quot;&gt;
+        &lt;label class=&quot;checkbox&quot;
+          &gt;&lt;input type=&quot;checkbox&quot; id=&quot;snow-opt1&quot; /&gt;&lt;span
+            &gt;Open community centres as emergency warming shelters&lt;/span
+          &gt;&lt;/label
+        &gt;
+        &lt;label class=&quot;checkbox&quot;
+          &gt;&lt;input type=&quot;checkbox&quot; id=&quot;snow-opt2&quot; /&gt;&lt;span
+            &gt;Issue emergency motel stay vouchers&lt;/span
+          &gt;&lt;/label
+        &gt;
+        &lt;label class=&quot;checkbox&quot;
+          &gt;&lt;input type=&quot;checkbox&quot; id=&quot;snow-opt3&quot; /&gt;&lt;span
+            &gt;Distribute thermal blankets and hot meals&lt;/span
+          &gt;&lt;/label
+        &gt;
+        &lt;label class=&quot;checkbox&quot;
+          &gt;&lt;input type=&quot;checkbox&quot; id=&quot;snow-opt4&quot; /&gt;&lt;span
+            &gt;Deploy mobile warming buses on major routes&lt;/span
+          &gt;&lt;/label
+        &gt;
+        &lt;label class=&quot;checkbox&quot;
+          &gt;&lt;input type=&quot;checkbox&quot; id=&quot;snow-opt5&quot; /&gt;&lt;span
+            &gt;Coordinate volunteer check-in phone calls to isolated
+            individuals&lt;/span
+          &gt;&lt;/label
+        &gt;
+        &lt;label class=&quot;checkbox&quot;
+          &gt;&lt;input type=&quot;checkbox&quot; id=&quot;snow-opt6&quot; /&gt;&lt;span
+            &gt;Enforce an overnight curfew in public spaces&lt;/span
+          &gt;&lt;/label
+        &gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;warning&quot; style=&quot;display: none; color: #b91c1c; margin-top: 1em&quot;&gt;
       ⚠️ You must choose at least one response before continuing.
     &lt;/div&gt;
     &lt;button class=&quot;button&quot; onclick=&quot;handleContinue()&quot;&gt;Continue&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="35" name="SnowstormInfo" tags="" position="500,1600" size="100,100">history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="36" name="Start" tags="" position="600,75" size="100,100">&lt;&lt;set $history = []&gt;&gt;
+&lt;/div&gt;
+
+
+&lt;&lt;script&gt;&gt;
+      setTimeout(function(){
+        // ❄️ Snow Animation
+        const canvas = document.getElementById(&#39;snowCanvas&#39;),
+              ctx    = canvas.getContext(&#39;2d&#39;);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const numFlakes = 300, flakes = [];
+        function Flake(x,y,r,d){
+          this.x=x; this.y=y; this.r=r; this.d=d;
+          this.update=()=&gt;{
+            this.y+=Math.cos(this.d)+1+this.r/2;
+            this.x+=Math.sin(this.d)*2;
+            if(this.y&gt;canvas.height){ this.y=-10; this.x=Math.random()*canvas.width; }
+          };
+          this.draw=()=&gt;{
+            ctx.beginPath();
+            ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+            ctx.fillStyle=&quot;#fff&quot;; ctx.fill();
+          };
+        }
+        for(let i=0;i&lt;numFlakes;i++){
+          flakes.push(new Flake(
+            Math.random()*canvas.width,
+            Math.random()*canvas.height,
+            Math.random()*3+1,
+            Math.random()*Math.PI
+          ));
+        }
+        function drawFlakes(){
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+          flakes.forEach(f=&gt;{ f.update(); f.draw(); });
+          requestAnimationFrame(drawFlakes);
+        }
+        drawFlakes();
+        window.addEventListener(&quot;resize&quot;,()=&gt;{
+          canvas.width=window.innerWidth;
+          canvas.height=window.innerHeight;
+        });
+
+        // 🎯 Continue button logic
+        window.handleContinue = function(){
+          const any = document.querySelectorAll(&#39;#snowChoices input:checked&#39;).length;
+          const w   = document.getElementById(&#39;warning&#39;);
+          if(!any) w.style.display=&#39;block&#39;;
+          else    SugarCube.Engine.play(&#39;Snow_Response_Centres&#39;);
+        };
+
+        // Helper function to animate number changes
+        function animateNumber(el, start, end) {
+          if (start === end) {
+            el.textContent = end;
+            return;
+          }
+          let current = start;
+          const step = end &gt; start ? 1 : -1;
+          const duration = 500;
+          const intervalTime = Math.max(Math.floor(duration / Math.abs(end - start)), 16);
+          el.classList.add(&#39;animate-number&#39;);
+          const timer = setInterval(() =&gt; {
+            current += step;
+            el.textContent = current;
+            if (current === end) {
+              clearInterval(timer);
+              el.classList.remove(&#39;animate-number&#39;);
+            }
+          }, intervalTime);
+        }
+
+        // 📊 Impact Logic
+        const snowImpacts = {
+          &quot;snow-opt1&quot;: { lives: 57, strain: 40, reach: 20 },
+          &quot;snow-opt2&quot;: { lives: 49, strain: 45, reach: 10 },
+          &quot;snow-opt3&quot;: { lives: 24, strain: 10, reach: 30 },
+          &quot;snow-opt4&quot;: { lives: 21, strain: 25, reach: 40 },
+          &quot;snow-opt5&quot;: { lives: 18, strain: 10, reach: 20 },
+          &quot;snow-opt6&quot;: { lives: 6, strain: 20, reach: -30 }
+        };
+
+        function updateSnowMetrics() {
+          const livesEl = document.getElementById(&#39;metric-lives&#39;);
+          const prevLives = parseInt(livesEl.textContent, 10);
+          const strainEl = document.getElementById(&#39;metric-strain&#39;);
+          const prevStrain = parseInt(strainEl.textContent, 10);
+          const reachEl = document.getElementById(&#39;metric-reach&#39;);
+          const prevReach = parseInt(reachEl.textContent, 10);
+
+          let totalLives = 0, totalStrain = 0, totalReach = 0;
+
+          Object.entries(snowImpacts).forEach(([id, impact]) =&gt; {
+            const cb = document.getElementById(id);
+            if (cb &amp;&amp; cb.checked) {
+              totalLives += impact.lives;
+              totalStrain += impact.strain;
+              totalReach += impact.reach;
+            }
+          });
+
+          totalStrain = Math.min(totalStrain, 100);
+          totalReach  = Math.min(totalReach, 100);
+          totalReach  = Math.max(totalReach, 0);
+
+          // document.getElementById(&#39;metric-lives&#39;).textContent  = totalLives;
+          // document.getElementById(&#39;metric-strain&#39;).textContent = totalStrain;
+          // document.getElementById(&#39;metric-reach&#39;).textContent = totalReach;
+          animateNumber(livesEl, prevLives, totalLives);
+          animateNumber(strainEl, prevStrain, totalStrain);
+          animateNumber(reachEl, prevReach, totalReach);
+
+          const strainSubtitle = document.querySelector(&#39;#metric-strain&#39;).nextElementSibling;
+          if (strainSubtitle) strainSubtitle.textContent = &#39; %&#39;;
+
+          document.getElementById(&#39;metric-reach&#39;).textContent = totalReach;
+          const reachSubtitle = document.querySelector(&#39;#metric-reach&#39;).nextElementSibling;
+          if (reachSubtitle) reachSubtitle.textContent = &#39; %&#39;;
+        }
+
+        updateSnowMetrics(); // initial render
+        if (typeof animateImpactValues === &#39;function&#39;) {
+          animateImpactValues();
+        }
+
+        document.querySelectorAll(&#39;#snowChoices input[type=checkbox]&#39;).forEach(cb =&gt; {
+          cb.addEventListener(&#39;change&#39;, function(e) {
+            const warning = document.getElementById(&#39;warning&#39;);
+            warning.style.display = &#39;none&#39;;
+            const checkedBoxes = document.querySelectorAll(&#39;#snowChoices input[type=checkbox]:checked&#39;);
+            if (checkedBoxes.length &gt; 3) {
+              e.target.checked = false;
+              warning.textContent = &#39;⚠️ You can only select up to 3 options.&#39;;
+              warning.style.display = &#39;block&#39;;
+              setTimeout(() =&gt; warning.style.display = &#39;none&#39;, 3000);
+            }
+            updateSnowMetrics();
+            if (typeof animateImpactValues === &#39;function&#39;) animateImpactValues();
+          });
+        });
+
+      }, 0);
+
+
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="35" name="SnowstormInfo" tags="" position="500,1600" size="100,100">&lt;style&gt;
+body {
+    background: #e5f5ff;
+}
+  #timeline {
+    background: #e5f5ff !important;
+  }
+&lt;/style&gt;
+
+history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="36" name="Start" tags="" position="600,75" size="100,100">&lt;&lt;set $history = []&gt;&gt;
 &lt;div class=&quot;passageContent&quot;&gt; In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: &lt;span title=&quot;A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed.&quot;&gt; ensuring everyone has a home&lt;/span&gt;, &lt;span title=&quot;People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.&quot;&gt;people get the support they need &lt;/span&gt; and &lt;span title=&quot;Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people&#39;s needs.&quot;&gt;working together / collaboration &lt;/span&gt;.
 
 Despite these goals, the nation&#39;s capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city&#39;s history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what&#39;s working, what&#39;s missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
