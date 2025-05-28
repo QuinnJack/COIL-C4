@@ -70,32 +70,39 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 
 :: Affordable {"position":"500,500","size":"100,100"}
 
-<div class="policy-impact-screen" >
+
+<div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
-      <div class="impact-title">Economic Growth</div>
+<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
       <div class="impact-content">
-        <div id="impact-chart-1" class="impact-graph"></div>
+        <span class="impact-icon">↑&nbsp; </span>
+        <span class="impact-value">500</span>
       </div>
     </div>
+
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Public Opinion</div>
+      <div class="impact-title">Long-Term Savings</div>
       <div class="impact-content">
-        <span class="impact-number">+5%</span>
+       <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
       </div>
     </div>
+
     <div class="impact-box" data-index="3">
-      <div class="impact-title">Service Coordination</div>
+      <div class="impact-title">Upfront Cost</div>
       <div class="impact-content">
-        <div class="impact-widget">★ ★ ★ ☆ ☆</div>
+        <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
       </div>
     </div>
   </div>
 </div>
-<p style="padding: 0 6rem;">
+
+
+<p style="padding: 0 6rem; font-size: 1.1em">
   With land scarce and demand high, you chose to densify. Construction begins on mid-rise apartments designed for affordability, sustainability, and access to transit.
 </p>
-<div class="break"> </div>
 
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
@@ -104,7 +111,7 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 
 
 
-:: Bills {"position":"1225,175","size":"100,100"}
+:: Bills {"position":"1100,100","size":"100,100"}
 <<script>>
 // run on *every* time this passage finishes displaying
 $(document).on(':passagedisplay', function (ev) {
@@ -863,6 +870,287 @@ zoom: 1.1;
 
 
 
+:: ChoiceTemplate {"position":"100,100","size":"100,100"}
+<<set $turn += 1>>
+  <<script>>window.PolicyManager.tick();<</script>>
+  
+  <!-- CSS Styling -->
+  <style>
+    .build-intro {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 5rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #1c1c1e;
+    }
+    .drawer-content {
+     padding: 10px;
+      padding-left: 25%;
+      padding-right: 25%;
+    }
+    .button-wrapper {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      margin: 0.9rem auto;
+      position: relative;
+      top: -0.25rem;
+    }
+  
+    .button {
+      flex: 1;
+      background-color: rgb(32, 117, 202);
+      background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+      border: 1px solid rgb(38, 111, 185);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      padding: 0.65rem 1rem;
+      text-align: center;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+  
+    .button:hover {
+      background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+      box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 2px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:active {
+      transform: scale(0.98);
+      box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 1px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+      border-color: #2a5a87;
+    }
+  
+    .button:disabled:hover,
+    .button:disabled:active {
+      pointer-events: none;
+      box-shadow: none;
+    }
+  
+    .button:first-of-type {
+      margin-top: 1rem;
+    }
+  
+    .info-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+  
+    .info-btn img {
+      width: 1.2rem;
+      height: 1.2rem;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+  
+    .info-btn:hover img {
+      opacity: 1;
+    }
+  
+  
+  </style>
+  <!-- Intro Text & Buttons -->
+  <div class="passage-content">
+    <div class="build-intro">
+      <p>
+        The federal government launches <strong>Build Canada Homes</strong>, its most ambitious housing program since WWII.
+        The program offers billions in financing, standardized housing designs, and land access for cities ready to build.
+        Your city has been invited to submit a proposal. Do you focus on mass affordable units, starter homes, or innovative pilots?
+      </p>
+  
+      <div class="button-wrapper">
+        <button class="button" onclick="buildAffordable();">
+          Densify existing neighbourhoods with new mid-rise apartments
+        </button>
+        <button id="info-affordable" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <div class="button-wrapper">
+        <button class="button" onclick="buildStarter();">
+          Expand suburban development with starter homes for low and middle-income families
+        </button>
+        <button id="info-starter" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <div class="button-wrapper">
+        <button class="button" onclick="buildModular();">
+          Accelerate housing construction through prefabricated, factory-built homes
+        </button>
+        <button id="info-modular" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+    </div>
+  </div>
+<!-- Drawers -->
+<sl-drawer placement="bottom" label=" " class="drawer-affordable">
+  <div class="drawer-content">
+    <h3>Mass-Transit & Community</h3>
+    <p>
+      Building mid-rise apartments near transit hubs reduces car dependence, promotes mixed-use sidewalks, and shortens construction time in dense zones.
+    </p>
+
+    <h4>Missing Middle Housing</h4>
+    <p>
+      “Missing middle” refers to housing types between detached homes and high-rises—such as triplexes, townhomes, and mid-rise apartments. These help meet demand while blending with existing neighborhoods.
+    </p>
+
+    <h4>Transit-Oriented Development</h4>
+    <p>
+      Concentrating homes near bus and rail stations reduces sprawl, increases transit ridership, and encourages walkable, vibrant streetscapes. These areas often see higher retail activity and better air quality.
+    </p>
+
+  </div>
+</sl-drawer>
+
+<sl-drawer placement="bottom" label=" " class="drawer-starter">
+  <div class="drawer-content">
+    <h3>Suburban Starter Homes</h3>
+    <p>
+      New subdivisions on the city’s edge offer turnkey homes for working families—with parks, schools, and roads built into the plan.
+    </p>
+
+    <h4>Starter Homes</h4>
+    <p>
+      Starter homes are smaller, affordable detached houses aimed at first-time buyers. These homes provide paths to ownership and long-term stability.
+    </p>
+
+    <h4>Incremental Growth</h4>
+    <p>
+      Inspired by post-war developments like Levittown, these neighborhoods prioritize fast approvals and modular planning, balancing cost with liveability.
+    </p>
+
+  </div>
+</sl-drawer>
+
+<sl-drawer placement="bottom" label=" " class="drawer-modular">
+  <div class="drawer-content">
+    <h3>Factory-Built Efficiency</h3>
+    <p>
+      Prefabricated housing shortens timelines and lowers costs. Homes are assembled in factories, then installed on-site—ideal for both suburban and urban infill.
+    </p>
+
+    <h4>Modular & Panel Systems</h4>
+    <p>
+      Components like walls and plumbing come prebuilt, allowing rapid assembly. Projects range from tiny homes to multi-storey apartment blocks and office conversions.
+    </p>
+
+    <h4>Digital Manufacturing</h4>
+    <p>
+      Modern factories use digital design, robotic cutting, and climate-controlled precision to reduce waste and labor dependency—especially useful in remote or high-demand areas.
+    </p>
+  </div>
+</sl-drawer>
+  
+  <!-- Wiring & Policy Logic -->
+  <script>
+    // Info-icon → drawer
+    document.getElementById('info-affordable').addEventListener('click', () => {
+      document.querySelector('.drawer-affordable').show();
+    });
+    document.getElementById('info-starter').addEventListener('click', () => {
+      document.querySelector('.drawer-starter').show();
+    });
+    document.getElementById('info-modular').addEventListener('click', () => {
+      document.querySelector('.drawer-modular').show();
+    });
+  
+    // Drawer close buttons
+    document.querySelectorAll('sl-drawer sl-button[slot="footer"]').forEach(btn => {
+      btn.addEventListener('click', () => btn.closest('sl-drawer').hide());
+    });
+  
+    // Policy registration functions
+    function buildAffordable() {
+      PolicyManager.register({
+        name: "Build City Affordable Housing",
+        costUpfront: 10,
+        duration: 999999,
+        immediate(v) { v.publicOpinion -= 15; },
+        tick(v, Util, age) {
+          let cost = 8;
+          if (age >= 2) cost = 0.42;
+          if (age >= 5) cost = 0.12;
+          if (age >= 7) cost = -0.5;
+          v.budget -= cost;
+          if (age >= 2) window.Util.exitPeople(100 + Math.floor(25 * (age - 2)));
+          if (age >= 10 && age < 30) v.serviceCoordination += 2;
+        }
+      });
+      SugarCube.Engine.play("Affordable");
+    }
+  
+    function buildStarter() {
+      PolicyManager.register({
+        name: "Starter Homes Expansion",
+        costUpfront: 8,
+        duration: 999999,
+        immediate(v) { v.publicOpinion += 10; v.inflow -= 5; },
+        tick(v) {
+          let cost = 5;
+          if (v.age >= 3) cost = 1;
+          if (v.age >= 6) cost = -0.25;
+          v.budget -= cost;
+          if (v.age >= 3) v.housingSupply += 150;
+        }
+      });
+      SugarCube.Engine.play("Starter");
+    }
+  
+    function buildModular() {
+      PolicyManager.register({
+        name: "Modular Housing & Office Conversions",
+        costUpfront: 6,
+        duration: 999999,
+        immediate(v) { v.publicOpinion += 5; v.systemCapacity += 10; },
+        tick(v, Util, age) {
+          let cost = 3;
+          if (age >= 2) cost = 0.8;
+          if (age >= 4) cost = 0.2;
+          v.budget -= cost;
+          if (age >= 2) window.Util.exitPeople(80 + Math.floor(15 * (age - 2)));
+          if (age >= 6) v.systemCapacity += 3;
+        }
+      });
+      SugarCube.Engine.play("Modular");
+    }
+  </script>
+
+
 :: ChooseC4Project1 {"position":"600,800","size":"100,100"}
   <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
@@ -1617,7 +1905,7 @@ $(document).on(':passagedisplay', function () {
 [[Heatwave|Heatwave]]
 
 
-:: Endgame {"position":"800,25","size":"100,100"}
+:: Endgame {"position":"800,0","size":"100,100"}
 <<set $finalScore = 823>>
 <<set $insights = [
   "Your city reduced homeless inflow by 34% over 10 years.",
@@ -2133,6 +2421,114 @@ color: #333;
 </div>
 
 
+:: Gantt {"position":"800,100","size":"100,100"}
+<div id="gantt"></div>
+
+<<script>>
+(function () {
+  // 1) inject CSS & base styling (unchanged)
+  if (!document.querySelector('link[href*="frappe-gantt"]')) {
+    const link = document.createElement('link');
+    link.rel  = 'stylesheet';
+    link.href = 'https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css';
+    document.head.appendChild(link);
+  }
+  if (!document.getElementById('GanttStyle')) {
+    const style = document.createElement('style');
+    style.id = 'GanttStyle';
+    style.textContent = `
+      #gantt {
+        width: 100%;
+        height: auto;       /* let the library size it */
+        margin: 1em 0;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  let currentGantt = null;
+
+  setTimeout(() => {
+    const ganttEl = document.getElementById('gantt');
+    if (!ganttEl) return;
+
+    const renderGantt = () => {
+      const MS_DAY = 86400000;
+      const fmt    = d => d.toISOString().slice(0,10);
+
+      const placeholder = [
+        { id: '1', name: 'Alpha', duration: 60, progress: 10 },
+        { id: '2', name: 'Beta',  duration: 45, progress:  0 },
+        { id: '3', name: 'Gamma', duration: 30, progress: 50 },
+        { id: '4', name: 'Delta', duration: 75, progress: 25 },
+        { id: '5', name: 'El', duration: 75, progress: 25 },
+        { id: '6', name: 'El', duration: 75, progress: 25 },
+        { id: '7', name: 'El', duration: 75, progress: 25 },
+
+      ];
+
+      let cursor = new Date();
+      cursor.setHours(0,0,0,0);
+
+      const tasks = placeholder.map(p => {
+        const start = new Date(cursor);
+        const end   = new Date(start.getTime() + p.duration * MS_DAY);
+        cursor = new Date(end.getTime() + MS_DAY);
+        return {
+          id:       p.id,
+          name:     p.name,
+          start:    fmt(start),
+          end:      fmt(end),
+          progress: p.progress
+        };
+      });
+
+      // 2) clean up old chart
+      if (currentGantt && typeof currentGantt.unmount === 'function') {
+        currentGantt.unmount();
+      }
+
+      // 3) compute a container height: e.g.  (rows × (bar+padding)) + header
+      const rowHeight    = 60;   // bar_height + padding
+      const padding      = 40;
+      const headerHeight = 100;   // upper + lower header
+      const chartHeight  = placeholder.length * rowHeight + headerHeight;
+
+      try {
+        currentGantt = new Gantt('#gantt', tasks, {
+          view_mode:        'Year',
+          date_format:      'YYYY-MM-DD',
+
+          // ↑ make each bar taller
+          bar_height:       30,     // px of the bar itself
+          padding:          10,     // px of space around each bar
+
+          // ↑ force the svg container to this px height
+          container_height: chartHeight,
+
+          // keep the left/right ends tight
+          infinite_padding: false,
+          scroll_to:        'start',
+          popup_on:         'hover',
+        });
+      } catch (err) {
+        console.error("⚠️ Gantt rendering failed:", err);
+      }
+    };
+
+    if (window.Gantt) {
+      renderGantt();
+    } else {
+      const s = document.createElement('script');
+      s.src   = 'https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js';
+      s.onload = renderGantt;
+      document.head.appendChild(s);
+    }
+  }, 0);
+})();
+<</script>>
+
+
 :: Heatwave {"position":"700,1500","size":"100,100"}
 <canvas id="sunCanvas"></canvas>
 
@@ -2302,6 +2698,49 @@ setTimeout(function(){
 
 :: HeatwaveInfo {"position":"700,1600","size":"100,100"}
 history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness. 
+
+
+:: InfoTemplate {"position":"100,200","size":"100,100"}
+
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="1">
+<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑&nbsp; </span>
+        <span class="impact-value">500</span>
+      </div>
+    </div>
+
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Long-Term Savings</div>
+      <div class="impact-content">
+       <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
+      </div>
+    </div>
+
+    <div class="impact-box" data-index="3">
+      <div class="impact-title">Upfront Cost</div>
+      <div class="impact-content">
+        <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<p style="padding: 0 6rem; font-size: 1.1em">
+  With land scarce and demand high, you chose to densify. Construction begins on mid-rise apartments designed for affordability, sustainability, and access to transit.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
+</div>
+
+
 
 
 :: LeaseSpace {"position":"800,300","size":"100,100"}
@@ -2498,29 +2937,37 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 
 :: Modular {"position":"700,500","size":"100,100"}
 
-<div class="policy-impact-screen" >
+
+<div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
-      <div class="impact-title">Economic Growth</div>
+<div class="impact-title" style="white-space: nowrap; display: inline;">Housing Supply</div>
       <div class="impact-content">
-        <div id="impact-chart-1" class="impact-graph"></div>
+        <span class="impact-icon">↑&nbsp; </span>
+        <span class="impact-value">500</span>
       </div>
     </div>
+
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Public Opinion</div>
+      <div class="impact-title">Long-Term Savings</div>
       <div class="impact-content">
-        <span class="impact-number">+5%</span>
+       <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">1<span class="impact-subtitle"> M / year</span></span>
       </div>
     </div>
+
     <div class="impact-box" data-index="3">
-      <div class="impact-title">Service Coordination</div>
+      <div class="impact-title">Upfront Cost</div>
       <div class="impact-content">
-        <div class="impact-widget">★ ★ ★ ☆ ☆</div>
+        <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">5<span class="impact-subtitle"> M</span></span>
       </div>
     </div>
   </div>
 </div>
-<p style="padding: 0 6rem;">Your team selects prefabricated modular homes to jumpstart supply. Quick to build and cost-efficient, they’ll deliver rapid housing relief in both urban and suburban zones.
+
+
+<p style="padding: 0 6rem; font-size: 1.1em;">Your team selects prefabricated modular homes to jumpstart supply. Quick to build and cost-efficient, they’ll deliver rapid housing relief in both urban and suburban zones.
 </p>
 <div class="break"> </div>
 <div class="centered-btn">
@@ -5403,143 +5850,55 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 * [[Start|ChooseCityPolicy1]]
     [[Endgame|Endgame]]
     [[Zoning|Zoning]]
+    [[Gantt|Gantt]]
 
 </div>
 
 
 :: Starter {"position":"600,500","size":"100,100"}
 
-<div class="policy-impact-screen" >
+
+<div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
-      <div class="impact-title">Economic Growth</div>
+<div class="impact-title" style="white-space: nowrap; display: inline;">Housing Supply</div>
       <div class="impact-content">
-        <div id="impact-chart-1" class="impact-graph"></div>
+        <span class="impact-icon">↑&nbsp; </span>
+        <span class="impact-value">500</span>
       </div>
     </div>
+
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Public Opinion</div>
+      <div class="impact-title">Long-Term Cost</div>
       <div class="impact-content">
-        <span class="impact-number">+5%</span>
+       <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
       </div>
     </div>
+
     <div class="impact-box" data-index="3">
-      <div class="impact-title">Service Coordination</div>
+      <div class="impact-title">Upfront Cost</div>
       <div class="impact-content">
-        <div class="impact-widget">★ ★ ★ ☆ ☆</div>
+        <span class="impact-unit">$ &nbsp;</span>
+        <span class="impact-value">10<span class="impact-subtitle"> M</span></span>
       </div>
     </div>
   </div>
 </div>
-<p style="padding: 0 6rem;">A familiar playbook returns: low-cost, fast-track starter homes on the urban fringe. It won’t solve sprawl, but it will help hundreds of families buy their first home.
+
+
+<p style="padding: 0 6rem; font-size: 1.1em">
+A familiar playbook returns: low-cost, fast-track starter homes on the urban fringe. It won’t solve sprawl, but it will help hundreds of families buy their first home.
 </p>
 
-<div class="break"> </div>
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
 </div>
 
-<style>
-.policy-impact-screen {
-  position: relative;        
-  margin: 10vh auto 2em;     content */
- 
-  border-radius: 14px;
-  width: 80%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 1.5em;
-  font-family: "Inter", sans-serif;
-  box-sizing: border-box;   
-}
-
-/* Close button still sits inside relative parent */
-.policy-impact-screen .impact-close {
-  position: absolute;
-  right: 0.75em;
-  background: none;
-  border: none;
-  font-size: 1.25em;
-  cursor: pointer;
-  line-height: 1;
-}
-
-/* Flex row of impacts */
-.policy-impact-screen .impact-container {
-  display: flex;
-  gap: 1.5em;
-  justify-content: center;
-}
-
-/* On small screens: stack and bring even higher */
-@media (max-width: 979px) {
-  .policy-impact-screen {
-    margin: 5vh auto 1.5em;   /* only 5 vh top margin */
-    width: 90%;
-    padding: 1em;
-  }
-  .policy-impact-screen .impact-container {
-    flex-direction: column;
-    gap: 1em;
-  }
-}
-
-/* Individual impact box */
-.impact-box {
-  background: #fff;
-  border: 1px solid #e2e2e8;
-  border-radius: 8px;
-  flex: 1;
-  min-width: 170px;
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Subtitle styling (uppercase Inter with a bottom dotted line) */
-.impact-title {
-  font-family: "Inter", sans-serif;
-  font-weight: 400;
-  font-size: 1em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5em;
-  text-align: center;
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
-  padding-bottom: 0.25em;
-}
-
-/* Content area */
-.impact-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.impact-number {
-  font-family: "Spectral", serif;
-  font-weight: 600;
-  font-size: 2em;
-  color: #0066cc;
-}
-
-.impact-graph {
-  width: 100%;
-  height: 120px;
-}
-
-.impact-widget {
-  font-size: 2em;
-  line-height: 1;
-}
-</style>
 
 
-:: StoryInterface {"position":"1225,275","size":"100,100"}
+
+:: StoryInterface {"position":"1100,200","size":"100,100"}
 <!--  =====  PERSISTENT UI  =====  -->
 
 <div id="spent-ui">
@@ -5670,7 +6029,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 [[Heatwave|Heatwave]]
 
 
-:: Zoning {"position":"800,150","size":"100,100"}
+:: Zoning {"position":"600,1800","size":"100,100"}
 <style>
   html,
   body {
@@ -5710,6 +6069,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
     font-size: 1rem;
     font-weight: 600;
     font-family: "Inter", sans-serif;
+      border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
   }
 
   .layer-option {
@@ -5824,7 +6184,7 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 
 
 
-:: metricsscreen {"position":"1000,100","size":"100,100"}
+:: metricsscreen {"position":"100,400","size":"100,100"}
 
 <div class="policy-impact-screen" >
   <div class="impact-container">
@@ -5965,7 +6325,8 @@ importScripts(
 		type : "module",
 		src  :  "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/drawer/drawer.js"
 	},
-  "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"
+  "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js",
+  "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js",
 );
 
 
@@ -6164,6 +6525,35 @@ function updateUI() {
   else staticUIUpdater();
 }
 
+ /* === 🏃‍♂️ Impact‑box number animation === */
+function animateImpactValues () {
+    // Grab every .impact-value inside .impact-box
+    document.querySelectorAll('.impact-box .impact-value').forEach(el => {
+
+      /* ── 1️⃣ Work out the target number ───────────────────────────── */
+      // Strip out everything that isn’t 0‑9 or “.”
+      const target = parseFloat(el.textContent.replace(/[^0-9.]/g, ''));
+      if (isNaN(target)) return;           // ignore boxes without a number
+
+      /* ── 2️⃣ If there’s a subtitle ( ‘ M / year’ etc.), park it ───── */
+      const subtitle = el.querySelector('.impact-subtitle');
+      if (subtitle) subtitle.remove();     // temporarily take it out
+      el.textContent = '0';                // start counting from 0
+      if (subtitle) el.appendChild(subtitle); // put subtitle back after “0”
+
+      /* ── 3️⃣ Animate 0 → target with Motion.animate ───────────────── */
+      Motion.animate(0, target, {
+        duration : 0.8,
+        ease     : 'circOut',
+        onUpdate (x) {
+          /* round big numbers, keep one decimal for small ones */
+          const value = Number.isInteger(target) ? Math.round(x) : x.toFixed(1);
+          el.firstChild.textContent = value;
+        }
+      });
+    });
+  }
+
 $(window).on('load', updateUI);
 $(document).on(':passagestart :passagedisplay', () => setTimeout(updateUI, 0));
 $(window).on('resize', updateUI);
@@ -6174,6 +6564,7 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
   .done(() => {
     const animate = Motion.animate;
 
+ 
     animateUIUpdater = function() {
       const v = State.variables;
 
@@ -6231,6 +6622,7 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
       });
     };
 
+  
     updateUI(); // initial animated run
   })
   .fail(() => {
@@ -6265,6 +6657,10 @@ $.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
     console.warn('⚠️ Motion.js failed to load.');
   });
 
+$(document).on(':passagedisplay', (ev) => {
+    animateImpactValues();
+});
+
 /* === 📱 MOBILE TOOLTIP SUPPORT === */
 $(function() {
   $(document).on('click', '.balance-meter', function() {
@@ -6290,6 +6686,9 @@ $(function() {
 
 @import url("https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css");
 @import url("https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
+
+@import url("https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css");
+
 
 .centered-btn {
   text-align: center;
@@ -6426,13 +6825,29 @@ sl-drawer[placement="bottom"]::part(close-button__base):hover {
   width: 100%;
 }
 
+.impact-unit {
+  font-family: "Spectral", serif;
+  font-weight: 600;
+  font-size: 2em;
+  color: #0066cc !important;
+}
+.impact-subtitle {
+  font-family: "Spectral", serif;
+  font-weight: 600;
+  font-size: .65em;
+}
+.impact-value {
+  font-family: "Spectral", serif;
+  font-weight: 600;
+    font-size: 2em;
+  color: #1c1c1e; /* dark neutral for contrast */
+}
 .impact-number {
   font-family: "Spectral", serif;
   font-weight: 600;
   font-size: 2em;
-  color: #0066cc;
+  color: #1c1c1e; /* dark neutral for contrast */
 }
-
 .impact-graph {
   width: 100%;
   height: 120px;
@@ -6442,7 +6857,12 @@ sl-drawer[placement="bottom"]::part(close-button__base):hover {
   font-size: 2em;
   line-height: 1;
 }
+.impact-icon {
+  font-size: 3em;
+  line-height: 1;
+    color: #0066cc !important;
 
+}
 .million {
   font-size: 24px;
   margin-left: -.5em;
