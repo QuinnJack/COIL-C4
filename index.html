@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://F2594C19-2B1A-436C-A749-C92E439252F0// --><tw-storydata name="simulator" startnode="36" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="F2594C19-2B1A-436C-A749-C92E439252F0" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
+	<!-- UUID://F2594C19-2B1A-436C-A749-C92E439252F0// --><tw-storydata name="simulator" startnode="40" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="F2594C19-2B1A-436C-A749-C92E439252F0" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
 
 @import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
 
@@ -1740,7 +1740,513 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Bills" tags="" position="1100,100" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Bill6" tags="" position="600,1700" size="100,100">&lt;&lt;script&gt;&gt;
+  // run on *every* time this passage finishes displaying
+  $(document).on(&#39;:passagedisplay&#39;, function (ev) {
+    // 1) inject the CSS if we haven&#39;t already
+    if (!$(&#39;head&#39;).find(&#39;link[href*=&quot;swiper-bundle.min.css&quot;]&#39;).length) {
+      $(&#39;head&#39;).append(
+        &#39;&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css&quot;&gt;&#39;
+      );
+    }
+  
+    // 2) helper to actually init the carousel
+    function setupSwiper() {
+      const el = ev.content.querySelector(&#39;.mySwiper&#39;);
+      if (!el) return;
+      if (window.mySwiper) {
+        window.mySwiper.destroy(true, true);
+      }
+      // ← here’s the only change: add observer + observeParents
+      window.mySwiper = new Swiper(el, {
+        effect:      &#39;cards&#39;,
+        grabCursor:  true,
+        observer:        true,
+        observeParents:  true
+      });
+    }
+  
+    // 3) load Swiper.js if needed, otherwise just init
+    if (typeof Swiper === &#39;undefined&#39;) {
+      $.getScript(&#39;https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js&#39;)
+       .done(setupSwiper)
+       .fail(() =&gt; console.error(&#39;Failed to load Swiper.&#39;));
+    }
+    else {
+      setupSwiper();
+    }
+  });
+  &lt;&lt;/script&gt;&gt;
+  
+  &lt;div class=&quot;passageContent&quot;&gt; 
+  
+  
+  
+  
+      &lt;!-- Demo styles --&gt;
+      &lt;style&gt;
+  
+  :root {
+  zoom: 1.1;
+  }
+  
+  .passageContent {
+  margin-top: 0rem !important
+  }
+        html,
+        body {
+          position: relative;
+          height: 100%;
+        }
+  
+.swiper-slide li {
+  margin-bottom: 0.25em; /* reduce spacing between items */
+  padding-left: 0.5em; /* optional: for visual clarity */
+  margin-top: -.7em;
+}
+
+        body {
+          background: #eee;
+          font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+          font-size: 14px;
+          color: #000;
+          margin: 0;
+          padding: 0;
+        }
+  
+        body {
+          background: #fff;
+          font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+          font-size: 14px;
+          color: #000;
+          margin: 0;
+          padding: 0;
+        }
+  
+        html,
+        body {
+          position: relative;
+          height: 100%;
+        }
+  
+        body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+  
+        .swiper {
+          width: 23rem !important;
+          max-width: 900px;
+          height: 44em !important;
+          max-height: 1000px;
+        }
+        @media screen and (max-width: 600px) {
+          .swiper {
+            width: 42vw !important;
+          }
+          .swiper-slide {
+            font-size: 0.9em;
+            padding: 1rem 0.75rem;
+          }
+        }
+        @media screen and (max-width: 979px) {
+          .swiper {
+            width: 38vw !important;
+            margin-left: 2rem !important;
+          }
+          .button {
+            margin-left: 2rem !important;
+          }
+        }
+    .swiper-slide-shadow {
+      background: rgba(0, 0, 0, 0.05) !important;
+    }
+    @media screen and (max-width: 979px) {
+      .swiper {
+        width: 38vw !important;
+        margin-left: 2rem !important;
+      }
+    
+      .button {
+        margin-left: 2rem !important;
+      }
+    
+      .swiper-slide {
+        font-size: 0.85em; 
+        padding: 1rem 0.75rem;
+      }
+      
+      .impacts {
+        display: none; 
+      }
+    }
+        .swiper-slide {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 20px;
+          font-size: 14px;
+          background-color: #fff;
+            border-radius: 14.130435% / 10.483871%;
+                        border-color: rgba(156, 162, 166, 0.32);
+         border-left-width: 1.5px;
+        border-right-width: 1.5px;
+        border-style: solid;
+        border-top-width: 1.5px;
+        border-bottom-width: 1.5px;
+  
+        }
+        .swiper-slide {
+          pointer-events: none;
+        }
+  
+  .slider-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* center slider + button together */
+    margin: 2rem auto;      /* vertical spacing + center wrapper in page */
+  }
+  
+  .slider-wrapper .swiper {
+    
+    margin: 0;                     /* reset any old margins */
+    margin-top: 3rem;
+    */
+  }
+  
+  
+        .swiper-slide.swiper-slide-active {
+          pointer-events: auto;
+              border-color: rgba(156, 162, 166, 0.18);
+         border-left-width: 1.5px;
+        border-right-width: 1.5px;
+        border-style: solid;
+        border-top-width: 1.5px;
+              border-bottom-width: 1.5px;
+  
+        }
+        .break {
+          display: block;
+          content: &quot;&quot;;
+        }
+        .small-break {
+          display: block;
+          content: &quot;&quot;;
+        }
+        .bill-header {
+          text-align: center;
+          margin-bottom: 20px;
+          line-height: 1.2;
+            border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5em;
+      margin-bottom: 1em;
+        }
+        .bill-header div {
+          font-variant: small-caps;
+          letter-spacing: 1px;
+          font-size: 0.85em;
+        }
+        .bill-header .bill-number {
+          font-size: 1.2em;
+          margin-top: 6px;
+        }
+        .swiper-slide h2 {
+          margin: 0 0 16px;
+          font-size: 1.3em;
+          text-align: center;
+          font-variant: small-caps;
+          letter-spacing: 0.5px;
+        }
+        .swiper-slide p {
+          line-height: 1.5;
+          font-size: 0.95em;
+          flex: 1;
+        }
+       button {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #e5e7eb !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 0.5rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    margin: 0.3rem !important;
+    position: relative !important;
+    top: -0.25rem !important;
+    text-align: center !important;
+    margin: 0.3rem auto; /* centers it */
+    position: relative;
+  
+  }
+        .meta {
+          text-align: right;
+          font-size: 0.8em;
+          color: #555;
+          margin-top: -10px;
+          margin-right: 6px;
+          font-family: Arial, sans-serif;
+        }
+        
+  @font-face{font-family:swiper-icons;src:url(&#39;data:application/font-woff;charset=utf-8;base64, d09GRgABAAAAAAZgABAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAAGRAAAABoAAAAci6qHkUdERUYAAAWgAAAAIwAAACQAYABXR1BPUwAABhQAAAAuAAAANuAY7+xHU1VCAAAFxAAAAFAAAABm2fPczU9TLzIAAAHcAAAASgAAAGBP9V5RY21hcAAAAkQAAACIAAABYt6F0cBjdnQgAAACzAAAAAQAAAAEABEBRGdhc3AAAAWYAAAACAAAAAj//wADZ2x5ZgAAAywAAADMAAAD2MHtryVoZWFkAAABbAAAADAAAAA2E2+eoWhoZWEAAAGcAAAAHwAAACQC9gDzaG10eAAAAigAAAAZAAAArgJkABFsb2NhAAAC0AAAAFoAAABaFQAUGG1heHAAAAG8AAAAHwAAACAAcABAbmFtZQAAA/gAAAE5AAACXvFdBwlwb3N0AAAFNAAAAGIAAACE5s74hXjaY2BkYGAAYpf5Hu/j+W2+MnAzMYDAzaX6QjD6/4//Bxj5GA8AuRwMYGkAPywL13jaY2BkYGA88P8Agx4j+/8fQDYfA1AEBWgDAIB2BOoAeNpjYGRgYNBh4GdgYgABEMnIABJzYNADCQAACWgAsQB42mNgYfzCOIGBlYGB0YcxjYGBwR1Kf2WQZGhhYGBiYGVmgAFGBiQQkOaawtDAoMBQxXjg/wEGPcYDDA4wNUA2CCgwsAAAO4EL6gAAeNpj2M0gyAACqxgGNWBkZ2D4/wMA+xkDdgAAAHjaY2BgYGaAYBkGRgYQiAHyGMF8FgYHIM3DwMHABGQrMOgyWDLEM1T9/w8UBfEMgLzE////P/5//f/V/xv+r4eaAAeMbAxwIUYmIMHEgKYAYjUcsDAwsLKxc3BycfPw8jEQA/gZBASFhEVExcQlJKWkZWTl5BUUlZRVVNXUNTQZBgMAAMR+E+gAEQFEAAAAKgAqACoANAA+AEgAUgBcAGYAcAB6AIQAjgCYAKIArAC2AMAAygDUAN4A6ADyAPwBBgEQARoBJAEuATgBQgFMAVYBYAFqAXQBfgGIAZIBnAGmAbIBzgHsAAB42u2NMQ6CUAyGW568x9AneYYgm4MJbhKFaExIOAVX8ApewSt4Bic4AfeAid3VOBixDxfPYEza5O+Xfi04YADggiUIULCuEJK8VhO4bSvpdnktHI5QCYtdi2sl8ZnXaHlqUrNKzdKcT8cjlq+rwZSvIVczNiezsfnP/uznmfPFBNODM2K7MTQ45YEAZqGP81AmGGcF3iPqOop0r1SPTaTbVkfUe4HXj97wYE+yNwWYxwWu4v1ugWHgo3S1XdZEVqWM7ET0cfnLGxWfkgR42o2PvWrDMBSFj/IHLaF0zKjRgdiVMwScNRAoWUoH78Y2icB/yIY09An6AH2Bdu/UB+yxopYshQiEvnvu0dURgDt8QeC8PDw7Fpji3fEA4z/PEJ6YOB5hKh4dj3EvXhxPqH/SKUY3rJ7srZ4FZnh1PMAtPhwP6fl2PMJMPDgeQ4rY8YT6Gzao0eAEA409DuggmTnFnOcSCiEiLMgxCiTI6Cq5DZUd3Qmp10vO0LaLTd2cjN4fOumlc7lUYbSQcZFkutRG7g6JKZKy0RmdLY680CDnEJ+UMkpFFe1RN7nxdVpXrC4aTtnaurOnYercZg2YVmLN/d/gczfEimrE/fs/bOuq29Zmn8tloORaXgZgGa78yO9/cnXm2BpaGvq25Dv9S4E9+5SIc9PqupJKhYFSSl47+Qcr1mYNAAAAeNptw0cKwkAAAMDZJA8Q7OUJvkLsPfZ6zFVERPy8qHh2YER+3i/BP83vIBLLySsoKimrqKqpa2hp6+jq6RsYGhmbmJqZSy0sraxtbO3sHRydnEMU4uR6yx7JJXveP7WrDycAAAAAAAH//wACeNpjYGRgYOABYhkgZgJCZgZNBkYGLQZtIJsFLMYAAAw3ALgAeNolizEKgDAQBCchRbC2sFER0YD6qVQiBCv/H9ezGI6Z5XBAw8CBK/m5iQQVauVbXLnOrMZv2oLdKFa8Pjuru2hJzGabmOSLzNMzvutpB3N42mNgZGBg4GKQYzBhYMxJLMlj4GBgAYow/P/PAJJhLM6sSoWKfWCAAwDAjgbRAAB42mNgYGBkAIIbCZo5IPrmUn0hGA0AO8EFTQAA&#39;);font-weight:400;font-style:normal}:root{--swiper-theme-color:#007aff}:host{position:relative;display:block;margin-left:auto;margin-right:auto;z-index:1}.swiper{margin-left:auto;margin-right:auto;position:relative;overflow:hidden;list-style:none;padding:0;z-index:1;display:block}.swiper-vertical&gt;.swiper-wrapper{flex-direction:column}.swiper-wrapper{position:relative;width:100%;height:100%;z-index:1;display:flex;transition-property:transform;transition-timing-function:var(--swiper-wrapper-transition-timing-function,initial);box-sizing:content-box}.swiper-android .swiper-slide,.swiper-ios .swiper-slide,.swiper-wrapper{transform:translate3d(0px,0,0)}.swiper-horizontal{touch-action:pan-y}.swiper-vertical{touch-action:pan-x}.swiper-slide{flex-shrink:0;width:100%;height:100%;position:relative;transition-property:transform;display:block}.swiper-slide-invisible-blank{visibility:hidden}.swiper-autoheight,.swiper-autoheight .swiper-slide{height:auto}.swiper-autoheight .swiper-wrapper{align-items:flex-start;transition-property:transform,height}.swiper-backface-hidden .swiper-slide{transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-3d.swiper-css-mode .swiper-wrapper{perspective:1200px}.swiper-3d .swiper-wrapper{transform-style:preserve-3d}.swiper-3d{perspective:1200px}.swiper-3d .swiper-cube-shadow,.swiper-3d .swiper-slide{transform-style:preserve-3d}.swiper-css-mode&gt;.swiper-wrapper{overflow:auto;scrollbar-width:none;-ms-overflow-style:none}.swiper-css-mode&gt;.swiper-wrapper::-webkit-scrollbar{display:none}.swiper-css-mode&gt;.swiper-wrapper&gt;.swiper-slide{scroll-snap-align:start start}.swiper-css-mode.swiper-horizontal&gt;.swiper-wrapper{scroll-snap-type:x mandatory}.swiper-css-mode.swiper-vertical&gt;.swiper-wrapper{scroll-snap-type:y mandatory}.swiper-css-mode.swiper-free-mode&gt;.swiper-wrapper{scroll-snap-type:none}.swiper-css-mode.swiper-free-mode&gt;.swiper-wrapper&gt;.swiper-slide{scroll-snap-align:none}.swiper-css-mode.swiper-centered&gt;.swiper-wrapper::before{content:&#39;&#39;;flex-shrink:0;order:9999}.swiper-css-mode.swiper-centered&gt;.swiper-wrapper&gt;.swiper-slide{scroll-snap-align:center center;scroll-snap-stop:always}.swiper-css-mode.swiper-centered.swiper-horizontal&gt;.swiper-wrapper&gt;.swiper-slide:first-child{margin-inline-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-horizontal&gt;.swiper-wrapper::before{height:100%;min-height:1px;width:var(--swiper-centered-offset-after)}.swiper-css-mode.swiper-centered.swiper-vertical&gt;.swiper-wrapper&gt;.swiper-slide:first-child{margin-block-start:var(--swiper-centered-offset-before)}.swiper-css-mode.swiper-centered.swiper-vertical&gt;.swiper-wrapper::before{width:100%;min-width:1px;height:var(--swiper-centered-offset-after)}.swiper-3d .swiper-slide-shadow,.swiper-3d .swiper-slide-shadow-bottom,.swiper-3d .swiper-slide-shadow-left,.swiper-3d .swiper-slide-shadow-right,.swiper-3d .swiper-slide-shadow-top{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:10}.swiper-3d .swiper-slide-shadow{background:rgba(0,0,0,.15)}.swiper-3d .swiper-slide-shadow-left{background-image:linear-gradient(to left,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-right{background-image:linear-gradient(to right,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-top{background-image:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-3d .swiper-slide-shadow-bottom{background-image:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,0))}.swiper-lazy-preloader{width:42px;height:42px;position:absolute;left:50%;top:50%;margin-left:-21px;margin-top:-21px;z-index:10;transform-origin:50%;box-sizing:border-box;border:4px solid var(--swiper-preloader-color,var(--swiper-theme-color));border-radius:50%;border-top-color:transparent}.swiper-watch-progress .swiper-slide-visible .swiper-lazy-preloader,.swiper:not(.swiper-watch-progress) .swiper-lazy-preloader{animation:swiper-preloader-spin 1s infinite linear}.swiper-lazy-preloader-white{--swiper-preloader-color:#fff}.swiper-lazy-preloader-black{--swiper-preloader-color:#000}@keyframes swiper-preloader-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.swiper-virtual .swiper-slide{-webkit-backface-visibility:hidden;transform:translateZ(0)}.swiper-virtual.swiper-css-mode .swiper-wrapper::after{content:&#39;&#39;;position:absolute;left:0;top:0;pointer-events:none}.swiper-virtual.swiper-css-mode.swiper-horizontal .swiper-wrapper::after{height:1px;width:var(--swiper-virtual-size)}.swiper-virtual.swiper-css-mode.swiper-vertical .swiper-wrapper::after{width:1px;height:var(--swiper-virtual-size)}:root{--swiper-navigation-size:44px}.swiper-button-next,.swiper-button-prev{position:absolute;top:var(--swiper-navigation-top-offset,50%);width:calc(var(--swiper-navigation-size)/ 44 * 27);height:var(--swiper-navigation-size);margin-top:calc(0px - (var(--swiper-navigation-size)/ 2));z-index:10;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--swiper-navigation-color,var(--swiper-theme-color))}.swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{opacity:.35;cursor:auto;pointer-events:none}.swiper-button-next.swiper-button-hidden,.swiper-button-prev.swiper-button-hidden{opacity:0;cursor:auto;pointer-events:none}.swiper-navigation-disabled .swiper-button-next,.swiper-navigation-disabled .swiper-button-prev{display:none!important}.swiper-button-next svg,.swiper-button-prev svg{width:100%;height:100%;object-fit:contain;transform-origin:center}.swiper-rtl .swiper-button-next svg,.swiper-rtl .swiper-button-prev svg{transform:rotate(180deg)}.swiper-button-prev,.swiper-rtl .swiper-button-next{left:var(--swiper-navigation-sides-offset,10px);right:auto}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-lock{display:none}.swiper-button-next:after,.swiper-button-prev:after{font-family:swiper-icons;font-size:var(--swiper-navigation-size);text-transform:none!important;letter-spacing:0;font-variant:initial;line-height:1}.swiper-button-prev:after,.swiper-rtl .swiper-button-next:after{content:&#39;prev&#39;}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:var(--swiper-navigation-sides-offset,10px);left:auto}.swiper-button-next:after,.swiper-rtl .swiper-button-prev:after{content:&#39;next&#39;}.swiper-pagination{position:absolute;text-align:center;transition:.3s opacity;transform:translate3d(0,0,0);z-index:10}.swiper-pagination.swiper-pagination-hidden{opacity:0}.swiper-pagination-disabled&gt;.swiper-pagination,.swiper-pagination.swiper-pagination-disabled{display:none!important}.swiper-horizontal&gt;.swiper-pagination-bullets,.swiper-pagination-bullets.swiper-pagination-horizontal,.swiper-pagination-custom,.swiper-pagination-fraction{bottom:var(--swiper-pagination-bottom,8px);top:var(--swiper-pagination-top,auto);left:0;width:100%}.swiper-pagination-bullets-dynamic{overflow:hidden;font-size:0}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transform:scale(.33);position:relative}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-main{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev-prev{transform:scale(.33)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next-next{transform:scale(.33)}.swiper-pagination-bullet{width:var(--swiper-pagination-bullet-width,var(--swiper-pagination-bullet-size,8px));height:var(--swiper-pagination-bullet-height,var(--swiper-pagination-bullet-size,8px));display:inline-block;border-radius:var(--swiper-pagination-bullet-border-radius,50%);background:var(--swiper-pagination-bullet-inactive-color,#000);opacity:var(--swiper-pagination-bullet-inactive-opacity, .2)}button.swiper-pagination-bullet{border:none;margin:0;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none}.swiper-pagination-clickable .swiper-pagination-bullet{cursor:pointer}.swiper-pagination-bullet:only-child{display:none!important}.swiper-pagination-bullet-active{opacity:var(--swiper-pagination-bullet-opacity, 1);background:var(--swiper-pagination-color,var(--swiper-theme-color))}.swiper-pagination-vertical.swiper-pagination-bullets,.swiper-vertical&gt;.swiper-pagination-bullets{right:var(--swiper-pagination-right,8px);left:var(--swiper-pagination-left,auto);top:50%;transform:translate3d(0px,-50%,0)}.swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-vertical&gt;.swiper-pagination-bullets .swiper-pagination-bullet{margin:var(--swiper-pagination-bullet-vertical-gap,6px) 0;display:block}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-vertical&gt;.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{top:50%;transform:translateY(-50%);width:8px}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-vertical&gt;.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{display:inline-block;transition:.2s transform,.2s top}.swiper-horizontal&gt;.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{margin:0 var(--swiper-pagination-bullet-horizontal-gap,4px)}.swiper-horizontal&gt;.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{left:50%;transform:translateX(-50%);white-space:nowrap}.swiper-horizontal&gt;.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s left}.swiper-horizontal.swiper-rtl&gt;.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s right}.swiper-pagination-fraction{color:var(--swiper-pagination-fraction-color,inherit)}.swiper-pagination-progressbar{background:var(--swiper-pagination-progressbar-bg-color,rgba(0,0,0,.25));position:absolute}.swiper-pagination-progressbar .swiper-pagination-progressbar-fill{background:var(--swiper-pagination-color,var(--swiper-theme-color));position:absolute;left:0;top:0;width:100%;height:100%;transform:scale(0);transform-origin:left top}.swiper-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{transform-origin:right top}.swiper-horizontal&gt;.swiper-pagination-progressbar,.swiper-pagination-progressbar.swiper-pagination-horizontal,.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,.swiper-vertical&gt;.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite{width:100%;height:var(--swiper-pagination-progressbar-size,4px);left:0;top:0}.swiper-horizontal&gt;.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-vertical,.swiper-vertical&gt;.swiper-pagination-progressbar{width:var(--swiper-pagination-progressbar-size,4px);height:100%;left:0;top:0}.swiper-pagination-lock{display:none}.swiper-scrollbar{border-radius:var(--swiper-scrollbar-border-radius,10px);position:relative;touch-action:none;background:var(--swiper-scrollbar-bg-color,rgba(0,0,0,.1))}.swiper-scrollbar-disabled&gt;.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-disabled{display:none!important}.swiper-horizontal&gt;.swiper-scrollbar,.swiper-scrollbar.swiper-scrollbar-horizontal{position:absolute;left:var(--swiper-scrollbar-sides-offset,1%);bottom:var(--swiper-scrollbar-bottom,4px);top:var(--swiper-scrollbar-top,auto);z-index:50;height:var(--swiper-scrollbar-size,4px);width:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar.swiper-scrollbar-vertical,.swiper-vertical&gt;.swiper-scrollbar{position:absolute;left:var(--swiper-scrollbar-left,auto);right:var(--swiper-scrollbar-right,4px);top:var(--swiper-scrollbar-sides-offset,1%);z-index:50;width:var(--swiper-scrollbar-size,4px);height:calc(100% - 2 * var(--swiper-scrollbar-sides-offset,1%))}.swiper-scrollbar-drag{height:100%;width:100%;position:relative;background:var(--swiper-scrollbar-drag-bg-color,rgba(0,0,0,.5));border-radius:var(--swiper-scrollbar-border-radius,10px);left:0;top:0}.swiper-scrollbar-cursor-drag{cursor:move}.swiper-scrollbar-lock{display:none}.swiper-zoom-container{width:100%;height:100%;display:flex;justify-content:center;align-items:center;text-align:center}.swiper-zoom-container&gt;canvas,.swiper-zoom-container&gt;img,.swiper-zoom-container&gt;svg{max-width:100%;max-height:100%;object-fit:contain}.swiper-slide-zoomed{cursor:move;touch-action:none}.swiper .swiper-notification{position:absolute;left:0;top:0;pointer-events:none;opacity:0;z-index:-1000}.swiper-free-mode&gt;.swiper-wrapper{transition-timing-function:ease-out;margin:0 auto}.swiper-grid&gt;.swiper-wrapper{flex-wrap:wrap}.swiper-grid-column&gt;.swiper-wrapper{flex-wrap:wrap;flex-direction:column}.swiper-fade.swiper-free-mode .swiper-slide{transition-timing-function:ease-out}.swiper-fade .swiper-slide{pointer-events:none;transition-property:opacity}.swiper-fade .swiper-slide .swiper-slide{pointer-events:none}.swiper-fade .swiper-slide-active{pointer-events:auto}.swiper-fade .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper.swiper-cube{overflow:visible}.swiper-cube .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1;visibility:hidden;transform-origin:0 0;width:100%;height:100%}.swiper-cube .swiper-slide .swiper-slide{pointer-events:none}.swiper-cube.swiper-rtl .swiper-slide{transform-origin:100% 0}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-cube .swiper-slide-active,.swiper-cube .swiper-slide-next,.swiper-cube .swiper-slide-prev{pointer-events:auto;visibility:visible}.swiper-cube .swiper-cube-shadow{position:absolute;left:0;bottom:0px;width:100%;height:100%;opacity:.6;z-index:0}.swiper-cube .swiper-cube-shadow:before{content:&#39;&#39;;background:#000;position:absolute;left:0;top:0;bottom:0;right:0;filter:blur(50px)}.swiper-cube .swiper-slide-next+.swiper-slide{pointer-events:auto;visibility:visible}.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-bottom,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-left,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-right,.swiper-cube .swiper-slide-shadow-cube.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper.swiper-flip{overflow:visible}.swiper-flip .swiper-slide{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;z-index:1}.swiper-flip .swiper-slide .swiper-slide{pointer-events:none}.swiper-flip .swiper-slide-active,.swiper-flip .swiper-slide-active .swiper-slide-active{pointer-events:auto}.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-bottom,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-left,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-right,.swiper-flip .swiper-slide-shadow-flip.swiper-slide-shadow-top{z-index:0;-webkit-backface-visibility:hidden;backface-visibility:hidden}.swiper-creative .swiper-slide{-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden;transition-property:transform,opacity,height}.swiper.swiper-cards{overflow:visible}.swiper-cards .swiper-slide{transform-origin:center bottom;-webkit-backface-visibility:hidden;backface-visibility:hidden;overflow:hidden}
+      &lt;/style&gt;
+  
+  
+  
+  
+      &lt;div class=&quot;slider-wrapper&quot;&gt;
+  
+      &lt;div class=&quot;swiper mySwiper&quot;&gt;
+        &lt;div class=&quot;swiper-wrapper&quot;&gt;
+        &lt;div class=&quot;swiper-slide&quot;&gt;
+    &lt;div class=&quot;bill-header&quot;&gt;
+      &lt;div&gt;Province of Ontario&lt;/div&gt;
+      &lt;div&gt;April 30&lt;sup&gt;th&lt;/sup&gt;, 2025&lt;/div&gt;
+      &lt;div&gt;Bill 6&lt;/div&gt;
+      &lt;div class=&quot;bill-number&quot;&gt;Premier Doug Ford&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;h2&gt;Safer Municipalities Act&lt;/h2&gt;
+    &lt;p&gt;
+      Whereas encampments and public drug use in parks and transit areas have grown visibly; and,&lt;br /&gt;
+      Whereas the Province proposes stricter public‐space controls via the Safer Municipalities Act;&lt;br /&gt;&lt;br /&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+      &lt;em&gt;Therefore be it enacted that&lt;/em&gt; municipalities may issue no‐trespass orders against encampments on public land, and provincial officers may arrest or fine (up to $10,000 or 6 months’ jail) anyone in possession of an illegal substance in a public space.
+    &lt;/p&gt;
+    &lt;div class=&quot;impacts&quot;&gt;
+      &lt;p&gt;Anticipated impacts include:&lt;/p&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;p&gt;↑ Enforcement costs and police involvement in encampment areas&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;p&gt;↓ Trust from service providers and advocates (seen as punitive)&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;p&gt;↑ Access to provincial grants if the city complies with enforcement provisions&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;p&gt;Legal challenges over Charter rights and potential court injunctions&lt;/p&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;meta&quot;&gt;
+      Ontario Legislature
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;/div&gt;
+      &lt;/div&gt;
+  
+  &lt;div class=&quot;decision-row&quot;&gt;
+  &lt;div class=&quot;tabs&quot; id=&quot;decisionTabs&quot;&gt;
+    &lt;button class=&quot;tab active&quot; data-choice=&quot;Comply&quot; style=&quot;view-transition-name: tab-1&quot;&gt;Comply&lt;/button&gt;
+    &lt;button class=&quot;tab&quot; data-choice=&quot;Delay&quot; style=&quot;view-transition-name: tab-2&quot;&gt;Delay&lt;/button&gt;
+    &lt;button class=&quot;tab&quot; data-choice=&quot;Oppose&quot; style=&quot;view-transition-name: tab-3&quot;&gt;Oppose&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;button class=&quot;confirm-button&quot; onclick=&quot;confirmBill6Choice()&quot;&gt;Confirm&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  .decision-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 2rem auto;
+    flex-direction: row;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    background: #f4f4f5;
+    border: 1px solid #cfcfcf;
+    border-radius: 24px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 6px;
+    padding: 4px;
+  }
+
+  .tab {
+    padding: 10px 14px;
+    border: none;
+    background: none;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #71717a;
+    cursor: pointer;
+    position: relative;
+    font-weight: 500;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    z-index: 1;
+  }
+
+  .tab.active {
+    color: #ffffff !important;
+    z-index: 2;
+  }
+
+  .tab.active::before {
+    content: &quot;&quot;;
+    position: absolute;
+    height: 100%;
+    inset: 0;
+    background: #000;
+    border-radius: inherit;
+    z-index: -1;
+    transition: background 0.3s ease;
+  }
+
+  .confirm-button {
+    padding: 10px 16px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .confirm-button:hover {
+    background: #333;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in-out;
+  }
+
+  .tab::before {
+    view-transition-name: tab-background;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    height: 100%;
+  }
+&lt;/style&gt;
+
+&lt;script&gt;
+  const tabs = document.querySelectorAll(&#39;.tab&#39;);
+  let selectedChoice = &quot;Comply&quot;; // default
+
+  tabs.forEach(tab =&gt; {
+    tab.addEventListener(&#39;click&#39;, () =&gt; {
+      document.startViewTransition(() =&gt; {
+        document.querySelector(&#39;.tab.active&#39;)?.classList.remove(&#39;active&#39;);
+        tab.classList.add(&#39;active&#39;);
+        selectedChoice = tab.getAttribute(&#39;data-choice&#39;);
+      });
+    });
+  });
+
+  function confirmBill6Choice() {
+    SugarCube.Engine.play(&#39;Bill6_&#39; + selectedChoice);
+  }
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="4" name="Bill6_Comply" tags="" position="500,1800" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+  impacts of this bill and your response
+&lt;/p&gt;
+
+&lt;div class=&quot;centered-btn&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="Bill6_Delay" tags="" position="600,1800" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+  impacts of this bill and your response
+&lt;/p&gt;
+
+&lt;div class=&quot;centered-btn&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="Bill6_Oppose" tags="" position="700,1800" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+  impacts of this bill and your response
+&lt;/p&gt;
+
+&lt;div class=&quot;centered-btn&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="Bills" tags="" position="1100,100" size="100,100">&lt;&lt;script&gt;&gt;
 // run on *every* time this passage finishes displaying
 $(document).on(&#39;:passagedisplay&#39;, function (ev) {
   // 1) inject the CSS if we haven&#39;t already
@@ -2175,7 +2681,7 @@ zoom: 1.1;
   &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="BuildCanadaHomes" tags="" position="600,400" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="BuildCanadaHomes" tags="" position="600,400" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
   &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
   
   &lt;!-- CSS Styling --&gt;
@@ -2452,7 +2958,7 @@ zoom: 1.1;
       });
       SugarCube.Engine.play(&quot;Modular&quot;);
     }
-  &lt;/script&gt;</tw-passagedata><tw-passagedata pid="5" name="C4Project1" tags="" position="600,900" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
+  &lt;/script&gt;</tw-passagedata><tw-passagedata pid="9" name="C4Project1" tags="" position="600,900" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
@@ -2481,7 +2987,7 @@ zoom: 1.1;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;Event1&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="ChoiceTemplate" tags="" position="100,100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="10" name="ChoiceTemplate" tags="" position="100,100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
   &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
   
   &lt;!-- CSS Styling --&gt;
@@ -2758,7 +3264,7 @@ zoom: 1.1;
       });
       SugarCube.Engine.play(&quot;Modular&quot;);
     }
-  &lt;/script&gt;</tw-passagedata><tw-passagedata pid="7" name="ChooseC4Project1" tags="" position="600,800" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+  &lt;/script&gt;</tw-passagedata><tw-passagedata pid="11" name="ChooseC4Project1" tags="" position="600,800" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;!-- CSS Styling --&gt;
@@ -2868,7 +3374,7 @@ zoom: 1.1;
     SugarCube.Engine.play(&quot;C4Project1&quot;);
   }
   &lt;/script&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="ChooseCityPolicy1" tags="" position="600,200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="ChooseCityPolicy1" tags="" position="600,200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;&lt;script&gt;&gt;
@@ -3249,7 +3755,7 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="ChooseProjectProposal1" tags="" position="600,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+    &lt;/div&gt;</tw-passagedata><tw-passagedata pid="13" name="ChooseProjectProposal1" tags="" position="600,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -3408,8 +3914,47 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
     });
     SugarCube.Engine.play(&quot;EncampmentTaskForce&quot;);
   }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="10" name="DataLab" tags="" position="600,1300" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="11" name="Dish out funding" tags="" position="1100,775" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="14" name="DataLab" tags="" position="600,1300" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;todo costs etc&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+  Supportive office text
+&lt;/p&gt;
+
+&lt;div class=&quot;centered-btn&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;SnowStorm&#39;);&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;
+
+
+
+[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="15" name="Dish out funding" tags="" position="1100,775" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt;
@@ -3485,8 +4030,47 @@ $(document).on(&#39;:passagedisplay&#39;, function () {
     });
   }, 0);
 });
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="EncampmentTaskForce" tags="" position="700,1300" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="13" name="Endgame" tags="" position="800,0" size="100,100">&lt;&lt;set $finalScore = 823&gt;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="EncampmentTaskForce" tags="" position="700,1300" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;todo costs etc&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+  Supportive office text
+&lt;/p&gt;
+
+&lt;div class=&quot;centered-btn&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;SnowStorm&#39;);&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;
+
+
+
+[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="17" name="Endgame" tags="" position="800,0" size="100,100">&lt;&lt;set $finalScore = 823&gt;&gt;
 &lt;&lt;set $insights = [
   &quot;Your city reduced homeless inflow by 34% over 10 years.&quot;,
   &quot;You met 5 of 8 targeted SDGs, including Clean Water, Affordable Housing, and Reduced Inequalities.&quot;,
@@ -3609,7 +4193,10 @@ $(document).on(&#39;:passagedisplay&#39;, function () {
 }
 
 /* “Back to Menu” button reuses your .button style */
-&lt;/style&gt;</tw-passagedata><tw-passagedata pid="14" name="Event1" tags="" position="600,1000" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="18" name="Event1" tags="" position="600,1000" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+
+&lt;&lt;script&gt;&gt;
 if (PolicyManager.has(&quot;Build City Affordable Housing&quot;)) {
   State.variables.bchChoice = &quot;affordable&quot;;
 } else if (PolicyManager.has(&quot;Starter Homes Expansion&quot;)) {
@@ -3993,7 +4580,7 @@ color: #333;
     &lt;&lt;/if&gt;&gt;
  &lt;button class=&quot;button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PIT1&#39;);&quot;&gt;Continue&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="Gantt" tags="" position="800,100" size="100,100">&lt;div id=&quot;gantt&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="Gantt" tags="" position="800,100" size="100,100">&lt;div id=&quot;gantt&quot;&gt;&lt;/div&gt;
 
 &lt;&lt;script&gt;&gt;
 (function () {
@@ -4097,7 +4684,7 @@ color: #333;
     }
   }, 0);
 })();
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="Heatwave" tags="" position="700,1500" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="Heatwave" tags="" position="700,1500" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
 
 &lt;style&gt;
   /* Highlight on focus/hover */
@@ -4410,7 +4997,7 @@ setTimeout(function(){
   };
 
 }, 0);
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="HeatwaveInfo" tags="" position="700,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="18" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="HeatwaveInfo" tags="" position="700,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="22" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
@@ -4445,7 +5032,7 @@ setTimeout(function(){
 
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="LeaseSpace" tags="" position="800,300" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="LeaseSpace" tags="" position="800,300" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Lived Experience Consultation&quot;,
   costUpfront: 10,
@@ -4511,7 +5098,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="Loop" tags="" position="1200,1000" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="Loop" tags="" position="1200,1000" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 
 
@@ -4652,7 +5239,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
     })()&gt;&gt;
   &lt;&lt;/button&gt;&gt;
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="Modular" tags="" position="700,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="25" name="Modular" tags="" position="700,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Housing Supply&lt;/div&gt;
@@ -4785,7 +5372,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
   font-size: 2em;
   line-height: 1;
 }
-&lt;/style&gt;</tw-passagedata><tw-passagedata pid="22" name="NewArrivalKits" tags="" position="1300,800" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="26" name="NewArrivalKits" tags="" position="1300,800" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Renoviction Awareness&quot;,
   costUpfront: 4,
@@ -4805,7 +5392,7 @@ PolicyManager.register({
 &lt;p&gt;Info &lt;/p&gt;
 
 [[Continue|Dish out funding]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="NextYear" tags="" position="1200,1300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="27" name="NextYear" tags="" position="1200,1300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;set $year += 1&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -4827,7 +5414,7 @@ PolicyManager.register({
 
 &lt;p&gt;
 &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="PIT" tags="" position="1200,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="PIT" tags="" position="1200,1200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
@@ -4866,7 +5453,7 @@ PolicyManager.register({
   &lt;p&gt;📌 [[Continue|NextYear]]&lt;/p&gt;
     &lt;p&gt;📌 [[PIT1|PIT1]]&lt;/p&gt;
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="25" name="PIT1" tags="" position="600,1100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="29" name="PIT1" tags="" position="600,1100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;set $year += 1&gt;&gt;
 
   &lt;div class=&quot;passage-content&quot;&gt;
@@ -5014,7 +5601,7 @@ PolicyManager.register({
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;ChooseProjectProposal1&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="26" name="PreServiceFunding" tags="" position="600,600" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="30" name="PreServiceFunding" tags="" position="600,600" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 &lt;!-- CSS Styling --&gt;
 &lt;style&gt;
@@ -5059,7 +5646,7 @@ PolicyManager.register({
     &lt;/p&gt;
     &lt;button class=&quot;button&quot; onclick=&quot;SugarCube.Engine.play(&#39;ServiceFunding1&#39;)&quot;&gt;Fund Services&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="27" name="QuarterFour" tags="" position="1500,1125" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="31" name="QuarterFour" tags="" position="1500,1125" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -5081,7 +5668,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[See End-of-Year Summary|QuarterTwo]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="QuarterThree" tags="" position="1600,925" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="QuarterThree" tags="" position="1600,925" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
@@ -5101,7 +5688,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[Proceed to Q4|QuarterFour]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="29" name="QuarterTwo" tags="" position="1425,925" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="33" name="QuarterTwo" tags="" position="1425,925" size="100,100">&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;passageContent&quot;&gt; 
   &lt;h2&gt;Quarter 2 Report&lt;/h2&gt;
@@ -5120,7 +5707,7 @@ PolicyManager.register({
   &lt;p&gt;
     &lt;strong&gt;→&lt;/strong&gt; [[Proceed to Q3|QuarterThree]]
   &lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="30" name="RenovictionAwareness" tags="" position="1300,600" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="RenovictionAwareness" tags="" position="1300,600" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Renoviction Awareness&quot;,
   costUpfront: 4,
@@ -5140,7 +5727,7 @@ PolicyManager.register({
 &lt;p&gt;Info &lt;/p&gt;
 
 [[Continue|Dish out funding]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="31" name="Renovictions" tags="" position="500,300" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="35" name="Renovictions" tags="" position="500,300" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Frontline Mental Health &amp; Addiction Support&quot;,
   costUpfront: 4,
@@ -5203,7 +5790,7 @@ The vote marked a rare instance where councillors pushed back against a staff re
 
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="ServiceFunding1" tags="" position="600,700" size="100,100">&lt;div class=&quot;puzzle-layout&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="36" name="ServiceFunding1" tags="" position="600,700" size="100,100">&lt;div class=&quot;puzzle-layout&quot;&gt;
     &lt;div id=&quot;game-area&quot;&gt;
       &lt;!-- The plugin will create its canvas inside this div --&gt;
     &lt;/div&gt;
@@ -7221,7 +7808,7 @@ body {
   width: 100% !important;
 }
 
-  &lt;/style&gt;</tw-passagedata><tw-passagedata pid="33" name="ShelterZones" tags="" position="400,300" size="100,100">&lt;&lt;script&gt;&gt;
+  &lt;/style&gt;</tw-passagedata><tw-passagedata pid="37" name="ShelterZones" tags="" position="400,300" size="100,100">&lt;&lt;script&gt;&gt;
 PolicyManager.register({
   name: &quot;Shelter Zones TODO change me&quot;,
   costUpfront: 10,
@@ -7286,7 +7873,7 @@ Some suburban councillors opposed the motion, arguing it weakened public consult
 TODO: add image of cbc news headline? / format that shows info is being displayed.
 &lt;div class=&quot;centered-btn&quot;&gt;
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;BuildCanadaHomes&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="SnowStorm" tags="" position="500,1500" size="100,100">&lt;canvas id=&quot;snowCanvas&quot;&gt;&lt;/canvas&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="38" name="SnowStorm" tags="" position="500,1500" size="100,100">&lt;canvas id=&quot;snowCanvas&quot;&gt;&lt;/canvas&gt;
 
 &lt;style&gt;
   canvas#snowCanvas {
@@ -7610,7 +8197,7 @@ TODO: add image of cbc news headline? / format that shows info is being displaye
       }, 0);
 
 
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="35" name="SnowstormInfo" tags="" position="500,1600" size="100,100">&lt;style&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="39" name="SnowstormInfo" tags="" position="500,1600" size="100,100">&lt;style&gt;
 body {
     background: #e5f5ff;
 }
@@ -7619,7 +8206,7 @@ body {
   }
 &lt;/style&gt;
 
-history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="36" name="Start" tags="" position="600,75" size="100,100">&lt;&lt;set $history = []&gt;&gt;
+history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="40" name="Start" tags="" position="600,75" size="100,100">&lt;&lt;set $history = []&gt;&gt;
 &lt;div class=&quot;passageContent&quot;&gt; In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: &lt;span title=&quot;A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed.&quot;&gt; ensuring everyone has a home&lt;/span&gt;, &lt;span title=&quot;People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.&quot;&gt;people get the support they need &lt;/span&gt; and &lt;span title=&quot;Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people&#39;s needs.&quot;&gt;working together / collaboration &lt;/span&gt;.
 
 Despite these goals, the nation&#39;s capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city&#39;s history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what&#39;s working, what&#39;s missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
@@ -7722,7 +8309,7 @@ You&#39;ve been brought into the city halls at a pivotal moment, right before th
     [[Zoning|Zoning]]
     [[Gantt|Gantt]]
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="37" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="41" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Housing Supply&lt;/div&gt;
@@ -7757,7 +8344,7 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="38" name="StoryInterface" tags="" position="1100,200" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="42" name="StoryInterface" tags="" position="1100,200" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
 
 &lt;div id=&quot;spent-ui&quot;&gt;
   &lt;div id=&quot;passages&quot;&gt;
@@ -7879,8 +8466,47 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
     &lt;/div&gt;
   &lt;/div&gt;
 
-  &lt;!--  =====  END UI  =====  --&gt;</tw-passagedata><tw-passagedata pid="39" name="SupportiveOffice" tags="" position="500,1300" size="100,100">[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="40" name="Zoning" tags="" position="600,1800" size="100,100">&lt;style&gt;
+  &lt;!--  =====  END UI  =====  --&gt;</tw-passagedata><tw-passagedata pid="43" name="SupportiveOffice" tags="" position="500,1300" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
+&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;todo costs etc&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
+  Supportive office text
+&lt;/p&gt;
+
+&lt;div class=&quot;centered-btn&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;SnowStorm&#39;);&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;
+
+
+
+[[SnowStorm|SnowStorm]]
+[[Heatwave|Heatwave]]</tw-passagedata><tw-passagedata pid="44" name="Zoning" tags="" position="875,800" size="100,100">&lt;style&gt;
   html,
   body {
     margin: 0;
@@ -8030,7 +8656,7 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
       });
     });
   });
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="41" name="metricsscreen" tags="" position="100,400" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="45" name="metricsscreen" tags="" position="100,400" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
