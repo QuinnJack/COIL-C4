@@ -7,7 +7,7 @@ simulator
   "ifid": "f2594c19-2b1a-436c-a749-c92e439252f0",
   "format": "SugarCube",
   "format-version": "2.37.3",
-  "start": "Start",
+  "start": "ChooseCityPolicy1",
   "zoom": 1
 }
 
@@ -1792,7 +1792,101 @@ zoom: 1.1;
 </div>
 
 
-:: ChooseCityPolicy1 {"position":"600,200","size":"100,100"}
+:: ChooseCityPolicy1 {"position":"600,100","size":"100,100"}
+<<set $history = []>>
+
+
+<<set $turn = 1>>
+<<set $year= 1>>
+<<set $currentYear= 2024>>
+<<set $budget = 215>>
+
+<<set $homelessTotal = 2952>>
+
+<!-- Demographic breakdown of CURRENT homeless population -->
+<<set $pop = {
+  // Housing status
+  unsheltered: 472,      // 16% of 2952
+  sheltered: 1269,       // 43%
+  transitional: 708,     // 24%
+  institutional: 59,     // 2%
+  chronic: 1446,         // 49%
+  withChildren: 295,     // 10%
+  fosterCareHistory: 561, // 19%
+
+  // Identity demographics
+  male: Math.round(2952 * 0.56),
+  female: Math.round(2952 * 0.36),
+  transNB: Math.round(2952 * 0.02),
+  age25to49: Math.round(2952 * 0.58),
+  youth: Math.round(2952 * 0.13),
+  lgbq: Math.round(2952 * 0.11),
+  lgbtqYouth: Math.round(2952 * 0.11 * 0.21),
+  racialized: Math.round(2952 * 0.56),
+  indigenous: 479,           // exact number provided
+  veteran: Math.round(2952 * 0.04),
+  immigrant: Math.round(2952 * 0.42)
+}>>
+
+<!-- INFLOW system -->
+<<set $inflowBase = 0>> <!-- Number of new homeless per turn -->
+
+<!-- Percentage distribution of INCOMING new homelessness cases -->
+<<set $inflowShare = {
+  // Housing status (default to unsheltered for new arrivals)
+  unsheltered: 0.16,
+  sheltered: 0.43,
+  transitional: 0.24,
+  institutional: 0.02,
+  chronic: 0.49,
+  withChildren: 0.10,
+  fosterCareHistory: 0.19,
+
+  // Identity demographics
+  male: 0.56,
+  female: 0.36,
+  transNB: 0.02,
+  lgbtqYouth: 0.21,
+  age25to49: 0.58,
+  lgbq: 0.11,
+  racialized: 0.56,
+  indigenous: 479 / 2952,    // ~16.2%
+  veteran: 0.04,
+  immigrant: 0.42
+}>>
+
+
+<!-- System + policy levers -->
+<<set $publicOpinion = 50>>
+<<set $serviceCoordination = 60>>
+<<set $systemCapacity = 100>>
+<<set $politicalCapital = 3>>
+
+<<script>>
+  // Create an initial snapshot representing the state *before* year 1 begins.
+  // This helps in comparing the first year's results against something.
+  const v = State.variables;
+  const initialPopSnapshot = {}; // Deep copy $pop
+  for (const key in v.pop) {
+      if (Object.prototype.hasOwnProperty.call(v.pop, key)) {
+          initialPopSnapshot[key] = v.pop[key];
+      }
+  }
+  const initialSnapshot = {
+    year: 0, // Conceptual "Year 0" or pre-game state
+    turn: 0, // Conceptual "Turn 0"
+    homelessTotal: v.homelessTotal,
+    pop: initialPopSnapshot,
+    budget: v.budget,
+    publicOpinion: v.publicOpinion,
+    serviceCoordination: v.serviceCoordination,
+    systemCapacity: v.systemCapacity,
+    politicalCapital: v.politicalCapital
+  };
+  v.history.push(initialSnapshot);
+<</script>>
+
+
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -7113,13 +7207,9 @@ body {
 history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?
 
 
-:: Start {"position":"600,100","size":"100,100"}
+:: Start {"position":"600,0","size":"100,100"}
 <<set $history = []>>
-<div class="passageContent"> In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: <span title="A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed."> ensuring everyone has a home</span>, <span title="People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.">people get the support they need </span> and <span title="Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people's needs.">working together / collaboration </span>.
 
-Despite these goals, the nation's capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city's history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what's working, what's missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
-
-You've been brought into the city halls at a pivotal moment, right before the next phase of the 10-Year Plan is finalized. Your task is to explore how different decisions, funding priorities, and policy trade-offs change outcomes over time. You can't solve everything at once. But you can change the direction we're heading — starting now.
 
 <<set $turn = 1>>
 <<set $year= 1>>
@@ -7212,12 +7302,6 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 <</script>>
 
 
-* [[Start|ChooseCityPolicy1]]
-    [[Endgame|Endgame]]
-    [[Zoning|Zoning]]
-    [[Gantt|Gantt]]
-
-</div>
 
 
 :: Starter {"position":"600,500","size":"100,100"}
@@ -8420,6 +8504,9 @@ sl-drawer[placement="bottom"]::part(close-button__base):hover {
   line-height: 1;
     color: #0066cc !important;
 
+}
+.info-btn:hover{
+  background: rgba(0,0,0,0) !important;
 }
 .million {
   font-size: 24px;
