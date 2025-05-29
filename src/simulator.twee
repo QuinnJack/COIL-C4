@@ -427,7 +427,7 @@ PolicyManager.register({
     <button class="tab" data-choice="Delay" style="view-transition-name: tab-2">Delay</button>
     <button class="tab" data-choice="Oppose" style="view-transition-name: tab-3">Oppose</button>
   </div>
-  <button class="confirm-button" onclick="confirmBill6Choice()">Confirm</button>
+  <button class="confirm-button" onclick="confirmBill6Choice()">Continue</button>
 </div>
 
 <style>
@@ -566,7 +566,7 @@ PolicyManager.register({
 </p>
 
 <div class="centered-btn">
-  <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
+  <button class="continue-button" onclick="SugarCube.Engine.play('PreZoning');">Continue</button>
 </div>
 
 
@@ -604,7 +604,7 @@ PolicyManager.register({
 </p>
 
 <div class="centered-btn">
-  <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
+  <button class="continue-button" onclick="SugarCube.Engine.play('PreZoning');">Continue</button>
 </div>
 
 
@@ -640,7 +640,7 @@ PolicyManager.register({
 </p>
 
 <div class="centered-btn">
-  <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
+  <button class="continue-button" onclick="SugarCube.Engine.play('PreZoning');">Continue</button>
 </div>
 
 
@@ -1364,7 +1364,7 @@ zoom: 1.1;
   </script>
 
 
-:: C4Project1 {"position":"600,900","size":"100,100"}
+:: C4Project1 {"position":"500,900","size":"100,100"}
 <div class="policy-impact-screen" >
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -3152,7 +3152,7 @@ color: #333;
 <</script>>
 
 
-:: Heatwave {"position":"925,1575","size":"100,100"}
+:: Heatwave {"position":"700,1500","size":"100,100"}
 <canvas id="sunCanvas"></canvas>
 
 <style>
@@ -3469,7 +3469,7 @@ setTimeout(function(){
 <</script>>
 
 
-:: HeatwaveInfo {"position":"925,1675","size":"100,100"}
+:: HeatwaveInfo {"position":"825,1600","size":"100,100"}
 history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.
 
 
@@ -3951,6 +3951,7 @@ PolicyManager.register({
 :: PIT1 {"position":"600,1100","size":"100,100"}
 <<set $turn += 1>>
 <<set $year += 1>>
+<<set $budget += 215>>
 
   <div class="passage-content">
 
@@ -4100,6 +4101,276 @@ PolicyManager.register({
 </div>
 
 
+:: Pilots {"position":"600,2100","size":"100,100"}
+<<set $turn += 1>>
+  <<script>>window.PolicyManager.tick();<</script>>
+  
+  <!-- CSS Styling -->
+  <style>
+    .build-intro {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 5rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #1c1c1e;
+    }
+    .drawer-content {
+     padding: 10px;
+      padding-left: 25%;
+      padding-right: 25%;
+    }
+    .button-wrapper {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      margin: 0.9rem auto;
+      position: relative;
+      top: -0.25rem;
+    }
+  
+    .button {
+      flex: 1;
+      background-color: rgb(32, 117, 202);
+      background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+      border: 1px solid rgb(38, 111, 185);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      padding: 0.65rem 1rem;
+      text-align: center;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+  
+    .button:hover {
+      background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+      box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 2px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:active {
+      transform: scale(0.98);
+      box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 1px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+      border-color: #2a5a87;
+    }
+  
+    .button:disabled:hover,
+    .button:disabled:active {
+      pointer-events: none;
+      box-shadow: none;
+    }
+  
+    .button:first-of-type {
+      margin-top: 1rem;
+    }
+  
+    .info-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+  
+    .info-btn img {
+      width: 1.2rem;
+      height: 1.2rem;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+  
+    .info-btn:hover img {
+      opacity: 1;
+    }
+  
+  
+  </style>
+<!-- Intro Text & Buttons -->
+<div class="passage-content">
+  <div class="build-intro">
+<p>
+  Your city is preparing to launch its next major housing initiative—designed to tackle affordability, displacement, and income precarity head-on. You must choose between direct income support, market regulation, or tenant-focused protections. Which approach will shape the city’s future?
+</p>
+
+    <div class="button-wrapper">
+      <button class="button" onclick="applyUBIPilot();">
+        Launch a Universal Basic Income Pilot
+      </button>
+      <button id="info-ubi" class="info-btn">
+        <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+      </button>
+    </div>
+
+    <div class="button-wrapper">
+      <button class="button" onclick="applyVacancyTax();">
+        Increase Vacancy & Speculation Taxes
+      </button>
+      <button id="info-vacancy" class="info-btn">
+        <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+      </button>
+    </div>
+
+    <div class="button-wrapper">
+      <button class="button" onclick="applyRightOfFirstRefusal();">
+        Establish Right of First Refusal
+      </button>
+      <button id="info-rofr" class="info-btn">
+        <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Drawers -->
+<sl-drawer placement="bottom" label=" " class="drawer-ubi">
+  <div class="drawer-content">
+    <h3>Universal Basic Income Pilot</h3>
+    <p>
+      UBI schemes date back to the 1960s (e.g. Milton Friedman’s “Negative Income Tax”) and more recently Ontario’s 2017–18 pilot in Hamilton and Thunder Bay. They provide an unconditional floor of support—here, a city-funded $1,000/month for 1,000 households over 24 months—to stabilize incomes and reduce housing precarity.
+    </p>
+    <h4>Why It Matters</h4>
+    <p>
+      Evidence from pilots (e.g., Finland 2017–18) shows improvements in well-being and modest employment changes. For housing, a steady income can cut rental arrears and eviction risk instantly, buying time for longer-term supply fixes.
+    </p>
+    <h4>Variants</h4>
+    <ul>
+      <li><strong>Flat UBI</strong>: Same payment to all eligible.</li>
+      <li><strong>Tiered UBI</strong>: Larger grants for highest-need groups (e.g., single parents).</li>
+      <li><strong>Time-Limited UBI</strong>: Phases out over 2–3 years to encourage self-sufficiency.</li>
+    </ul>
+  </div>
+</sl-drawer>
+
+<sl-drawer placement="bottom" label=" " class="drawer-vacancy">
+  <div class="drawer-content">
+    <h3>Speculation & Vacancy Tax</h3>
+    <p>
+      First pioneered in Vancouver (2017) and Montréal (2021), escalating vacancy taxes start at 3% of assessed value, rising by 1% each year. Coupled with a mandatory Empty Homes Registry, they discourage houses sitting unused and spur owners to rent or sell.
+    </p>
+    <h4>How It Works</h4>
+    <p>
+      Owners register every property; unoccupied homes incur a tax. Revenues fund affordable-housing grants. Transparency also reveals geographic clusters of empty units, guiding targeted outreach.
+    </p>
+    <h4>Possible Tweaks</h4>
+    <ul>
+      <li><strong>Tiered Tax Rates</strong>: Higher rates in hotter markets.</li>
+      <li><strong>Occupancy Exemptions</strong>: Seniors or medically homebound.</li>
+      <li><strong>Rebate Mechanisms</strong>: For owners who lease to nonprofits or below-market tenants.</li>
+    </ul>
+  </div>
+</sl-drawer>
+
+<sl-drawer placement="bottom" label=" " class="drawer-rofr">
+  <div class="drawer-content">
+    <h3>Right of First Refusal</h3>
+    <p>
+      Adopted in cities like New York (1988) and Montreal (2019), ROFR laws give tenants—or in this case, the municipality—the option to match a sale offer whenever a rental building is put on the market. This preserves affordability and prevents mass renoviction flips.
+    </p>
+    <h4>Key Features</h4>
+    <p>
+      When an owner accepts a third-party bid, the city or tenant coop has 60 days to step in. If exercised, sales close at the agreed price; if declined, the sale proceeds unrestricted.
+    </p>
+    <h4>Challenges & Variants</h4>
+    <ul>
+      <li><strong>Tenant ROFR</strong>: Empowers residents directly but requires strong tenant organizations.</li>
+      <li><strong>City ROFR</strong>: Centralizes acquisitions under a municipal land trust or housing authority.</li>
+      <li><strong>Limited Scope</strong>: Applies only to buildings over a certain size or in priority zones.</li>
+    </ul>
+  </div>
+</sl-drawer>
+
+<!-- Wiring & Policy Logic -->
+<script>
+  // Info-icon → drawer
+  document.getElementById('info-ubi').addEventListener('click', () => {
+    document.querySelector('.drawer-ubi').show();
+  });
+  document.getElementById('info-vacancy').addEventListener('click', () => {
+    document.querySelector('.drawer-vacancy').show();
+  });
+  document.getElementById('info-rofr').addEventListener('click', () => {
+    document.querySelector('.drawer-rofr').show();
+  });
+
+  // Drawer close buttons
+  document.querySelectorAll('sl-drawer sl-button[slot="footer"]').forEach(btn => {
+    btn.addEventListener('click', () => btn.closest('sl-drawer').hide());
+  });
+
+  // Policy registration functions (placeholders)
+  function applyUBIPilot() {
+    PolicyManager.register({
+      name: "UBI Pilot",
+      costUpfront: 12,
+      duration: 2,        // years
+      immediate(v) { v.publicOpinion += 5; },
+      tick(v, Util, age) {
+        v.budget -= 0.5;
+        if (age === 1) v.inflow -= 10;
+      }
+    });
+    SugarCube.Engine.play("UBIPilot");
+  }
+
+  function applyVacancyTax() {
+    PolicyManager.register({
+      name: "Vacancy & Speculation Tax",
+      costUpfront: 1,
+      duration: 999999,
+      immediate(v) { v.publicOpinion -= 2; },
+      tick(v, Util, age) {
+        let revenue = 2 + age * 0.1;
+        v.budget += revenue;
+        if (age >= 1) v.housingSupply += 20;
+      }
+    });
+    SugarCube.Engine.play("VacancyTax");
+  }
+
+  function applyRightOfFirstRefusal() {
+    PolicyManager.register({
+      name: "Right of First Refusal",
+      costUpfront: 8,
+      duration: 999999,
+      immediate(v) { v.publicOpinion += 3; },
+      tick(v, Util, age) {
+        if (age >= 1) {
+          v.unitsPreserved = (v.unitsPreserved || 0) + 50;
+          v.inflow -= 5;
+        }
+        v.budget -= 0.2;
+      }
+    });
+    SugarCube.Engine.play("ROFR");
+  }
+</script>
+
+
 :: PreServiceFunding {"position":"600,600","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
@@ -4145,6 +4416,54 @@ PolicyManager.register({
       These services don’t always align perfectly. Now it’s your job to allocate funds to each one — and decide what role they’ll play in the years ahead.
     </p>
     <button class="button" onclick="SugarCube.Engine.play('ServiceFunding1')">Fund Services</button>
+  </div>
+</div>
+
+
+:: PreZoning {"position":"600,1900","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+<!-- CSS Styling -->
+<style>
+  .build-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 5rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #1c1c1e;
+  }
+.button {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  margin: 0.3rem auto; /* centers it */
+  display: block;
+  text-align: center !important;
+}
+</style>
+
+<!-- Intro Text -->
+<div class="passage-content">
+  <div class="build-intro">
+  <p>
+      Zoning rules determine what kind of buildings can be built — and where. They shape our neighborhoods, our housing supply, and who gets to live where.
+    </p>
+  <p>
+      For decades, zoning laws have blocked density, excluded lower-income residents, and slowed the response to the housing crisis. But changing them is politically risky and not glamorous. Each path changes affordability, climate impact, and public trust.
+    </p>
+    <button class="button" onclick="SugarCube.Engine.play('Zoning')">Update Zoning</button>
   </div>
 </div>
 
@@ -4219,6 +4538,61 @@ PolicyManager.register({
   <p>
     <strong>→</strong> [[Proceed to Q3|QuarterThree]]
   </p>
+</div>
+
+
+:: ROFR {"position":"700,2200","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Right of First Refusal",
+  costUpfront: 8,
+  costPerTurn: 0.2,
+  duration: 999999,
+
+  immediate(v) {
+    v.publicOpinion += 3;
+  },
+
+  tick(v) {
+    v.unitsPreserved = (v.unitsPreserved || 0) + 75;
+    v.inflow        -= 5;
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Units Preserved</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">75</span>
+        <span class="impact-subtitle">&nbsp;units / year</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Unsheltered Inflow</div>
+      <div class="impact-content">
+        <span class="impact-icon">↓&nbsp;</span>
+        <span class="impact-value">5</span>
+        <span class="impact-subtitle">&nbsp;% / year</span>
+      </div>
+    </div>
+  
+<div class="impact-box" data-index="3">
+  <div class="impact-title">Political Cost</div>
+  <div class="impact-content">
+    <span style="color: #06C; font-size: 5em; padding-right: 10px;">●</span>
+  </div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+Now when rental properties are listed for sale, the city of Ottawa or a local tenant coop get 60 days to match offers. In its first year, its estimated 75 at-risk units will be secured under nonprofit or city ownership, reducing unsheltered inflow by around 5%. 
+</p>
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('ROFR');">Continue</button>
 </div>
 
 
@@ -6627,7 +7001,7 @@ PolicyManager.register({
           const any = document.querySelectorAll('#snowChoices input:checked').length;
           const w   = document.getElementById('warning');
           if(!any) w.style.display='block';
-          else    SugarCube.Engine.play('Snow_Response_Centres');
+          else    SugarCube.Engine.play('Bill6');
         };
 
         // Helper function to animate number changes
@@ -6726,7 +7100,7 @@ PolicyManager.register({
 <</script>>
 
 
-:: SnowstormInfo {"position":"500,1600","size":"100,100"}
+:: SnowstormInfo {"position":"350,1575","size":"100,100"}
 <style>
 body {
     background: #e5f5ff;
@@ -7048,7 +7422,118 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 </div>
 
 
-:: Zoning {"position":"875,800","size":"100,100"}
+:: UBIPilot {"position":"500,2200","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "UBI Pilot",
+  costUpfront: 12,
+  costPerTurn: 0.5,
+  duration: 2,
+
+  immediate(v) {
+    v.publicOpinion += 5;
+    v.inflow        -= 10;
+  },
+
+  tick(v) {
+    // ongoing cost applied via costPerTurn
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Unsheltered Inflow</div>
+      <div class="impact-content">
+        <span class="impact-icon">↓&nbsp;</span>
+        <span class="impact-value">10</span>
+        <span class="impact-subtitle">&nbsp;% / year</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Public Opinion</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">5</span>
+        <span class="impact-subtitle">&nbsp;pts</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="3">
+  <div class="impact-title">Political Cost</div>
+  <div class="impact-content">
+    <span style="color: #06C; font-size: 5em; padding-right: 10px;">●</span>
+  </div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+The Universal Basic Income pilot provides $1,000/month to 1,000 households unconditionally. Proponents highlight its immediate impact on rental arrears and eviction risk; critics caution about long-term budget pressures. 
+</p>
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('UBIPilot');">Continue</button>
+</div>
+
+
+:: VacancyTax {"position":"600,2200","size":"100,100"}
+<<script>>
+PolicyManager.register({
+  name: "Vacancy & Speculation Tax",
+  costUpfront: 1,
+  costPerTurn: 0,
+  duration: 999999,
+
+  immediate(v) {
+    v.publicOpinion -= 2;
+  },
+
+  tick(v) {
+    const revenue = 2.5;
+    v.budget        += revenue;
+    v.housingSupply += 50;
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Housing Supply</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">50</span>
+        <span class="impact-subtitle">&nbsp;units / year</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Public Opinion</div>
+      <div class="impact-content">
+        <span class="impact-icon">↓&nbsp;</span>
+        <span class="impact-value">2</span>
+        <span class="impact-subtitle">&nbsp;pts</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Annual Revenue</div>
+      <div class="impact-content">
+        <span class="impact-unit">$&nbsp;</span>
+        <span class="impact-value">2.5</span>
+        <span class="impact-subtitle">&nbsp;M / year</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+The city raises its vacancy and speculation tax to 5% and launches an Empty Homes Registry. In the first year, roughly 50 vacant units were returned to the rental market while generating about $2.5M in revenue. While it eases supply pressures, some homeowners argue it unfairly penalizes secondary residences. 
+</p>
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('VacancyTax');">Continue</button>
+</div>
+
+
+:: Zoning {"position":"600,2000","size":"100,100"}
 <style>
   html,
   body {
@@ -7058,6 +7543,18 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
     font-family: system-ui, sans-serif;
   }
 
+#continue-zoning {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+  }
+  
   #container {
     position: relative;
     height: 90vh;
@@ -7074,32 +7571,33 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 
   #menu {
     position: absolute;
-    top: 1rem;
+    top: 0.5rem;              /* pulled up from 1rem */
     left: 1rem;
     z-index: 2;
     background: #fff;
     padding: 1rem;
     border-radius: 6px;
     width: 220px;
+    display: flex;
+    flex-direction: column;
   }
 
-  #menu h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: "Inter", sans-serif;
-      border-bottom: 1px dotted rgba(0, 0, 0, 0.8);
+  /* New Continue button style */
+  #continue-zoning {
+    margin-top: 0.75rem;      /* small gap from checkboxes */
+    padding: 0.5rem;
+    background: #111827;      /* dark active color */
+    color: #fff;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;              /* fill the menu width */
+    height: auto;             /* auto height so it’s not too tall */
   }
-
-  .layer-option {
-    margin: 0.5rem 0;
-  }
-
-  .layer-option label {
-    margin-left: 0.3rem;
-  }
-  .mapboxgl-control-container {
-    display: none;
+  #continue-zoning:hover {
+    background: #1f2937;
   }
 </style>
 
@@ -7107,29 +7605,34 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
   <div id="map"></div>
   <div id="menu">
     <h3>ZONING CHOICES</h3>
+
     <div class="layer-option">
       <input type="checkbox" id="expand" />
       <label for="expand">Expand Suburbia</label>
     </div>
+
     <div class="layer-option">
       <input type="checkbox" id="transit" />
       <label for="transit">Transit Oriented</label>
     </div>
+
     <div class="layer-option">
       <input type="checkbox" id="reserve" />
       <label for="reserve">Develop Reserved Zones</label>
     </div>
+
     <div class="layer-option">
       <input type="checkbox" id="single" />
       <label for="single">Remove Single Family Zoning</label>
     </div>
+
+    <!-- Continue button -->
+    <button id="continue-zoning">Continue</button>
   </div>
 </div>
 
 <script>
-  mapboxgl.accessToken =
-    "pk.eyJ1IjoicWRvZ2dlcjY5IiwiYSI6ImNseDd1MWZ4ZzBrdmsyanB2d3E4MHY4ejQifQ.aXV61OY1jofAOXK_28omhA";
-
+  mapboxgl.accessToken = "pk.eyJ1IjoicWRvZ2dlcjY5IiwiYSI6ImNseDd1MWZ4ZzBrdmsyanB2d3E4MHY4ejQifQ.aXV61OY1jofAOXK_28omhA";
   const map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/qdogger69/cmb87asdd012t01qy67cn6dn7",
@@ -7137,66 +7640,86 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
     zoom: 13.5,
     antialias: true,
     maxZoom: 17.5,
-    minZoom: 10,
+    minZoom: 10
   });
 
   const layerConfigs = {
-    expand: {
-      center: [-75.84776, 45.33199],
-      zoom: 12,
-    },
-    transit: {
-      center: [-75.72607, 45.40851],
-      zoom: 15.5,
-    },
-    reserve: {
-      center: [-75.6658, 45.40836],
-      zoom: 15.5,
-    },
-    single: {
-      center: [-75.7003, 45.4141],
-      zoom: 14.5,
-    },
+    expand:  { center: [-75.84776, 45.33199], zoom: 13.5 },
+    transit: { center: [-75.72607, 45.40851], zoom: 15.5 },
+    reserve: { center: [-75.6658,  45.40836], zoom: 15.5 },
+    single:  { center: [-75.7003,  45.4141 ], zoom: 14.5 }
   };
 
   map.on("load", () => {
-    // Hide layers initially (if they exist)
-    Object.keys(layerConfigs).forEach((layerId) => {
-      if (map.getLayer(layerId)) {
-        map.setPaintProperty(layerId, "fill-opacity", 0);
-      }
+    // hide layers initially
+    Object.keys(layerConfigs).forEach(id => {
+      if (map.getLayer(id)) map.setPaintProperty(id, "fill-opacity", 0);
     });
 
-    // Set up checkbox handlers
-    Object.keys(layerConfigs).forEach((layerId) => {
-      const checkbox = document.getElementById(layerId);
-      checkbox.addEventListener("change", () => {
-        const config = layerConfigs[layerId];
-        if (checkbox.checked) {
-          map.flyTo({
-            center: config.center,
-            zoom: config.zoom,
-            essential: true,
-          });
-
-          // Smooth opacity ramp-up
-          let opacity = 0;
-          const fadeIn = setInterval(() => {
-            opacity += 0.05;
-            if (opacity >= 1) {
-              opacity = 1;
-              clearInterval(fadeIn);
-            }
-            if (map.getLayer(layerId)) {
-              map.setPaintProperty(layerId, "fill-opacity", opacity);
-            }
+    // fly-to & fade-in layers on toggle
+    Object.entries(layerConfigs).forEach(([id, cfg]) => {
+      document.getElementById(id).addEventListener("change", e => {
+        if (e.target.checked) {
+          map.flyTo({ center: cfg.center, zoom: cfg.zoom, essential: true });
+          let op = 0;
+          const fade = setInterval(() => {
+            op = Math.min(op + 0.05, 1);
+            map.getLayer(id) && map.setPaintProperty(id, "fill-opacity", op);
+            if (op === 1) clearInterval(fade);
           }, 50);
         } else {
-          if (map.getLayer(layerId)) {
-            map.setPaintProperty(layerId, "fill-opacity", 0);
-          }
+          map.getLayer(id) && map.setPaintProperty(id, "fill-opacity", 0);
         }
       });
+    });
+
+    // === Policy registration functions ===
+    function expandSuburbia() {
+      PolicyManager.register({
+        name: "Expand Suburbia",
+        costUpfront: 8,
+        duration: Infinity,
+        immediate(v) { v.budget -= 8; },
+        tick(v) { v.housingSupply += 120; v.systemCapacity -= 5; }
+      });
+    }
+    function transitOriented() {
+      PolicyManager.register({
+        name: "Transit-Oriented Zoning",
+        costUpfront: 6,
+        duration: Infinity,
+        immediate(v) { v.budget -= 6; v.publicOpinion += 5; },
+        tick(v) { v.housingSupply += 80; v.inflow -= 3; }
+      });
+    }
+    function developReservedZones() {
+      PolicyManager.register({
+        name: "Develop Reserved Zones",
+        costUpfront: 10,
+        duration: Infinity,
+        immediate(v) { v.budget -= 10; v.publicOpinion -= 2; },
+        tick(v) { v.housingSupply += 200; v.serviceCoordination += 2; }
+      });
+    }
+    function removeSingleFamilyZoning() {
+      PolicyManager.register({
+        name: "Remove Single-Family Zoning",
+        costUpfront: 7,
+        duration: Infinity,
+        immediate(v) { v.budget -= 7; v.publicOpinion -= 10; },
+        tick(v) { v.housingSupply += 150; v.inflow -= 4; }
+      });
+    }
+
+    // Continue click: register any checked policies, then advance
+    document.getElementById("continue-zoning").addEventListener("click", () => {
+      if (document.getElementById("expand").checked)   expandSuburbia();
+      if (document.getElementById("transit").checked)  transitOriented();
+      if (document.getElementById("reserve").checked)  developReservedZones();
+      if (document.getElementById("single").checked)   removeSingleFamilyZoning();
+
+      // Advance to your next passage (adjust the name if needed)
+      SugarCube.Engine.play("Pilots");
     });
   });
 </script>
