@@ -49,53 +49,46 @@ PolicyManager.register({
 <</script>>
 
 
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
-    <div class="impact-box" data-index="1">
-<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Units Preserved</div>
       <div class="impact-content">
-        <span class="impact-icon">↑&nbsp; </span>
-        <span class="impact-value">500</span>
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">300</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;units</span>
       </div>
     </div>
-
-    <div class="impact-box" data-index="2">
+    <div class="impact-box" data-index="1">
       <div class="impact-title">Long-Term Savings</div>
       <div class="impact-content">
-       <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
+        <span class="impact-unit">$&nbsp;</span>
+        <span class="impact-value">4</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M / year</span>
       </div>
     </div>
-
-    <div class="impact-box" data-index="3">
+    <div class="impact-box" data-index="2">
       <div class="impact-title">Upfront Cost</div>
       <div class="impact-content">
-        <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+        <span class="impact-unit">$&nbsp;</span>
+        <span class="impact-value">20</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M</span>
       </div>
     </div>
   </div>
 </div>
 
-In November 2024, a motion to establish an affordable housing acquisition fund in Ottawa failed to pass at the city’s planning and housing committee. The proposal, introduced by College Ward Councillor Laine Johnson, would have redirected surplus revenue from the city’s vacant unit tax into a fund dedicated to preserving at-risk affordable housing. Johnson argued that Ottawa’s current housing plan focused too narrowly on new construction, ignoring the ongoing loss of existing affordable units. She warned that without a strategy to acquire and protect aging rental stock, the city was “bailing out a leaky rowboat.”
-<div class="break"> </div>
-Despite support from tenant advocates and several councillors — including Ariel Troster, Jeff Leiper, and Riley Brockington — the motion was voted down eight to four. City staff and senior officials opposed the plan, citing fears it could jeopardize eligibility for federal and provincial housing funds, which are tied to aggressive construction targets. They also raised concerns about rising market prices, renovation costs, and the risk of diverting limited municipal resources away from shovel-ready builds.
-<div class="break"> </div>
+<p style="padding:0 6rem;font-size:1.1em">
+  In November 2024, Ottawa City Council voted down a proposal to create an Affordable Housing Acquisition Fund. The plan would have redirected Vacant Unit Tax revenue to help non-profits purchase aging rentals and preserve affordability. By enacting the the policy, you perserve around 300 units and save an estimated $4 M annually in redevelopment costs, though it requires a $20 M up‑front investment.
+</p>
+</p>
 
-Supporters of the fund pointed to success stories in cities like Toronto and Vancouver, and to local pilots like the Ottawa Community Land Trust, which had already acquired two properties using a mix of municipal support, community bonds, and donations. However, city leadership insisted that until more federal guidance was available on the Canada Rental Protection Fund — a $1.5 billion national acquisition initiative still under development — Ottawa would stick with its current approach. 
-<div class="break"> </div>
 <div class="centered-btn">
  <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
 </div>
 
 
-
-
 :: Affordable {"position":"500,500","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -134,11 +127,7 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 </div>
 
 
-
-
 :: Bill6 {"position":"600,1700","size":"100,100"}
-
-
 <<script>>
   // run on *every* time this passage finishes displaying
   $(document).on(':passagedisplay', function (ev) {
@@ -541,12 +530,9 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
     SugarCube.Engine.play('Bill6_' + selectedChoice);
   }
 </script>
-  
 
 
 :: Bill6_Comply {"position":"500,1800","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -583,13 +569,9 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
 </div>
-
-
 
 
 :: Bill6_Delay {"position":"600,1800","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -626,13 +608,9 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
 </div>
-
-
 
 
 :: Bill6_Oppose {"position":"700,1800","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -669,8 +647,6 @@ Supporters of the fund pointed to success stories in cities like Toronto and Van
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
 </div>
-
-
 
 
 :: Bills {"position":"1100,100","size":"100,100"}
@@ -1112,9 +1088,6 @@ zoom: 1.1;
     </div>
 
 
-
-
-
 :: BuildCanadaHomes {"position":"600,400","size":"100,100"}
 <<set $turn += 1>>
   <<script>>window.PolicyManager.tick();<</script>>
@@ -1397,7 +1370,6 @@ zoom: 1.1;
 
 
 :: C4Project1 {"position":"600,900","size":"100,100"}
-
 <div class="policy-impact-screen" >
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -1428,8 +1400,6 @@ zoom: 1.1;
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
 </div>
-
-
 
 
 :: ChoiceTemplate {"position":"100,100","size":"100,100"}
@@ -1714,7 +1684,7 @@ zoom: 1.1;
 
 
 :: ChooseC4Project1 {"position":"600,800","size":"100,100"}
-  <<set $turn += 1>>
+<<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
 <!-- CSS Styling -->
@@ -1828,7 +1798,7 @@ zoom: 1.1;
 
 
 :: ChooseCityPolicy1 {"position":"600,200","size":"100,100"}
-  <<set $turn += 1>>
+<<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
 <<script>>
@@ -2212,13 +2182,17 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
     </div>
 
 
-
-
 :: ChooseProjectProposal1 {"position":"600,1200","size":"100,100"}
-  <<set $turn += 1>>
+<<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
+
 <!-- CSS Styling -->
 <style>
+    .drawer-content {
+     padding: 10px;
+      padding-left: 25%;
+      padding-right: 25%;
+    }
   .build-intro {
     max-width: 700px;
     margin: 0 auto;
@@ -2230,68 +2204,57 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
     margin-bottom: 2rem;
     color: #1c1c1e;
   }
-.button {
-  background-color: rgb(32, 117, 202);
-  background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
-  border: 1px solid rgb(38, 111, 185); /* ✔ Correct border color */
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: block;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.25;
-  padding: 0.65rem 1rem;
-  text-align: center;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: 100%;
-  max-width: 420px;
-  margin: 0.9rem auto;
-  position: relative;
-  top: -0.25rem;
-}
-
-.button:hover {
-  background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
-  box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
-              rgba(0, 0, 0, 0.4) 0 1px 2px;
-  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on hover */
-}
-
-.button:active {
-  transform: scale(0.98);
-  box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
-              rgba(0, 0, 0, 0.4) 0 1px 1px;
-  border-color: rgb(44, 123, 202); /* ✔ Reinforce border on click */
-}
-
-.button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
-  border-color: rgb(44, 123, 202); /* ✔ Keep border consistent on focus */
-}
-
-.button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-  box-shadow: none;
-  border-color: #2a5a87; /* ✔ Still visible, but dimmed */
-}
-
-.button:disabled:hover,
-.button:disabled:active {
-  pointer-events: none;
-  box-shadow: none;
-}
-.button:first-of-type {
-  margin-top: 1rem;
-}
+  .info-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+  .info-btn img {
+    width: 1.2rem;
+    height: 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+  .info-btn:hover img {
+    opacity: 1;
+  }
+   .button {
+      flex: 1;
+      background-color: rgb(32, 117, 202);
+      background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+      border: 1px solid rgb(38, 111, 185);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      padding: 0.65rem 1rem;
+      text-align: center;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+  
+    .button:hover {
+      background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+      box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 2px;
+      border-color: rgb(44, 123, 202);
+    }
+  
+    .button:active {
+      transform: scale(0.98);
+      box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 1px;
+      border-color: rgb(44, 123, 202);
+    }
 </style>
+
 <div class="passage-content">
   <div class="build-intro">
     <p>
@@ -2299,39 +2262,92 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
       What direction do you choose?
     </p>
 
-    <!-- Button: Supportive Housing Office -->
-    <button class="button" onclick="launchSupportiveOffice();">
-      Create a permanent Supportive Housing Delivery Office
-    </button>
+    <!-- Supportive Housing Delivery Office -->
+    <div style="margin-bottom:1rem; text-align:center;">
+      <button class="button" onclick="launchSupportiveOffice();">
+        Create a permanent Supportive Housing Delivery Office
+      </button>
+      <button class="info-btn" id="info-supportive">
+        <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info">
+      </button>
+    </div>
 
-    <!-- Button: Data Lab -->
-    <button class="button" onclick="launchDataLab();">
-      Launch a Housing & Homelessness Data Lab
-    </button>
+    <!-- Housing & Homelessness Data Lab -->
+    <div style="margin-bottom:1rem; text-align:center;">
+      <button class="button" onclick="launchDataLab();">
+        Launch a Housing & Homelessness Data Lab
+      </button>
+      <button class="info-btn" id="info-datalab">
+        <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info">
+      </button>
+    </div>
 
-    <!-- Button: Encampment Response -->
-    <button class="button" onclick="launchEncampmentTaskForce();">
-      Form a Multi-Agency Encampment Response Task Force
-    </button>
+    <!-- Encampment Response Task Force -->
+    <div style="margin-bottom:1rem; text-align:center;">
+      <button class="button" onclick="launchEncampmentTaskForce();">
+        Form a Multi-Agency Encampment Response Task Force
+      </button>
+      <button class="info-btn" id="info-encampment">
+        <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info">
+      </button>
+    </div>
   </div>
 </div>
 
+<!-- Drawers -->
+
+<sl-drawer placement="bottom" label=" " class="drawer-supportive">
+  <div class="drawer-content">
+    <h3>Supportive Housing Coordination in Canada</h3>
+    <p>
+      Since 2018, Toronto’s <strong>Housing Secretariat</strong> has coordinated over 1,200 permanent supportive units, partnering with CMHA and Indigenous agencies.<br>
+      In Vancouver, BC’s <strong>Provincial Supportive Housing Tax Credit</strong> encouraged non-profits to build 800+ supportive homes by 2022.<br>
+      Edmonton’s <strong>Homeward Trust</strong> runs a by-name list and case-management pipeline—key best-practice models that your office can emulate.
+    </p>
+  </div>
+</sl-drawer>
+
+<sl-drawer placement="bottom" label=" " class="drawer-datalab">
+  <div class="drawer-content">
+    <h3>Municipal Data Hubs in Canada</h3>
+    <p>
+      Edmonton pioneered real-time tracking with its By-Name List, reducing chronic homelessness by 30% since 2017.<br>
+      Calgary’s <strong>Homeless Hub</strong> publishes monthly dashboards showing inflow, length of shelter stay, and service gaps.<br>
+      The CMHC’s 2023 <em>National Housing Data Lab</em> grant program offers funding to standardize metrics across provinces.
+    </p>
+  </div>
+</sl-drawer>
+
+<sl-drawer placement="bottom" label=" " class="drawer-encampment">
+  <div class="drawer-content">
+    <h3>Encampment Responses Across Canada</h3>
+    <p>
+      Vancouver’s controversial 2021 encampment sweeps drove calls for a <strong>Safe Encampment Strategy</strong>, blending outreach and designated sites.<br>
+      Montreal’s <strong>Social Safety Zones</strong> provide warming centers in winter and cooling sites in summer, balancing enforcement with services.<br>
+      The Region of Waterloo’s 2024 by-law includes mandatory transition plans—offering lessons on lean, humane task forces.
+    </p>
+  </div>
+</sl-drawer>
+
+<!-- JS Wiring & Policy Logic -->
+
 <script>
+  // Info-icon → drawer
+  document.getElementById('info-supportive')
+          .addEventListener('click', () => document.querySelector('.drawer-supportive').show());
+  document.getElementById('info-datalab')
+          .addEventListener('click', () => document.querySelector('.drawer-datalab').show());
+  document.getElementById('info-encampment')
+          .addEventListener('click', () => document.querySelector('.drawer-encampment').show());
+
+  // Policy registration functions
   function launchSupportiveOffice() {
     PolicyManager.register({
       name: "Supportive Housing Delivery Office",
-      costUpfront: 12,
-      duration: 999999,
-      immediate(v) {
-        v.publicOpinion -= 5;
-        v.systemCoordination += 1;
-      },
+      costUpfront: 12, duration: 999999,
+      immediate(v) { v.publicOpinion -= 5; v.systemCoordination += 1; },
       tick(v, Util, age) {
         v.budget -= 1.5;
-        if (age >= 3) {
-          window.Util.exitPeople(50 + age * 10);
-          v.systemCoordination += 0.5;
-        }
       }
     });
     SugarCube.Engine.play("SupportiveOffice");
@@ -2340,16 +2356,10 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   function launchDataLab() {
     PolicyManager.register({
       name: "Housing & Homelessness Data Lab",
-      costUpfront: 6,
-      duration: 999999,
-      immediate(v) {
-        v.systemCoordination += 0.5;
-      },
+      costUpfront: 6, duration: 999999,
+      immediate(v) { v.systemCoordination += 0.5; },
       tick(v, Util, age) {
-        v.budget -= 0.5;
-        if (age >= 2) {
-          v.policyEffectiveness += 1;
-        }
+        v.budget -= 1;
       }
     });
     SugarCube.Engine.play("DataLab");
@@ -2358,18 +2368,10 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
   function launchEncampmentTaskForce() {
     PolicyManager.register({
       name: "Encampment Response Task Force",
-      costUpfront: 4,
-      duration: 999999,
-      immediate(v) {
-        v.publicOpinion += 15;
-        v.systemStrain += 5;
-      },
+      costUpfront: 4, duration: 999999,
+      immediate(v) { v.publicOpinion += 15; v.systemStrain += 5; },
       tick(v, Util, age) {
         v.budget -= 1;
-        if (age >= 2) {
-          v.unsheltered -= 5;
-          v.publicTrust -= 1;
-        }
       }
     });
     SugarCube.Engine.play("EncampmentTaskForce");
@@ -2378,48 +2380,39 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 
 
 :: DataLab {"position":"600,1300","size":"100,100"}
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
-<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+      <div class="impact-title">Policy Effectiveness</div>
       <div class="impact-content">
-        <span class="impact-icon">↑&nbsp; </span>
-        <span class="impact-value">500</span>
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">20<span class="impact-subtitle"> %</span></span>
       </div>
     </div>
-
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Long-Term Savings</div>
+      <div class="impact-title">Annual Lab Budget</div>
       <div class="impact-content">
-       <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
+        <span class="impact-unit">$ &nbsp; </span>
+        <span class="impact-value">0.5<span class="impact-subtitle"> M / year</span></span>
       </div>
     </div>
-
     <div class="impact-box" data-index="3">
-      <div class="impact-title">todo costs etc</div>
+      <div class="impact-title">Data-Driven Placements</div>
       <div class="impact-content">
-        <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">20<span class="impact-subtitle"> %</span></span>
       </div>
     </div>
   </div>
 </div>
 
-
 <p style="padding: 0 6rem; font-size: 1.1em">
-  Supportive office text
+  Your new Data Lab aggregates shelter, hospital, and outreach data in real time—surfacing service gaps, equity blind spots, and predictive risk indicators. It enables evidence-based decision-making for all homelessness programs.
 </p>
 
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('SnowStorm');">Continue</button>
 </div>
-
-
-
-[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]
 
 
 :: Dish out funding {"position":"1100,775","size":"100,100"}
@@ -2503,48 +2496,39 @@ $(document).on(':passagedisplay', function () {
 
 
 :: EncampmentTaskForce {"position":"700,1300","size":"100,100"}
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
-<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+      <div class="impact-title">Unsheltered Population</div>
       <div class="impact-content">
-        <span class="impact-icon">↑&nbsp; </span>
-        <span class="impact-value">500</span>
+        <span class="impact-icon">↓ </span>
+        <span class="impact-value">10<span class="impact-subtitle"> %</span></span>
       </div>
     </div>
-
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Long-Term Savings</div>
+      <div class="impact-title">Public Opinion</div>
       <div class="impact-content">
-       <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">15<span class="impact-subtitle"> pts</span></span>
       </div>
     </div>
-
     <div class="impact-box" data-index="3">
-      <div class="impact-title">todo costs etc</div>
+      <div class="impact-title">Enforcement Cost</div>
       <div class="impact-content">
-        <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+        <span class="impact-unit">$ </span>
+        <span class="impact-value">1<span class="impact-subtitle"> M</span></span>
       </div>
     </div>
   </div>
 </div>
 
-
 <p style="padding: 0 6rem; font-size: 1.1em">
-  Supportive office text
+  The Task Force has deployed outreach teams alongside designated sweeps—reducing visible encampments and winning a short-term boost in public satisfaction. It forces some into shelters but increases long-term and enforcement costs.
 </p>
 
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('SnowStorm');">Continue</button>
 </div>
-
-
-
-[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]
 
 
 :: Endgame {"position":"800,0","size":"100,100"}
@@ -2675,7 +2659,7 @@ $(document).on(':passagedisplay', function () {
 
 
 :: Event1 {"position":"600,1000","size":"100,100"}
-  <<set $turn += 1>>
+<<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
 <<script>>
@@ -3491,12 +3475,10 @@ setTimeout(function(){
 
 
 :: HeatwaveInfo {"position":"700,1600","size":"100,100"}
-history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness. 
+history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.
 
 
 :: InfoTemplate {"position":"100,200","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -3535,8 +3517,6 @@ history of heatwaves in canadian cities. what impact do they have on people who 
 </div>
 
 
-
-
 :: LeaseSpace {"position":"800,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
@@ -3561,52 +3541,41 @@ PolicyManager.register({
   }
 });
 <</script>>
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Transitional Capacity</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">120</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;beds</span>
+      </div>
+    </div>
     <div class="impact-box" data-index="1">
-<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+      <div class="impact-title">Overflow Relief</div>
       <div class="impact-content">
-        <span class="impact-icon">↑&nbsp; </span>
-        <span class="impact-value">500</span>
+        <span class="impact-value">1,200</span>
+        <span class="impact-subtitle" style="font-size: 1.1em; margin-bottom: -3px;">&nbsp;nights / year</span>
       </div>
     </div>
-
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Long-Term Savings</div>
+      <div class="impact-title">Renovation Cost</div>
       <div class="impact-content">
-       <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
-      </div>
-    </div>
-
-    <div class="impact-box" data-index="3">
-      <div class="impact-title">Upfront Cost</div>
-      <div class="impact-content">
-        <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+        <span class="impact-unit">$&nbsp;</span>
+        <span class="impact-value">6</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M</span>
       </div>
     </div>
   </div>
 </div>
 
-<p>In early 2024, Ottawa city councillors unanimously approved a plan to lease and retrofit underused downtown office space into transitional housing, part of a growing shift in the city’s strategy to move away from temporary overflow shelters and toward more stable, supportive environments. The approach responds to dual pressures: an overwhelmed shelter system and an ongoing influx of asylum seekers, many of whom were sleeping in chairs or makeshift spaces.
-<div class="break"> </div>
-
-Unlike emergency shelters, transitional housing provides stability: residents can stay during the day, access caseworkers on-site, and begin planning their move into permanent housing. Councillors described the move as both urgent and strategic — helping return recreation centres to public use while testing a new model for housing service delivery.
-<div class="break"> </div>
-
-While the first Queen Street lease cost nearly $6 million, councillors and staff suggested it could become a broader strategy. With much of downtown’s commercial real estate underused post-pandemic, office-to-housing conversions offer a potential win-win. However, some cautioned that not every space is easily adaptable and the cost to retrofit can strain limited budgets.
-<div class="break"> </div>
-
-City leadership, alongside advocacy groups like the Alliance to End Homelessness, framed the move as a necessary innovation. They stressed the importance of pairing this transitional model with continued investment in permanent supportive housing and called on the federal government to step up with funding for a dedicated welcome centre for newcomers.</p>
+<p style="padding:0 6rem;font-size:1.1em">
+  In March 2024, Council approved leasing under‑used downtown offices for conversion to transitional housing, adding 120 staffed beds and freeing recreation centres for public use. Retrofits cost around $6 M but create a template for wider office‑to‑housing conversions post‑pandemic.
+</p>
 
 <div class="centered-btn">
  <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
 </div>
-
-
 
 
 :: Loop {"position":"1200,1000","size":"100,100"}
@@ -3754,13 +3723,7 @@ City leadership, alongside advocacy groups like the Alliance to End Homelessness
 </div>
 
 
-
-
-
-
 :: Modular {"position":"700,500","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -3921,7 +3884,6 @@ PolicyManager.register({
 </div>
 
 
-
 :: NextYear {"position":"1200,1300","size":"100,100"}
 <<set $turn += 1>>
 <<set $year += 1>>
@@ -3946,7 +3908,6 @@ PolicyManager.register({
 <p>
 </p>
 </div>
-
 
 
 :: PIT {"position":"1200,1200","size":"100,100"}
@@ -4144,11 +4105,8 @@ PolicyManager.register({
 </div>
 
 
-
-
-
 :: PreServiceFunding {"position":"600,600","size":"100,100"}
-  <<set $turn += 1>>
+<<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 <!-- CSS Styling -->
 <style>
@@ -4293,7 +4251,6 @@ PolicyManager.register({
 </div>
 
 
-
 :: Renovictions {"position":"500,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
@@ -4318,42 +4275,40 @@ PolicyManager.register({
   }
 });
 <</script>>
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Eviction-driven Inflow</div>
+      <div class="impact-content">
+        <span class="impact-icon">↓&nbsp;</span>
+        <span class="impact-value">22</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;% / year</span>
+      </div>
+    </div>
     <div class="impact-box" data-index="1">
-<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+      <div class="impact-title">Affordable Units Preserved</div>
       <div class="impact-content">
-        <span class="impact-icon">↑&nbsp; </span>
-        <span class="impact-value">500</span>
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">150</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;units</span>
       </div>
     </div>
-
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Long-Term Savings</div>
+      <div class="impact-title">Enforcement Cost</div>
       <div class="impact-content">
-       <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
-      </div>
-    </div>
-
-    <div class="impact-box" data-index="3">
-      <div class="impact-title">Upfront Cost</div>
-      <div class="impact-content">
-        <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+        <span class="impact-unit">$&nbsp;</span>
+        <span class="impact-value">2</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M / year</span>
       </div>
     </div>
   </div>
 </div>
 
 
-<p>In January 2025, Ottawa City Council voted to move forward with developing a renovictions bylaw, following intense advocacy from tenant groups and mounting evidence of widespread misuse of eviction laws. The motion, introduced by Councillor Ariel Troster, came in response to a sharp increase—nearly 500% over three years—in N13 “renoviction” notices, where landlords evict tenants under the pretense of major renovations, only to re-rent the units at significantly higher rates.
-<div class="break"> </div>
-Despite a staff recommendation to delay action, the Planning and Housing Committee was swayed by powerful public delegations from renters across the city, as well as data showing a parallel rise in homelessness. Troster argued that municipal action was essential, especially in the absence of provincial vacancy control or enforcement. Her motion called on staff to explore a bylaw modeled after Hamilton’s, which requires landlords to obtain renovation licenses, provide engineering reports, and offer relocation assistance.
-<div class="break"> </div>
-The vote marked a rare instance where councillors pushed back against a staff recommendation, signalling the strength of local organizing. Groups like ACORN Ottawa played a key role in mobilizing tenants, gathering testimonies, and holding the city accountable. The issue will return to council in 2026 for a final vote on what the bylaw will look like. In the meantime, Troster and other councillors continue to press the province for stronger tenant protections, while warning that the current legal framework leaves far too many renters vulnerable to displacement. </p>
+<p style="padding:0 6rem;font-size:1.1em">
+  In January 2025, Council instructed staff to draft an anti‑renoviction by‑law after a five‑fold jump in N13 eviction notices. The by‑law will license major renovations, require relocation assistance, and fine landlords who misuse the process—aimed at cutting eviction‑driven homelessness while protecting roughly 150 affordable units a year.
+</p>
+
 <div class="break"> </div>
 
 <div class="centered-btn">
@@ -4361,10 +4316,7 @@ The vote marked a rare instance where councillors pushed back against a staff re
 </div>
 
 
-
-
 :: ServiceFunding1 {"position":"600,700","size":"100,100"}
-
 <div class="puzzle-layout">
     <div id="game-area">
       <!-- The plugin will create its canvas inside this div -->
@@ -6417,44 +6369,38 @@ PolicyManager.register({
 
 <div class="policy-impact-screen">
   <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">System Capacity</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">200</span>
+<span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp; beds </span>
+      </div>
+    </div>
     <div class="impact-box" data-index="1">
-<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+      <div class="impact-title">Unsheltered Inflow</div>
       <div class="impact-content">
-        <span class="impact-icon">↑&nbsp; </span>
-        <span class="impact-value">500</span>
+        <span class="impact-icon">↓&nbsp;</span>
+        <span class="impact-value">15</span>
+                <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;"> &nbsp; % / year</span>
       </div>
     </div>
-
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Long-Term Savings</div>
+      <div class="impact-title">Provincial Funding Access</div>
       <div class="impact-content">
-       <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
-      </div>
-    </div>
-
-    <div class="impact-box" data-index="3">
-      <div class="impact-title">Upfront Cost</div>
-      <div class="impact-content">
-        <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+        <span class="impact-unit">$&nbsp;</span>
+        <span class="impact-value">8</span>
+        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;"> M</span>
       </div>
     </div>
   </div>
 </div>
 
-<p>In February 2025, Ottawa City Council passed a motion allowing shelters in all urban zones, amending the city’s zoning bylaw ahead of a broader review. Brought forward by Councillor Jeff Leiper and backed by Councillor Ariel Troster, the move aimed to align zoning rules with the city’s Official Plan and respond more quickly to the growing homelessness crisis.
-<div class="break"> </div>
-Previously, shelter projects faced delays due to restrictive zoning, particularly in suburban areas. The new rule lets emergency shelters bypass re-zoning processes, making it easier to access time-sensitive provincial and federal funding. Supporters, including the Alliance to End Homelessness Ottawa, said the change was critical to decentralizing services and reducing community backlash that had become increasingly hostile—even threatening—toward shelter staff and housing providers.
-<div class="break"> </div>
-Some suburban councillors opposed the motion, arguing it weakened public consultation and risked entrenching shelters over long-term housing solutions. Despite these concerns, the motion passed, with implementation expected before summer. Advocates stressed the need to pair this zoning reform with urgent investment in supportive and transitional housing, warning that expanding shelter access alone could deepen the city’s reliance on temporary responses.</p>
-<div class="break"> </div>
-TODO: add image of cbc news headline? / format that shows info is being displayed.
+
+<p style="padding:0 6rem;font-size:1.1em">In February 2025, Ottawa City Council passed a motion permitting shelters in all urban zones, removing zoning barriers that had delayed new sites for months. This expands system capacity, speeds up approvals, and unlocks access to new provincial and federal funds. Advocates welcome the change, though some warn it must be paired with long-term housing investments to avoid deepening reliance on temporary shelter. </p>
 <div class="centered-btn">
  <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
 </div>
-
-
 
 
 :: SnowStorm {"position":"500,1500","size":"100,100"}
@@ -6785,7 +6731,6 @@ TODO: add image of cbc news headline? / format that shows info is being displaye
 <</script>>
 
 
-
 :: SnowstormInfo {"position":"500,1600","size":"100,100"}
 <style>
 body {
@@ -6796,7 +6741,7 @@ body {
   }
 </style>
 
-history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside? 
+history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?
 
 
 :: Start {"position":"600,75","size":"100,100"}
@@ -6907,8 +6852,6 @@ You've been brought into the city halls at a pivotal moment, right before the ne
 
 
 :: Starter {"position":"600,500","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -6945,8 +6888,6 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('PreServiceFunding');">Continue</button>
 </div>
-
-
 
 
 :: StoryInterface {"position":"1100,200","size":"100,100"}
@@ -7076,49 +7017,40 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 
 
 :: SupportiveOffice {"position":"500,1300","size":"100,100"}
-
-
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
-<div class="impact-title" style="white-space: nowrap; display: inline;">Affordable Housing</div>
+      <div class="impact-title">Clients</div>
       <div class="impact-content">
-        <span class="impact-icon">↑&nbsp; </span>
-        <span class="impact-value">500</span>
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">600<span class="impact-subtitle"> / year</span></span>
+
       </div>
     </div>
-
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Long-Term Savings</div>
+      <div class="impact-title">Annual Operating Cost</div>
       <div class="impact-content">
-       <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">2<span class="impact-subtitle"> M / year</span></span>
+        <span class="impact-unit">$ </span>
+        <span class="impact-value">1.2<span class="impact-subtitle"> M / year</span></span>
       </div>
     </div>
-
     <div class="impact-box" data-index="3">
-      <div class="impact-title">todo costs etc</div>
+      <div class="impact-title">Service Coordination</div>
       <div class="impact-content">
-        <span class="impact-unit">$ &nbsp;</span>
-        <span class="impact-value">20<span class="impact-subtitle"> M</span></span>
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">20<span class="impact-subtitle"> %</span></span>
       </div>
     </div>
   </div>
 </div>
 
-
 <p style="padding: 0 6rem; font-size: 1.1em">
-  Supportive office text
+  The Supportive Housing Delivery Office is now up and running—streamlining case management, coordinating builds, and partnering with health services. It enables faster, prioritized placements for those with the highest needs.
 </p>
 
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('SnowStorm');">Continue</button>
 </div>
-
-
-
-[[SnowStorm|SnowStorm]]
-[[Heatwave|Heatwave]]
 
 
 :: Zoning {"position":"875,800","size":"100,100"}
@@ -7275,9 +7207,7 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 </script>
 
 
-
 :: metricsscreen {"position":"100,400","size":"100,100"}
-
 <div class="policy-impact-screen" >
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -7767,7 +7697,6 @@ $(function() {
     }, 2500);
   });
 });
-
 
 :: StoryStylesheet [stylesheet]
 @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
