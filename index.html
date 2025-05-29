@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://F2594C19-2B1A-436C-A749-C92E439252F0// --><tw-storydata name="simulator" startnode="43" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="F2594C19-2B1A-436C-A749-C92E439252F0" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
+	<!-- UUID://F2594C19-2B1A-436C-A749-C92E439252F0// --><tw-storydata name="simulator" startnode="12" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="F2594C19-2B1A-436C-A749-C92E439252F0" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
 
 @import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
 
@@ -307,6 +307,9 @@ sl-drawer[placement="bottom"]::part(close-button__base):hover {
   line-height: 1;
     color: #0066cc !important;
 
+}
+.info-btn:hover{
+  background: rgba(0,0,0,0) !important;
 }
 .million {
   font-size: 24px;
@@ -3381,7 +3384,101 @@ zoom: 1.1;
     SugarCube.Engine.play(&quot;C4Project1&quot;);
   }
   &lt;/script&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="ChooseCityPolicy1" tags="" position="600,200" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="ChooseCityPolicy1" tags="" position="600,100" size="100,100">&lt;&lt;set $history = []&gt;&gt;
+
+
+&lt;&lt;set $turn = 1&gt;&gt;
+&lt;&lt;set $year= 1&gt;&gt;
+&lt;&lt;set $currentYear= 2024&gt;&gt;
+&lt;&lt;set $budget = 215&gt;&gt;
+
+&lt;&lt;set $homelessTotal = 2952&gt;&gt;
+
+&lt;!-- Demographic breakdown of CURRENT homeless population --&gt;
+&lt;&lt;set $pop = {
+  // Housing status
+  unsheltered: 472,      // 16% of 2952
+  sheltered: 1269,       // 43%
+  transitional: 708,     // 24%
+  institutional: 59,     // 2%
+  chronic: 1446,         // 49%
+  withChildren: 295,     // 10%
+  fosterCareHistory: 561, // 19%
+
+  // Identity demographics
+  male: Math.round(2952 * 0.56),
+  female: Math.round(2952 * 0.36),
+  transNB: Math.round(2952 * 0.02),
+  age25to49: Math.round(2952 * 0.58),
+  youth: Math.round(2952 * 0.13),
+  lgbq: Math.round(2952 * 0.11),
+  lgbtqYouth: Math.round(2952 * 0.11 * 0.21),
+  racialized: Math.round(2952 * 0.56),
+  indigenous: 479,           // exact number provided
+  veteran: Math.round(2952 * 0.04),
+  immigrant: Math.round(2952 * 0.42)
+}&gt;&gt;
+
+&lt;!-- INFLOW system --&gt;
+&lt;&lt;set $inflowBase = 0&gt;&gt; &lt;!-- Number of new homeless per turn --&gt;
+
+&lt;!-- Percentage distribution of INCOMING new homelessness cases --&gt;
+&lt;&lt;set $inflowShare = {
+  // Housing status (default to unsheltered for new arrivals)
+  unsheltered: 0.16,
+  sheltered: 0.43,
+  transitional: 0.24,
+  institutional: 0.02,
+  chronic: 0.49,
+  withChildren: 0.10,
+  fosterCareHistory: 0.19,
+
+  // Identity demographics
+  male: 0.56,
+  female: 0.36,
+  transNB: 0.02,
+  lgbtqYouth: 0.21,
+  age25to49: 0.58,
+  lgbq: 0.11,
+  racialized: 0.56,
+  indigenous: 479 / 2952,    // ~16.2%
+  veteran: 0.04,
+  immigrant: 0.42
+}&gt;&gt;
+
+
+&lt;!-- System + policy levers --&gt;
+&lt;&lt;set $publicOpinion = 50&gt;&gt;
+&lt;&lt;set $serviceCoordination = 60&gt;&gt;
+&lt;&lt;set $systemCapacity = 100&gt;&gt;
+&lt;&lt;set $politicalCapital = 3&gt;&gt;
+
+&lt;&lt;script&gt;&gt;
+  // Create an initial snapshot representing the state *before* year 1 begins.
+  // This helps in comparing the first year&#39;s results against something.
+  const v = State.variables;
+  const initialPopSnapshot = {}; // Deep copy $pop
+  for (const key in v.pop) {
+      if (Object.prototype.hasOwnProperty.call(v.pop, key)) {
+          initialPopSnapshot[key] = v.pop[key];
+      }
+  }
+  const initialSnapshot = {
+    year: 0, // Conceptual &quot;Year 0&quot; or pre-game state
+    turn: 0, // Conceptual &quot;Turn 0&quot;
+    homelessTotal: v.homelessTotal,
+    pop: initialPopSnapshot,
+    budget: v.budget,
+    publicOpinion: v.publicOpinion,
+    serviceCoordination: v.serviceCoordination,
+    systemCapacity: v.systemCapacity,
+    politicalCapital: v.politicalCapital
+  };
+  v.history.push(initialSnapshot);
+&lt;&lt;/script&gt;&gt;
+
+
+&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
 &lt;&lt;script&gt;&gt;
@@ -8578,12 +8675,8 @@ body {
   }
 &lt;/style&gt;
 
-history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="43" name="Start" tags="" position="600,100" size="100,100">&lt;&lt;set $history = []&gt;&gt;
-&lt;div class=&quot;passageContent&quot;&gt; In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: &lt;span title=&quot;A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed.&quot;&gt; ensuring everyone has a home&lt;/span&gt;, &lt;span title=&quot;People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.&quot;&gt;people get the support they need &lt;/span&gt; and &lt;span title=&quot;Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people&#39;s needs.&quot;&gt;working together / collaboration &lt;/span&gt;.
+history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="43" name="Start" tags="" position="600,0" size="100,100">&lt;&lt;set $history = []&gt;&gt;
 
-Despite these goals, the nation&#39;s capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city&#39;s history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what&#39;s working, what&#39;s missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
-
-You&#39;ve been brought into the city halls at a pivotal moment, right before the next phase of the 10-Year Plan is finalized. Your task is to explore how different decisions, funding priorities, and policy trade-offs change outcomes over time. You can&#39;t solve everything at once. But you can change the direction we&#39;re heading — starting now.
 
 &lt;&lt;set $turn = 1&gt;&gt;
 &lt;&lt;set $year= 1&gt;&gt;
@@ -8673,15 +8766,7 @@ You&#39;ve been brought into the city halls at a pivotal moment, right before th
     politicalCapital: v.politicalCapital
   };
   v.history.push(initialSnapshot);
-&lt;&lt;/script&gt;&gt;
-
-
-* [[Start|ChooseCityPolicy1]]
-    [[Endgame|Endgame]]
-    [[Zoning|Zoning]]
-    [[Gantt|Gantt]]
-
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="44" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="44" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Housing Supply&lt;/div&gt;
