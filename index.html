@@ -115,9 +115,24 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 
 @import url("https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css");
 
+
+
+  .description {
+    padding: 0 6rem;
+    font-size: 1.1em;
+  }
+
+  @media (max-width: 979px) {
+    .description {
+      padding: 0 0.5rem;
+    }
+  }
+
+
+
 \::selection {
-  background-color: #0871d9;   /* Deep blue */
-  color: white;             /* Optional: makes text readable */
+  background-color: #0871d9;   
+  color: white;            
 }
 
 .centered-btn {
@@ -2141,34 +2156,33 @@ PolicyManager.register({
 &lt;/script&gt;</tw-passagedata><tw-passagedata pid="4" name="Bill6_Comply" tags="" position="500,1800" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
-&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Unsheltered Homelessness&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↓ &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;15&lt;span class=&quot;impact-subtitle&quot;&gt; %&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
 
     &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Incarceration Inflow&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑ &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;18&lt;span class=&quot;impact-subtitle&quot;&gt; %&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
 
     &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Service Provider Trust&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↓ &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;30&lt;span class=&quot;impact-subtitle&quot;&gt; pts&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
-
-&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
-  impacts of this bill and your response
+&lt;p class=&quot;description&quot;&gt;
+  Adopting the full &lt;em&gt;Safer Municipalities Act&lt;/em&gt; quickly reduces unsheltered homelessness as encampments are cleared, but at the cost of an 18% rise in incoming incarceration. Trust with service providers drops sharply. The city qualifies for the full $8M in provincial enforcement-linked funding.
 &lt;/p&gt;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
@@ -2176,34 +2190,33 @@ PolicyManager.register({
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="Bill6_Delay" tags="" position="600,1800" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
-&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Unsheltered Homelessness&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↮  &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;--&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
 
     &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Public Opinion&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↓&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;10&lt;span class=&quot;impact-subtitle&quot;&gt; pts&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
 
     &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Provincial Funding Access&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↓ &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;50&lt;span class=&quot;impact-subtitle&quot;&gt; %&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
-
-&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
-  impacts of this bill and your response
+&lt;p class=&quot;description&quot;&gt;
+  Delaying full enforcement keeps the city in a holding pattern. Encampments remain visible and trust declines mildly as uncertainty frustrates both partners, advocates and the public. You receive only partial funding from the province while legal outcomes remain in flux.
 &lt;/p&gt;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
@@ -2211,34 +2224,31 @@ PolicyManager.register({
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="Bill6_Oppose" tags="" position="700,1800" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
-&lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Public Opinion&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-icon&quot;&gt;↑&amp;nbsp; &lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;500&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑ &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;25&lt;span class=&quot;impact-subtitle&quot;&gt; pts&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
 
     &lt;div class=&quot;impact-box&quot; data-index=&quot;2&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Long-Term Savings&lt;/div&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Unsheltered Homelessness&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
-       &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; M / year&lt;/span&gt;&lt;/span&gt;
+        &lt;span class=&quot;impact-icon&quot;&gt;↑ &lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot;&gt;2&lt;span class=&quot;impact-subtitle&quot;&gt; %&lt;/span&gt;&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
 
-    &lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
-      &lt;div class=&quot;impact-title&quot;&gt;Upfront Cost&lt;/div&gt;
-      &lt;div class=&quot;impact-content&quot;&gt;
-        &lt;span class=&quot;impact-unit&quot;&gt;$ &amp;nbsp;&lt;/span&gt;
-        &lt;span class=&quot;impact-value&quot;&gt;20&lt;span class=&quot;impact-subtitle&quot;&gt; M&lt;/span&gt;&lt;/span&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
+&lt;div class=&quot;impact-box&quot; data-index=&quot;3&quot;&gt;
+  &lt;div class=&quot;impact-title&quot;&gt;Political Cost&lt;/div&gt;
+  &lt;div class=&quot;impact-content&quot;&gt;
+    &lt;span style=&quot;color: #06C; font-size: 5em; padding-right: 10px;&quot;&gt;●&lt;/span&gt;&lt;span style=&quot;color: #06C; font-size: 5em;&quot;&gt;●&lt;/span&gt;
   &lt;/div&gt;
 &lt;/div&gt;
+&lt;/div&gt;
 
-
-&lt;p style=&quot;padding: 0 6rem; font-size: 1.1em&quot;&gt;
-  impacts of this bill and your response
+&lt;p class=&quot;description&quot;&gt;
+  Rejecting Bill 6 preserves dignity and avoids punitive enforcement. Incarceration does not increase, and trust with frontline providers surges as the public tentatively supports the disobedience. However, visible homelessness rises moderately as encampments grow. The city forfeits all provincial funding tied to compliance.
 &lt;/p&gt;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
@@ -4699,7 +4709,7 @@ color: #333;
     }
   }, 0);
 })();
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="Heatwave" tags="" position="700,1500" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="Heatwave" tags="" position="925,1575" size="100,100">&lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
 
 &lt;style&gt;
   /* Highlight on focus/hover */
@@ -5012,7 +5022,7 @@ setTimeout(function(){
   };
 
 }, 0);
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="HeatwaveInfo" tags="" position="700,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="22" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="HeatwaveInfo" tags="" position="925,1675" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="22" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
@@ -8206,7 +8216,7 @@ body {
   }
 &lt;/style&gt;
 
-history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="40" name="Start" tags="" position="600,75" size="100,100">&lt;&lt;set $history = []&gt;&gt;
+history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="40" name="Start" tags="" position="600,100" size="100,100">&lt;&lt;set $history = []&gt;&gt;
 &lt;div class=&quot;passageContent&quot;&gt; In 2014, the City of Ottawa launched its first 10-Year Housing and Homelessness Plan with three priorities: &lt;span title=&quot;A range of housing options meets demand through construction, purchase, redevelopment, housing subsidies, Affordable housing is in a good state of repair and well-managed.&quot;&gt; ensuring everyone has a home&lt;/span&gt;, &lt;span title=&quot;People receive the right types of services and support to keep their homes and to prevent homelessness. People who become homeless are safe and receive adequate temporary shelter and supports to find housing. There is no chronic homelessness.&quot;&gt;people get the support they need &lt;/span&gt; and &lt;span title=&quot;Ottawa has an integrated housing system, responsive to the housing and support needs of residents. Improved service planning and coordination and sustained funding from all levels of government meet people&#39;s needs.&quot;&gt;working together / collaboration &lt;/span&gt;.
 
 Despite these goals, the nation&#39;s capital became the first city in Canada to declare a housing and homelessness emergency in January 2020. More people are sleeping on the streets, in shelters, and in their cars than at any point in the city&#39;s history. Now, Ottawa is midway through its 2020–2030 Housing and Homelessness Plan and, as required every five years, is taking a hard look at what&#39;s working, what&#39;s missing, and what needs to change. From Q2 to Q3, the city is gathering input through consultations with the housing and homelessness sector, people with lived experience, and frontline service providers. Their insights will shape the revised strategy to be presented to the Community Services Committee and City Council.
