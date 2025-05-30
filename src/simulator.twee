@@ -15,34 +15,28 @@ simulator
 :: AcquisitionFund {"position":"700,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
-  name: "Build City Affordable Housing",
-  costUpfront: 10,
+  name: "Affordable Housing Acquisition Fund Program",
+  costUpfront: 20,
   duration: 999999,
 
   immediate(v) {
     v.publicOpinion -= 15;
-    // initial setup already deducts costUpfront
+     v.inflowBase = Math.max(0, v.inflowBase - 10); // Represents about 40 people/year prevented from homelessness
+    v.unitsPreserved = (v.unitsPreserved || 0) + 300; // Track preserved units
   },
 
-  tick(v, Util, age) {
-    // Decreasing operational cost over time, then net revenue
-    let cost = 8;
+  tick(v,  age) {
 
-    if (age >= 2)  cost = .42;
-    if (age >= 5) cost = .12;
-    if (age >= 7) cost = -.5; // begins generating surplus
-
-    v.budget -= cost;
-
-    // Exit people: housing units become available over time
-    if (age >= 2) {
-      const exits = 100 + Math.floor(25 * (age - 2)); // gradual ramp-up
-      window.Util.exitPeople(exits);
+    if (age >= 5) {
+        v.budget += 1;
     }
 
-    // Service coordination stabilizes and improves after age 10
-    if (age >= 10 && age < 30) {
-      v.serviceCoordination += 2;
+    // Ongoing small reduction in certain vulnerable inflow categories due to stable housing from fund.
+    if (age > 0 && age % 4 === 0) { // Annually
+        v.inflowShare.withChildren = Math.max(0.01, v.inflowShare.withChildren - 0.005);
+        v.inflowShare.racialized = Math.max(0.01, v.inflowShare.racialized - 0.005);
+        window.Util.renorm(v.inflowShare);
+        v.publicOpinion += 1; // Sustained positive effect of visible action
     }
   }
 });
@@ -1316,18 +1310,27 @@ zoom: 1.1;
     // Policy registration functions
     function buildAffordable() {
       PolicyManager.register({
-        name: "Build City Affordable Housing",
+        name: "Build City Affordable Housing (Mid-Rise Densification)",
         costUpfront: 10,
         duration: 999999,
-        immediate(v) { v.publicOpinion -= 15; },
-        tick(v, Util, age) {
-          let cost = 8;
-          if (age >= 2) cost = 0.42;
-          if (age >= 5) cost = 0.12;
-          if (age >= 7) cost = -0.5;
-          v.budget -= cost;
-          if (age >= 2) window.Util.exitPeople(100 + Math.floor(25 * (age - 2)));
-          if (age >= 10 && age < 30) v.serviceCoordination += 2;
+        immediate(v) { v.publicOpinion -= 10; },
+        tick(v,  age) {
+          let operationalCost = 2;
+          if (age >= 8) operationalCost = 1;
+          if (age >= 20) operationalCost = 0.5;
+          if (age >= 28) operationalCost = -0.5;
+          v.budget -= operationalCost;
+
+          if (age >= 4 && age < 44) {
+            if (age % 4 === 0) {
+              const newUnitsThisYear = 50;
+              window.Util.exitPeople(newUnitsThisYear, { sheltered: 0.5, transitional: 0.3, unsheltered: 0.2 });
+              v.systemCapacity += 2;
+            }
+          }
+          if (age >= 20 && age < 60) {
+             if (age % 4 === 0 && v.serviceCoordination < 85) v.serviceCoordination += 1;
+          }
         }
       });
       SugarCube.Engine.play("Affordable");
@@ -1335,16 +1338,25 @@ zoom: 1.1;
   
     function buildStarter() {
       PolicyManager.register({
-        name: "Starter Homes Expansion",
-        costUpfront: 8,
+        name: "Starter Homes Expansion (Suburban)",
+        costUpfront: 10,
         duration: 999999,
-        immediate(v) { v.publicOpinion += 10; v.inflow -= 5; },
-        tick(v) {
-          let cost = 5;
-          if (v.age >= 3) cost = 1;
-          if (v.age >= 6) cost = -0.25;
+        immediate(v) { },
+        tick(v,  age) {
+          let cost = 0.5;
           v.budget -= cost;
-          if (v.age >= 3) v.housingSupply += 150;
+
+          if (age >= 4 && age < 24) {
+            if (age % 4 === 0) {
+              v.inflowBase = Math.max(0, v.inflowBase - 5);
+              window.Util.exitPeople(20, { withChildren: 0.6, sheltered: 0.4 });
+              if (v.systemCapacity < 150) v.systemCapacity += 1;
+            }
+          }
+          if (age >= 20) {
+            if (age % 4 === 0 && v.serviceCoordination > 40) v.serviceCoordination -= 1;
+            if (age % 8 === 0 && v.publicOpinion > 30) v.publicOpinion -= 2;
+          }
         }
       });
       SugarCube.Engine.play("Starter");
@@ -1353,16 +1365,26 @@ zoom: 1.1;
     function buildModular() {
       PolicyManager.register({
         name: "Modular Housing & Office Conversions",
-        costUpfront: 6,
+        costUpfront: 5,
         duration: 999999,
-        immediate(v) { v.publicOpinion += 5; v.systemCapacity += 10; },
-        tick(v, Util, age) {
-          let cost = 3;
-          if (age >= 2) cost = 0.8;
-          if (age >= 4) cost = 0.2;
+        immediate(v) {
+          v.publicOpinion += 2;
+          v.systemCapacity += 5;
+        },
+        tick(v,  age) {
+          let cost = 0.5;
+          if (age >= 8) cost = 0.1;
+          if (age >= 16) cost = -0.25;
           v.budget -= cost;
-          if (age >= 2) window.Util.exitPeople(80 + Math.floor(15 * (age - 2)));
-          if (age >= 6) v.systemCapacity += 3;
+
+          if (age >= 2 && age < 12) {
+            const newUnitsThisTurn = 50;
+            window.Util.exitPeople(newUnitsThisTurn, { transitional: 0.4, sheltered: 0.4, unsheltered: 0.2 });
+            v.systemCapacity += 2;
+          }
+          if (age >= 12 && age < 28) {
+            if (age % 4 === 0 && v.serviceCoordination < 85) v.serviceCoordination += 1;
+          }
         }
       });
       SugarCube.Engine.play("Modular");
@@ -1634,13 +1656,13 @@ zoom: 1.1;
         costUpfront: 10,
         duration: 999999,
         immediate(v) { v.publicOpinion -= 15; },
-        tick(v, Util, age) {
+        tick(v,  age) {
           let cost = 8;
           if (age >= 2) cost = 0.42;
           if (age >= 5) cost = 0.12;
           if (age >= 7) cost = -0.5;
           v.budget -= cost;
-          if (age >= 2) window.Util.exitPeople(100 + Math.floor(25 * (age - 2)));
+          if (age >= 2) window.window.Util.exitPeople(100 + Math.floor(25 * (age - 2)));
           if (age >= 10 && age < 30) v.serviceCoordination += 2;
         }
       });
@@ -1670,12 +1692,12 @@ zoom: 1.1;
         costUpfront: 6,
         duration: 999999,
         immediate(v) { v.publicOpinion += 5; v.systemCapacity += 10; },
-        tick(v, Util, age) {
+        tick(v,  age) {
           let cost = 3;
           if (age >= 2) cost = 0.8;
           if (age >= 4) cost = 0.2;
           v.budget -= cost;
-          if (age >= 2) window.Util.exitPeople(80 + Math.floor(15 * (age - 2)));
+          if (age >= 2) window.window.Util.exitPeople(80 + Math.floor(15 * (age - 2)));
           if (age >= 6) v.systemCapacity += 3;
         }
       });
@@ -1781,17 +1803,7 @@ zoom: 1.1;
   <!-- Project Scripts -->
   <script>
    function project1() {
-    PolicyManager.register({
-      name: "Student Project 1 – TODO: Add more details",
-      costUpfront: 0,
-      duration: 10,
-      immediate(v) {
-        // Optional: Modify variables right away
-      },
-      tick(v, Util, age) {
-        // Optional: Add ongoing effects here
-      }
-    });
+
     SugarCube.Engine.play("C4Project1");
   }
   </script>
@@ -1835,7 +1847,7 @@ zoom: 1.1;
 }>>
 
 <!-- INFLOW system -->
-<<set $inflowBase = 0>> <!-- Number of new homeless per turn -->
+<<set $inflowBase = 50>> <!-- Number of new homeless per turn -->
 
 <!-- Percentage distribution of INCOMING new homelessness cases -->
 <<set $inflowShare = {
@@ -1867,6 +1879,7 @@ zoom: 1.1;
 <<set $serviceCoordination = 60>>
 <<set $systemCapacity = 100>>
 <<set $politicalCapital = 3>>
+<<set $unitsPreserved = 0>>
 
 <<script>>
   // Create an initial snapshot representing the state *before* year 1 begins.
@@ -2425,53 +2438,100 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 </sl-drawer>
 
 <!-- JS Wiring & Policy Logic -->
+<<script>>
+  // Advance the turn
+  window.PolicyManager.tick();
 
-<script>
-  // Info-icon → drawer
-  document.getElementById('info-supportive')
-          .addEventListener('click', () => document.querySelector('.drawer-supportive').show());
-  document.getElementById('info-datalab')
-          .addEventListener('click', () => document.querySelector('.drawer-datalab').show());
-  document.getElementById('info-encampment')
-          .addEventListener('click', () => document.querySelector('.drawer-encampment').show());
+  // INFO buttons (delegated—fires even if #info-supportive isn't in DOM yet)
+  $(document).on('click', '#info-supportive', () => {
+    document.querySelector('.drawer-supportive').show();
+  });
+  $(document).on('click', '#info-datalab', () => {
+    document.querySelector('.drawer-datalab').show();
+  });
+  $(document).on('click', '#info-encampment', () => {
+    document.querySelector('.drawer-encampment').show();
+  });
 
-  // Policy registration functions
-  function launchSupportiveOffice() {
+  // Policy functions (now safely declared)
+  window.launchSupportiveOffice = function() {
     PolicyManager.register({
       name: "Supportive Housing Delivery Office",
-      costUpfront: 12, duration: 999999,
-      immediate(v) { v.publicOpinion -= 5; v.systemCoordination += 1; },
-      tick(v, Util, age) {
-        v.budget -= 1.5;
+      costUpfront: 5,
+      costPerTurn: 0.3,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion += 2;
+        if (v.serviceCoordination < 90) v.serviceCoordination += 10;
+      },
+      tick(v, age) {
+        if (v.pop.chronic > 0) {
+          const exits = Math.min(v.pop.chronic, 150);
+          window.Util.exitPeople(exits, { chronic: 0.7, institutional: 0.2, unsheltered: 0.1 });
+        }
+        else if (v.homelessTotal > 0 && age > 4) {
+          window.Util.exitPeople(20);
+        }
+        if (age > 0 && age % 4 === 0 && v.serviceCoordination < 90) {
+          v.serviceCoordination += 2;
+        }
       }
     });
     SugarCube.Engine.play("SupportiveOffice");
-  }
+  };
 
-  function launchDataLab() {
+  window.launchDataLab = function() {
     PolicyManager.register({
       name: "Housing & Homelessness Data Lab",
-      costUpfront: 6, duration: 999999,
-      immediate(v) { v.systemCoordination += 0.5; },
-      tick(v, Util, age) {
-        v.budget -= 1;
+      costUpfront: 2,
+      costPerTurn: 0.125,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion += 1;
+        if (v.serviceCoordination < 95) v.serviceCoordination += 5;
+      },
+      tick(v, age) {
+        if (age >= 4) {
+          window.Util.exitPeople(15, { chronic: 0.3, transitional: 0.3, withChildren: 0.2, youth: 0.2 });
+          if (age % 4 === 0 && v.serviceCoordination < 85) v.serviceCoordination += 3;
+          if (age % 8 === 0) v.budget += 0.1;
+        }
       }
     });
     SugarCube.Engine.play("DataLab");
-  }
+  };
 
-  function launchEncampmentTaskForce() {
+  window.launchEncampmentTaskForce = function() {
     PolicyManager.register({
       name: "Encampment Response Task Force",
-      costUpfront: 4, duration: 999999,
-      immediate(v) { v.publicOpinion += 15; v.systemStrain += 5; },
-      tick(v, Util, age) {
-        v.budget -= 1;
+      costUpfront: 2,
+      costPerTurn: 0.25,
+      duration: 999999,
+      immediate(v) {
+        v.publicOpinion += 10;
+        const reduction = Math.round(v.pop.unsheltered * 0.10);
+        v.pop.unsheltered -= reduction;
+        v.pop.sheltered += Math.round(reduction * 0.7);
+        v.inflowShare.unsheltered += 0.01;
+        v.inflowShare.chronic += 0.01;
+        window.Util.renorm(v.inflowShare);
+        if (v.serviceCoordination > 35) v.serviceCoordination -= 5;
+      },
+      tick(v, age) {
+        if (age > 0 && age % 2 === 0 && v.pop.unsheltered > 20) {
+          let moved = Math.min(v.pop.unsheltered, 15);
+          v.pop.unsheltered -= moved;
+          v.pop.sheltered += moved;
+          if (v.publicOpinion < 70) v.publicOpinion += 1;
+        }
+        if (age > 0 && age % 4 === 0 && v.serviceCoordination > 30) {
+          v.serviceCoordination -= 1;
+        }
       }
     });
     SugarCube.Engine.play("EncampmentTaskForce");
-  }
-</script>
+  };
+<</script>>
 
 
 :: DataLab {"position":"600,1300","size":"100,100"}
@@ -2758,9 +2818,9 @@ $(document).on(':passagedisplay', function () {
 <<script>>window.PolicyManager.tick();<</script>>
 
 <<script>>
-if (PolicyManager.has("Build City Affordable Housing")) {
+if (PolicyManager.has("Build City Affordable Housing (Mid-Rise Densification)")) {
   State.variables.bchChoice = "affordable";
-} else if (PolicyManager.has("Starter Homes Expansion")) {
+} else if (PolicyManager.has("Starter Homes Expansion (Suburban)")) {
   State.variables.bchChoice = "starter";
 } else if (PolicyManager.has("Modular Housing & Office Conversions")) {
   State.variables.bchChoice = "modular";
@@ -3426,7 +3486,7 @@ color: #333;
       </label>
       <label class="checkbox">
         <input type="checkbox" id="heat-opt4" />
-        <span>Subsidize utility bills to support increased air-conditioning use</span>
+        <span>Subsidize window.Utility bills to support increased air-conditioning use</span>
       </label>
       <label class="checkbox">
         <input type="checkbox" id="heat-opt5" />
@@ -3618,23 +3678,38 @@ history of heatwaves in canadian cities. what impact do they have on people who 
 :: LeaseSpace {"position":"800,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
-  name: "Lived Experience Consultation",
-  costUpfront: 10,
-  costPerTurn: 2,
-  duration: 20, // lasts 4 turns (1 year)
+  name: "Office Conversion to Transitional Housing",
+  costUpfront: 6,
+  costPerTurn: 0.5,
+  duration: 999999,
 
-  immediate(v) {
-    v.systemCoordination += 5;
-    v.publicOpinion    += 15;
+  immediate(v, window.Util) { // Added window.Util
+    v.publicOpinion += 5;
+    if (v.systemCapacity < 180) v.systemCapacity += 10;
+
+    let toMove = 120;
+    let fromUnsheltered = Math.min(v.pop.unsheltered, Math.round(toMove * 0.4));
+    v.pop.unsheltered -= fromUnsheltered;
+    v.pop.transitional += fromUnsheltered;
+    toMove -= fromUnsheltered;
+
+    let fromSheltered = Math.min(v.pop.sheltered, toMove);
+    v.pop.sheltered -= fromSheltered;
+    v.pop.transitional += fromSheltered;
+    // homelessTotal does not change here, as they move between categories of homelessness.
+
+    v.inflowShare.unsheltered = Math.max(0.01, v.inflowShare.unsheltered - 0.02);
+    v.inflowShare.sheltered = Math.min(0.9, v.inflowShare.sheltered + 0.02);
+    window.Util.renorm(v.inflowShare);
   },
 
-  tick(v, Util, age) {
-    // After two quarters, you start to see people move out:
-    if (age >= 2) {
-     v.systemCoordination += 1;
-     v.publicOpinion += 1;
-      const exits = Math.round(v.homelessTotal * 0.04); // 4% per quarter
-      window.Util.exitPeople(exits);
+  tick(v,  age) {
+    if (age > 0 && v.pop.transitional > 0) {
+      const exitsFromTransitional = Math.min(v.pop.transitional, 8); // ~32/year
+      window.Util.exitPeople(exitsFromTransitional, { transitional: 1.0 });
+    }
+    if (age > 0 && age % 4 === 0) {
+        if (v.serviceCoordination < 90) v.serviceCoordination += 1;
     }
   }
 });
@@ -3969,7 +4044,7 @@ PolicyManager.register({
   immediate(v) {
   },
 
-  tick(v, Util, age) {
+  tick(v,  age) {
     // Nothing for now
   }
 });
@@ -4053,189 +4128,6 @@ PolicyManager.register({
 
 :: PIT1 {"position":"600,1000","size":"100,100"}
 <<set $turn += 1>>
-<<set $year += 1>>
-<<set $budget += 215>>
-<!-- —————————————————————————————————————————————
-     ————————————————————————————————————————————— -->
-<div class="chart-section">
-  <h3>Housing Status Change</h3>
-  <canvas id="housingStackedBar" height="160"></canvas>
-</div>
-
-<div class="chart-section">
-  <h3>Homelessness Trend</h3>
-  <canvas id="homelessLineChart" height="160"></canvas>
-</div>
-
-<div class="chart-section">
-  <h3>Identity Demographics</h3>
-</div>
-
-<div class="chart-section">
-  <div class="demo-nav">
-    <button id="prevDemo">◀</button>
-    <canvas id="demoBarChart" height="160"></canvas>
-    <button id="nextDemo">▶</button>
-  </div>
-</div>
-
-<style>
-  .chart-section canvas{padding:12px!important;}
-  /* make nav buttons line up with the bar chart nicely */
-  .demo-nav{
-    display:flex;align-items:center;gap:0.5em;justify-content:center;
-  }
-  .demo-nav button{
-    font-size:1.2em;border:none;border-radius:4px;padding:0.2em 0.5em;
-    background-color: #06C;
-    color: #fff;
-  }
-</style>
-
-<<script>>
-// Global font settings for all charts
-Chart.defaults.font.family = "'Inter', sans-serif";
-Chart.defaults.font.size = 16;
-Chart.defaults.font.style = 'normal';
-Chart.defaults.font.weight = 'normal';
-Chart.defaults.font.lineHeight = 1.5;
-/*  ─────────────────────────────────────────────
-    1. build or update CHARTS after each passage
-    ───────────────────────────────────────────── */
-$(document).one(':passagedisplay', function(){
-  const V      = State.variables;
-  const hist   = V.history || [];
-  const before = hist[0];
-  const after  = hist[1] ?? null;
-
-  /* -------------------------
-     HOUSING‑STATUS  STACKED BAR
-     (absolute counts this time)
-     ------------------------- */
- /* -------------------------
-   HOUSING‑STATUS  STACKED BAR (year → year)
-   ------------------------- */
-(function(){
-  const ctx  = document.getElementById('housingStackedBar').getContext('2d');
-  const cats = ['unsheltered','sheltered','transitional','institutional'];
-  const colours=['#FF6384','#36A2EB','#FFCE56','#4BC0C0'];
-
-  // take the LAST snapshot for each year, only for years >= 0
-  const byYear = Array.from(
-    new Map(hist.filter(s => s.year >= 0).map(s => [s.year, s])).values()
-  );
-  const before = byYear[0];
-  const after  = byYear[byYear.length-1];
-  const labels = byYear.map((s, i) => `Year ${i + 1}`);
-
-  const datasets = cats.map((k,i)=>({
-    label : k.charAt(0).toUpperCase()+k.slice(1),
-    data  : [before.pop[k]],
-    backgroundColor: colours[i]
-  }));
-  if(after !== before){
-    cats.forEach((k,i)=>datasets[i].data.push(after.pop[k]));
-  }
-
-  new Chart(ctx,{
-    type:'bar',
-    data:{labels,datasets},
-    options:{
-      responsive:true,
-      layout:{padding:16},
-      scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}
-    }
-  });
-})();
-
-/* -------------------------
-   HOMELESS TOTAL LINE (turn → turn, unchanged)
-   ------------------------- */
-(function(){
-  const ctx    = document.getElementById('homelessLineChart').getContext('2d');
-  const labels = hist.map(s=>`Turn ${s.turn}`);
-  const data   = hist.map(s=>s.homelessTotal);
-
-  const grad=ctx.createLinearGradient(0,0,0,200);
-  grad.addColorStop(0,'rgba(0,102,204,0.5)');
-  grad.addColorStop(1,'rgba(0,102,204,0)');
-
-  new Chart(ctx,{
-    type:'line',
-    data:{labels,datasets:[{
-      label:'Total Homeless',
-      data,fill:true,backgroundColor:grad,
-      borderColor:'rgba(0,102,204,1)',tension:0.4,pointRadius:3
-    }]},
-    options:{responsive:true,layout:{padding:16}}
-  });
-})();
-
-/* -------------------------
-   CYCLABLE DEMOGRAPHIC BAR (year → year, colour #06C)
-   ------------------------- */
-(function(){
-  const ctx      = document.getElementById('demoBarChart').getContext('2d');
-  const groups   = [
-    {key:'male',       label:'Male'},
-    {key:'female',     label:'Female'},
-    {key:'transNB',    label:'Trans & NB'},
-    {key:'lgbq',       label:'LGBTQ'},
-    {key:'lgbtqYouth', label:'LGBTQ Youth'},
-    {key:'age25to49',  label:'Ages 25‑49'},
-    {key:'racialized', label:'Racialized'},
-    {key:'indigenous', label:'Indigenous'},
-    {key:'veteran',    label:'Veteran'},
-    {key:'immigrant',  label:'Immigrant'}
-  ];
-  let index = 0;
-
-  // unique years (take last snapshot from each, only for years >= 0)
-  const yearly = Array.from(
-    new Map(hist.filter(s => s.year >= 0).map(s => [s.year, s])).values()
-  );
-  const labels = yearly.map((s, i) => `Year ${i + 1}`);
-  const makeDataset = g => yearly.map(s=>s.pop[g.key]);
-
-  const chart = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels,
-      datasets:[{
-        label:groups[0].label,
-        data :makeDataset(groups[0]),
-        backgroundColor:'#06C'
-      }]
-    },
-    options:{
-      responsive:true,
-      layout:{padding:16},
-      scales:{y:{beginAtZero:true}}
-    }
-  });
-
-  function updateChart(dir){
-    index = (index+dir+groups.length)%groups.length;
-    const g = groups[index];
-    chart.data.datasets[0].label = g.label;
-    chart.data.datasets[0].data  = makeDataset(g);
-    chart.update();
-  }
-  $('#prevDemo').on('click',()=>updateChart(-1));
-  $('#nextDemo').on('click',()=>updateChart(+1));
-})();
-});
-<</script>>
-
-<div class="centered-btn">
-
- <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
-</div>
-
-
-
-:: PIT2 {"position":"600,2300","size":"100,100"}
-<<set $turn += 1>>
 <!-- —————————————————————————————————————————————
      ————————————————————————————————————————————— -->
 <div class="chart-section">
@@ -4281,7 +4173,7 @@ Chart.defaults.font.style = 'normal';
 Chart.defaults.font.weight = 'normal';
 Chart.defaults.font.lineHeight = 1.5;
 
-// Utility: get first snapshot per year
+// window.Utility: get first snapshot per year
 function snapshotsByYear(history) {
   const out = [];
   const seen = new Set();
@@ -4413,6 +4305,194 @@ $(document).one(':passagedisplay', function(){
  <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
 </div>
 
+
+:: PIT2 {"position":"600,2300","size":"100,100"}
+<<set $turn += 1>>
+<!-- —————————————————————————————————————————————
+     ————————————————————————————————————————————— -->
+<div class="chart-section">
+  <h3>Housing Status Change</h3>
+  <canvas id="housingStackedBar" height="160"></canvas>
+</div>
+
+<div class="chart-section">
+  <h3>Homelessness Trend</h3>
+  <canvas id="homelessLineChart" height="160"></canvas>
+</div>
+
+<div class="chart-section">
+  <h3>Identity Demographics</h3>
+</div>
+
+<div class="chart-section">
+  <div class="demo-nav">
+    <button id="prevDemo">◀</button>
+    <canvas id="demoBarChart" height="160"></canvas>
+    <button id="nextDemo">▶</button>
+  </div>
+</div>
+
+<style>
+  .chart-section canvas{padding:12px!important;}
+  /* make nav buttons line up with the bar chart nicely */
+  .demo-nav{
+    display:flex;align-items:center;gap:0.5em;justify-content:center;
+  }
+  .demo-nav button{
+    font-size:1.2em;border:none;border-radius:4px;padding:0.2em 0.5em;
+    background-color: #06C;
+    color: #fff;
+  }
+</style>
+
+<<script>>
+// Global font settings for all charts
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 16;
+Chart.defaults.font.style = 'normal';
+Chart.defaults.font.weight = 'normal';
+Chart.defaults.font.lineHeight = 1.5;
+
+// window.Utility: get first snapshot per year
+function snapshotsByYear(history) {
+  const out = [];
+  const seen = new Set();
+  history.forEach(s => {
+    if (s.year >= 0 && !seen.has(s.year)) {
+      out.push(s);
+      seen.add(s.year);
+    }
+  });
+  return out;
+}
+/*  ─────────────────────────────────────────────
+    1. build or update CHARTS after each passage
+    ───────────────────────────────────────────── */
+$(document).one(':passagedisplay', function(){
+  const V      = State.variables;
+  const hist   = V.history || [];
+  const before = hist[0];
+  const after  = hist[1] ?? null;
+
+  console.groupCollapsed("DEBUG: Chart State Snapshot");
+  console.log("Current Variables (V):", V);
+  console.log("History Array (V.history):", hist);
+  console.groupEnd();
+  console.group("DEBUG: Expanded Chart State");
+  console.dir(V);
+  console.dir(hist);
+  console.groupEnd();
+
+  /* -------------------------
+     HOUSING‑STATUS  STACKED BAR
+     (absolute counts this time)
+     ------------------------- */
+ /* -------------------------
+   HOUSING‑STATUS  STACKED BAR (year → year)
+   ------------------------- */
+(function(){
+  const ctx  = document.getElementById('housingStackedBar').getContext('2d');
+  const cats = ['unsheltered','sheltered','transitional','institutional'];
+  const colours=['#FF6384','#36A2EB','#FFCE56','#4BC0C0'];
+  const byYear = snapshotsByYear(hist);
+  const labels = byYear.map((s, i) => `Year ${i + 1}`);
+
+  const datasets = cats.map((k, i) => ({
+    label: k.charAt(0).toUpperCase() + k.slice(1),
+    data: byYear.map(y => y.pop[k] ?? 0),   // one value per year
+    backgroundColor: colours[i]
+  }));
+
+  new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets},
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}
+    }
+  });
+})();
+
+/* -------------------------
+   HOMELESS TOTAL LINE (turn → turn, unchanged)
+   ------------------------- */
+(function(){
+  const ctx    = document.getElementById('homelessLineChart').getContext('2d');
+  const labels = hist.map(s=>`Turn ${s.turn}`);
+  const data   = hist.map(s=>s.homelessTotal);
+
+  const grad=ctx.createLinearGradient(0,0,0,200);
+  grad.addColorStop(0,'rgba(0,102,204,0.5)');
+  grad.addColorStop(1,'rgba(0,102,204,0)');
+
+  new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'Total Homeless',
+      data,fill:true,backgroundColor:grad,
+      borderColor:'rgba(0,102,204,1)',tension:0.4,pointRadius:3
+    }]},
+    options:{responsive:true,layout:{padding:16}}
+  });
+})();
+
+/* -------------------------
+   CYCLABLE DEMOGRAPHIC BAR (year → year, colour #06C)
+   ------------------------- */
+(function(){
+  const ctx      = document.getElementById('demoBarChart').getContext('2d');
+  const groups   = [
+    {key:'male',       label:'Male'},
+    {key:'female',     label:'Female'},
+    {key:'transNB',    label:'Trans & NB'},
+    {key:'lgbq',       label:'LGBTQ'},
+    {key:'lgbtqYouth', label:'LGBTQ Youth'},
+    {key:'age25to49',  label:'Ages 25‑49'},
+    {key:'racialized', label:'Racialized'},
+    {key:'indigenous', label:'Indigenous'},
+    {key:'veteran',    label:'Veteran'},
+    {key:'immigrant',  label:'Immigrant'}
+  ];
+  let index = 0;
+  const yearly = snapshotsByYear(hist);
+  const labels = yearly.map((s, i) => `Year ${i + 1}`);
+  const makeDataset = g => yearly.map(s=>s.pop[g.key]);
+
+  const chart = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:groups[0].label,
+        data :makeDataset(groups[0]),
+        backgroundColor:'#06C'
+      }]
+    },
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+
+  function updateChart(dir){
+    index = (index+dir+groups.length)%groups.length;
+    const g = groups[index];
+    chart.data.datasets[0].label = g.label;
+    chart.data.datasets[0].data  = makeDataset(g);
+    chart.update();
+  }
+  $('#prevDemo').on('click',()=>updateChart(-1));
+  $('#nextDemo').on('click',()=>updateChart(+1));
+})();
+});
+<</script>>
+
+<div class="centered-btn">
+
+ <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
+</div>
 
 
 :: Pilots {"position":"600,2100","size":"100,100"}
@@ -4619,70 +4699,96 @@ $(document).one(':passagedisplay', function(){
 </sl-drawer>
 
 <!-- Wiring & Policy Logic -->
-<script>
-  // Info-icon → drawer
-  document.getElementById('info-ubi').addEventListener('click', () => {
-    document.querySelector('.drawer-ubi').show();
-  });
-  document.getElementById('info-vacancy').addEventListener('click', () => {
-    document.querySelector('.drawer-vacancy').show();
-  });
-  document.getElementById('info-rofr').addEventListener('click', () => {
-    document.querySelector('.drawer-rofr').show();
-  });
+<<script>>
+  // 1. Advance the turn
+  window.PolicyManager.tick();
 
-  // Drawer close buttons
-  document.querySelectorAll('sl-drawer sl-button[slot="footer"]').forEach(btn => {
-    btn.addEventListener('click', () => btn.closest('sl-drawer').hide());
-  });
+  // 2. INFO buttons (delegated binding—no more null errors)
+  $(document).on('click', '#info-ubi',     () => document.querySelector('.drawer-ubi').show());
+  $(document).on('click', '#info-vacancy', () => document.querySelector('.drawer-vacancy').show());
+  $(document).on('click', '#info-rofr',    () => document.querySelector('.drawer-rofr').show());
 
-  // Policy registration functions (placeholders)
-  function applyUBIPilot() {
+  // 3. Close drawers (delegated too)
+  $(document).on('click', 'sl-drawer sl-button[slot="footer"]', e =>
+    e.currentTarget.closest('sl-drawer').hide()
+  );
+
+  // 4. Policy registration functions on window
+  window.applyUBIPilot = function() {
     PolicyManager.register({
-      name: "UBI Pilot",
-      costUpfront: 12,
-      duration: 2,        // years
-      immediate(v) { v.publicOpinion += 5; },
-      tick(v, Util, age) {
-        v.budget -= 0.5;
-        if (age === 1) v.inflow -= 10;
+      name: "UBI Pilot Program",
+      costUpfront: 0,
+      costPerTurn: 3,
+      duration: 8,
+      immediate(v) {
+        if (v.publicOpinion < 90) v.publicOpinion += 8;
+        v.politicalCapital -= 1;
+      },
+      tick(v, age) {
+        v.inflowBase = Math.max(0, v.inflowBase - 8);
+        v.inflowShare.withChildren = Math.max(0.01, v.inflowShare.withChildren - 0.01);
+        v.inflowShare.racialized   = Math.max(0.01, v.inflowShare.racialized   - 0.01);
+        v.inflowShare.sheltered    = Math.max(0.01, v.inflowShare.sheltered    - 0.01);
+        window.Util.renorm(v.inflowShare);
+        window.Util.exitPeople(10, { sheltered: 0.5, transitional: 0.5 });
+        if (age === 8) {
+          if (v.publicOpinion < 90)   v.publicOpinion     += 5;
+          if (v.serviceCoordination < 90) v.serviceCoordination += 3;
+        }
       }
     });
     SugarCube.Engine.play("UBIPilot");
-  }
+  };
 
-  function applyVacancyTax() {
+  window.applyVacancyTax = function() {
     PolicyManager.register({
-      name: "Vacancy & Speculation Tax",
+      name: "Vacancy & Speculation Tax Increase",
       costUpfront: 1,
+      costPerTurn: 0.1,
       duration: 999999,
-      immediate(v) { v.publicOpinion -= 2; },
-      tick(v, Util, age) {
-        let revenue = 2 + age * 0.1;
+      immediate(v) {
+        if (v.publicOpinion > 10) v.publicOpinion -= 3;
+        v.politicalCapital -= 1;
+      },
+      tick(v, age) {
+        const revenue = 0.625;
         v.budget += revenue;
-        if (age >= 1) v.housingSupply += 20;
+        if (age >= 2) {
+          window.Util.exitPeople(12, { sheltered: 0.6, transitional: 0.4 });
+          v.inflowBase = Math.max(0, v.inflowBase - 2);
+        }
+        if (age > 0 && age % 4 === 0 && v.publicOpinion < 60) {
+          v.publicOpinion += 1;
+        }
       }
     });
     SugarCube.Engine.play("VacancyTax");
-  }
+  };
 
-  function applyRightOfFirstRefusal() {
+  window.applyRightOfFirstRefusal = function() {
     PolicyManager.register({
-      name: "Right of First Refusal",
-      costUpfront: 8,
+      name: "Right of First Refusal Program",
+      costUpfront: 3,
+      costPerTurn: 0.2,
       duration: 999999,
-      immediate(v) { v.publicOpinion += 3; },
-      tick(v, Util, age) {
+      immediate(v) {
+        if (v.publicOpinion < 90) v.publicOpinion += 5;
+        v.politicalCapital -= 1;
+      },
+      tick(v, age) {
         if (age >= 1) {
-          v.unitsPreserved = (v.unitsPreserved || 0) + 50;
-          v.inflow -= 5;
+          v.unitsPreserved = (v.unitsPreserved || 0) + 18;
+          v.inflowBase = Math.max(0, v.inflowBase - 3);
+          v.inflowShare.withChildren = Math.max(0.01, v.inflowShare.withChildren - 0.005);
+          v.inflowShare.racialized   = Math.max(0.01, v.inflowShare.racialized   - 0.005);
+          window.Util.renorm(v.inflowShare);
+          if (age % 8 === 0) v.budget -= 1;
         }
-        v.budget -= 0.2;
       }
     });
-    SugarCube.Engine.play("ROFR");
-  }
-</script>
+    SugarCube.Engine.play("RightOfFirstRefusal");
+  };
+<</script>>
 
 
 :: PreServiceFunding {"position":"600,600","size":"100,100"}
@@ -4856,23 +4962,7 @@ $(document).one(':passagedisplay', function(){
 
 
 :: ROFR {"position":"700,2200","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Right of First Refusal",
-  costUpfront: 8,
-  costPerTurn: 0.2,
-  duration: 999999,
 
-  immediate(v) {
-    v.publicOpinion += 3;
-  },
-
-  tick(v) {
-    v.unitsPreserved = (v.unitsPreserved || 0) + 75;
-    v.inflow        -= 5;
-  }
-});
-<</script>>
 
 <div class="policy-impact-screen">
   <div class="impact-container">
@@ -4921,7 +5011,7 @@ PolicyManager.register({
   immediate(v) {
   },
 
-  tick(v, Util, age) {
+  tick(v,  age) {
     // Nothing for now
   }
 });
@@ -4937,24 +5027,23 @@ PolicyManager.register({
 :: Renovictions {"position":"500,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
-  name: "Frontline Mental Health & Addiction Support",
-  costUpfront: 4,
-  costPerTurn: 2,
-  duration: 20,
-
+  name: "Anti-Renoviction Bylaw",
+  costUpfront: 1,
+  costPerTurn: 1,
+  duration: 999999,
   immediate(v) {
-    v.staffMorale        += 10;
-    v.unsheltered        -= 300;
-    v.publicOpinion  -= 50;
-    v.homelessTotal = v.unsheltered + v.sheltered + v.transitional + v.institutional;
+    if (v.publicOpinion < 90) v.publicOpinion += 8;
+    v.politicalCapital -= 1;
+    v.unitsPreserved = (v.unitsPreserved || 0) + 150;
   },
-
-  tick(v, Util, age) {
-    // Each quarter, 3% of chronic population exit through wrap-around care
-    const chronicPop = v.pop.chronic;
-        v.publicOpinion  += 20;
-    const exits     = Math.round(chronicPop * 0.03);
-    window.Util.exitPeople(exits, { chronic: 1 });
+  tick(v,  age) {
+    if (age >= 1) {
+        v.inflowBase = Math.max(0, v.inflowBase - 10);
+        v.inflowShare.withChildren = Math.max(0.01, v.inflowShare.withChildren - 0.01);
+        v.inflowShare.sheltered = Math.max(0.01, v.inflowShare.sheltered - 0.01);
+        window.Util.renorm(v.inflowShare);
+        if (age % 4 === 0 && v.publicOpinion < 70) v.publicOpinion +=1;
+    }
   }
 });
 <</script>>
@@ -6710,15 +6799,15 @@ $(document).on("click", "#submit-button", function () {
     PolicyManager.register({
       name: "The Ottawa Mission",
       costUpfront: 0,
-  duration: puzzle._allPieces.find(p => p.typeKey === "typeA")?.currentShapeKeyIndex || 1,
+      duration: puzzle._allPieces.find(p => p.typeKey === "typeA")?.currentShapeKeyIndex || 1,
       immediate(v) {
         // no immediate effect
       },
-      tick(v, Util) {
+      tick(v, age) {
         // Shift 5% of unsheltered into shelter
-        const shifted = Math.round(v.unsheltered * 0.05);
-        v.unsheltered -= shifted;
-        v.sheltered   += shifted;
+        const shifted = Math.round(v.pop.unsheltered * 0.05);
+        v.pop.unsheltered -= shifted;
+        v.pop.sheltered   += shifted;
         // 1% of total homeless exit via wrap-around care
         const exits = Math.round(v.homelessTotal * 0.01);
         window.Util.exitPeople(exits);
@@ -6734,19 +6823,19 @@ $(document).on("click", "#submit-button", function () {
       name: "Shepherds of Good Hope",
       costUpfront: 0,
       costPerTurn: 0,
-  duration: puzzle._allPieces.find(p => p.typeKey === "typeB")?.currentShapeKeyIndex || 1,
+      duration: puzzle._allPieces.find(p => p.typeKey === "typeB")?.currentShapeKeyIndex || 1,
       immediate(v) {
         // no immediate effect
       },
-      tick(v, Util) {
+      tick(v) {
         // Shift 3% of unsheltered into shelter
-        const usToSh = Math.round(v.unsheltered * 0.03);
-        v.unsheltered   -= usToSh;
-        v.sheltered     += usToSh;
+        const usToSh = Math.round(v.pop.unsheltered * 0.03);
+        v.pop.unsheltered   -= usToSh;
+        v.pop.sheltered     += usToSh;
         // Shift 3% of institutional into shelter
-        const instToSh = Math.round(v.institutional * 0.03);
-        v.institutional -= instToSh;
-        v.sheltered     += instToSh;
+        const instToSh = Math.round(v.pop.institutional * 0.03);
+        v.pop.institutional -= instToSh;
+        v.pop.sheltered     += instToSh;
         // 1% exit via wrap-around care
         const exits = Math.round(v.homelessTotal * 0.01);
         window.Util.exitPeople(exits);
@@ -6761,14 +6850,14 @@ $(document).on("click", "#submit-button", function () {
     PolicyManager.register({
       name: "Cornerstone Housing for Women",
       costUpfront: 0,
-  duration: puzzle._allPieces.find(p => p.typeKey === "typeC")?.currentShapeKeyIndex || 1,
+      duration: puzzle._allPieces.find(p => p.typeKey === "typeC")?.currentShapeKeyIndex || 1,
       immediate(v) {
         // no immediate effect
       },
-      tick(v, Util) {
+      tick(v) {
         // 4% of unsheltered exit via wrap-around care
-        const exits = Math.round(v.unsheltered * 0.04);
-        v.unsheltered -= exits;
+        const exits = Math.round(v.pop.unsheltered * 0.04);
+        v.pop.unsheltered -= exits;
         window.Util.exitPeople(exits);
         // Public opinion boost
         v.publicOpinion += 3;
@@ -6779,14 +6868,14 @@ $(document).on("click", "#submit-button", function () {
     PolicyManager.register({
       name: "Youth Services Bureau",
       costUpfront: 0,
-  duration: puzzle._allPieces.find(p => p.typeKey === "typeD")?.currentShapeKeyIndex || 1,
+      duration: puzzle._allPieces.find(p => p.typeKey === "typeD")?.currentShapeKeyIndex || 1,
       immediate(v) {
         // no immediate effect
       },
-      tick(v, Util) {
+      tick(v) {
         // 8% of unsheltered youth exit via wrap-around care
-        const exits = Math.round(v.unsheltered * 0.08);
-        v.unsheltered -= exits;
+        const exits = Math.round(v.pop.unsheltered * 0.08);
+        v.pop.unsheltered -= exits;
         window.Util.exitPeople(exits);
         // Public opinion boost
         v.publicOpinion += 5;
@@ -6801,7 +6890,7 @@ $(document).on("click", "#submit-button", function () {
       immediate(v) {
         // no immediate effect
       },
-      tick(v, Util) {
+      tick(v) {
         // 1% of total homeless exit via wrap-around care
         const exits = Math.round(v.homelessTotal * 0.01);
         window.Util.exitPeople(exits);
@@ -6818,7 +6907,7 @@ $(document).on("click", "#submit-button", function () {
       immediate(v) {
         // no immediate effect
       },
-      tick(v, Util) {
+      tick(v) {
         // 0.2% of total homeless exit each tick via housing exits
         const exits = Math.round(v.homelessTotal * 0.002);
         window.Util.exitPeople(exits);
@@ -7024,25 +7113,32 @@ body {
 :: ShelterZones {"position":"400,300","size":"100,100"}
 <<script>>
 PolicyManager.register({
-  name: "Shelter Zones TODO change me",
-  costUpfront: 10,
-  costPerTurn: 0,
-  duration: 3, 
-
+  name: "Permit Shelters in All Urban Zones",
+  costUpfront: 2,
+  costPerTurn: 0, // Small ongoing admin/monitoring cost
+  duration: 999999,
   immediate(v) {
-    v.unsheltered        -= 500;
-    v.sheltered        += 500;
-    v.staffMorale        -= 10;
-    v.publicOpinion      += 1;
+    if (v.publicOpinion > 15) v.publicOpinion -= 5;
+    if (v.systemCapacity < 180) v.systemCapacity += 15;
+    v.budget += 8;
+    v.politicalCapital -=1;
   },
-
-  tick(v, Util, age) {
-    if (age === 2) {
-      const reenter = Math.round(500 * 0.3);
-      v.sheltered        -= reenter;
-      v.unsheltered += reenter;
-      v.homelessTotal += reenter;
+  tick(v,  age) {
+    if (age > 0 && age <= 16) {
+        if (age % 4 === 0) {
+            let toShelter = Math.min(v.pop.unsheltered, 50);
+            v.pop.unsheltered -= toShelter;
+            v.pop.sheltered += toShelter;
+        }
     }
+    if (age >= 1) {
+        if (v.inflowShare.unsheltered > 0.05) {
+            v.inflowShare.unsheltered = Math.max(0.01, v.inflowShare.unsheltered - 0.005); // Slower reduction than before
+            v.inflowShare.sheltered = Math.min(0.9, v.inflowShare.sheltered + 0.005);
+            window.Util.renorm(v.inflowShare);
+        }
+    }
+    if (age > 0 && age % 8 === 0 && v.publicOpinion < 70) v.publicOpinion +=2;
   }
 });
 <</script>>
@@ -7525,8 +7621,6 @@ history of snow storms in canadian cities. what impact do they have on homeless 
 <</script>>
 
 
-
-
 :: Starter {"position":"600,500","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
@@ -7730,23 +7824,7 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 
 
 :: UBIPilot {"position":"500,2200","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "UBI Pilot",
-  costUpfront: 12,
-  costPerTurn: 0.5,
-  duration: 2,
 
-  immediate(v) {
-    v.publicOpinion += 5;
-    v.inflow        -= 10;
-  },
-
-  tick(v) {
-    // ongoing cost applied via costPerTurn
-  }
-});
-<</script>>
 
 <div class="policy-impact-screen">
   <div class="impact-container">
@@ -7784,24 +7862,7 @@ The Universal Basic Income pilot provides $1,000/month to 1,000 households uncon
 
 
 :: VacancyTax {"position":"600,2200","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Vacancy & Speculation Tax",
-  costUpfront: 1,
-  costPerTurn: 0,
-  duration: 999999,
 
-  immediate(v) {
-    v.publicOpinion -= 2;
-  },
-
-  tick(v) {
-    const revenue = 2.5;
-    v.budget        += revenue;
-    v.housingSupply += 50;
-  }
-});
-<</script>>
 
 <div class="policy-impact-screen">
   <div class="impact-container">
@@ -7982,41 +8043,59 @@ The city raises its vacancy and speculation tax to 5% and launches an Empty Home
       });
     });
 
-    // === Policy registration functions ===
     function expandSuburbia() {
       PolicyManager.register({
-        name: "Expand Suburbia",
-        costUpfront: 8,
-        duration: Infinity,
-        immediate(v) { v.budget -= 8; },
-        tick(v) { v.housingSupply += 120; v.systemCapacity -= 5; }
+        name: "Expand Suburbia (Zoning)", costUpfront: 5, costPerTurn: 0.2, duration: 999999,
+        immediate(v) { if(v.publicOpinion > 15) v.publicOpinion -= 3; v.politicalCapital -=1; },
+        tick(v,  age) {
+          if (age >= 4) {
+            window.Util.exitPeople(10, { withChildren: 0.5, sheltered: 0.3 });
+            v.inflowBase = Math.max(0, v.inflowBase - 2);
+            if (age % 4 === 0 && v.systemCapacity > 50) v.systemCapacity = Math.max(30, v.systemCapacity - 2);
+            if (age % 4 === 0 && v.serviceCoordination > 40) v.serviceCoordination = Math.max(30, v.serviceCoordination - 1);
+          }
+        }
       });
     }
     function transitOriented() {
       PolicyManager.register({
-        name: "Transit-Oriented Zoning",
-        costUpfront: 6,
-        duration: Infinity,
-        immediate(v) { v.budget -= 6; v.publicOpinion += 5; },
-        tick(v) { v.housingSupply += 80; v.inflow -= 3; }
+        name: "Transit-Oriented Zoning Reform", costUpfront: 4, costPerTurn: 0, duration: 999999,
+        immediate(v) { if(v.publicOpinion < 90) v.publicOpinion += 8; if(v.serviceCoordination < 90) v.serviceCoordination += 5; },
+        tick(v,  age) {
+          if (age >= 8) {
+            window.Util.exitPeople(20, { sheltered: 0.4, transitional: 0.3, racialized: 0.2, youth: 0.1 });
+            v.inflowBase = Math.max(0, v.inflowBase - 3);
+            if (age % 4 === 0 && v.systemCapacity < 150) v.systemCapacity +=2;
+            if (age % 4 === 0 && v.publicOpinion < 70) v.publicOpinion +=1;
+          }
+        }
       });
     }
     function developReservedZones() {
       PolicyManager.register({
-        name: "Develop Reserved Zones",
-        costUpfront: 10,
-        duration: Infinity,
-        immediate(v) { v.budget -= 10; v.publicOpinion -= 2; },
-        tick(v) { v.housingSupply += 200; v.serviceCoordination += 2; }
+        name: "Develop Reserved/Underused Zones", costUpfront: 12, costPerTurn: 0.1, duration: 999999,
+        immediate(v) { if(v.publicOpinion > 10) v.publicOpinion -= 5; v.politicalCapital -=2; },
+        tick(v,  age) {
+          if (age >= 12) {
+            window.Util.exitPeople(50, { chronic: 0.2, sheltered: 0.3, transitional: 0.3, withChildren: 0.2 });
+            if (age % 4 === 0 && v.serviceCoordination < 80) v.serviceCoordination += 1;
+            if (age % 4 === 0 && v.systemCapacity < 180) v.systemCapacity +=3;
+          }
+        }
       });
     }
     function removeSingleFamilyZoning() {
       PolicyManager.register({
-        name: "Remove Single-Family Zoning",
-        costUpfront: 7,
-        duration: Infinity,
-        immediate(v) { v.budget -= 7; v.publicOpinion -= 10; },
-        tick(v) { v.housingSupply += 150; v.inflow -= 4; }
+        name: "Abolish Single-Family Exclusive Zoning", costUpfront: 3, costPerTurn: 0, duration: 999999,
+        immediate(v) { if(v.publicOpinion > 20) v.publicOpinion -= 15; v.politicalCapital -= 2; },
+        tick(v,  age) {
+          if (age >= 6) {
+            window.Util.exitPeople(25, { sheltered: 0.4, racialized: 0.2, immigrant: 0.2, youth: 0.2 });
+            v.inflowBase = Math.max(0, v.inflowBase - 4);
+            if (age % 4 === 0 && v.systemCapacity < 160) v.systemCapacity +=1;
+            if (age > 20 && age % 4 === 0 && v.publicOpinion < 50) v.publicOpinion +=1;
+          }
+        }
       });
     }
 
@@ -8354,7 +8433,7 @@ importScripts(
   "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js"
 );
 
-/* === 🧠 UTILITIES & POLICY LOGIC === */
+/* === 🧠 window.UtilITIES & POLICY LOGIC === */
 window.Util = {
   renorm(obj) {
     const total = Object.values(obj).reduce((a, b) => a + b, 0);
@@ -8408,16 +8487,28 @@ window.PolicyManager = {
       cfg
     );
     State.variables.budget -= p.costUpfront;
-    p.immediate(State.variables, Util);
+    p.immediate(State.variables, window.Util);
     this.active.push(p);
     if (typeof updateUI === "function") updateUI();
   },
   tick() {
     const v = State.variables;
+    console.group(`PolicyManager.tick() — Turn ${v.turn} / Year ${v.year}`);
+    console.log("Before tick:", {
+      turn: v.turn,
+      year: v.year,
+      homelessTotal: v.homelessTotal,
+      pop: { ...v.pop },
+      budget: v.budget,
+      publicOpinion: v.publicOpinion,
+      serviceCoordination: v.serviceCoordination,
+      systemCapacity: v.systemCapacity,
+      politicalCapital: v.politicalCapital,
+    });
     this.active = this.active.filter((p) => {
       p.age++;
       v.budget -= p.costPerTurn;
-      p.tick(v, Util, p.age);
+      p.tick(v, p.age);
       return p.age < p.duration;
     });
 
@@ -8427,6 +8518,17 @@ window.PolicyManager = {
       v.pop[demo] = (v.pop[demo] || 0) + num;
       v.homelessTotal += num;
     }
+    console.log("After policies & inflow:", {
+      turn: v.turn,
+      year: v.year,
+      homelessTotal: v.homelessTotal,
+      pop: { ...v.pop },
+      budget: v.budget,
+      publicOpinion: v.publicOpinion,
+      serviceCoordination: v.serviceCoordination,
+      systemCapacity: v.systemCapacity,
+      politicalCapital: v.politicalCapital,
+    });
 
     if (!Array.isArray(v.history)) {
       // console.warn("PolicyManager.tick(): Initializing v.history as it was not an array."); // Optional: for debugging
@@ -8451,7 +8553,9 @@ window.PolicyManager = {
       systemCapacity: v.systemCapacity,
       politicalCapital: v.politicalCapital,
     };
+    console.log("Snapshot to push:", snapshot);
     v.history.push(snapshot);
+    console.groupEnd();
     // === HISTORY SNAPSHOT END ===
     if (typeof updateUI === "function") updateUI();
   },
@@ -8712,7 +8816,7 @@ $(function () {
   });
 });
 
-// Utility: Get first snapshot for each year from history
+// window.Utility: Get first snapshot for each year from history
 function snapshotsByYear(history) {
   const out = [];
   const seen = new Set();
