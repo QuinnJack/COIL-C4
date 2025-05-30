@@ -7575,7 +7575,7 @@ setTimeout(function () {
     "protest-opt3": { opinion: -8, strain: 15 },
     "protest-opt4": { opinion: -4, strain: 0 }
   };
-
+//bleh
   // Limit: up to 3 choices
   document.querySelectorAll('#protestChoices input[type=checkbox]').forEach(cb => {
     cb.addEventListener('change', function (e) {
