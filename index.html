@@ -4198,7 +4198,11 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 &lt;/p&gt;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
-  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;SnowStorm&#39;);&quot;&gt;Continue&lt;/button&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;(function() {
+    var events = [&#39;SnowStorm&#39;, &#39;COVIDOutbreak&#39;, &#39;ProtestAtCityHall&#39;, &#39;Heatwave&#39;];
+    var event = events[Math.floor(Math.random() * events.length)];
+    SugarCube.Engine.play(event);
+  })();&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="Dish out funding" tags="" position="1100,775" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
 
@@ -4306,7 +4310,11 @@ $(document).on(&#39;:passagedisplay&#39;, function () {
 &lt;/p&gt;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
-  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;SnowStorm&#39;);&quot;&gt;Continue&lt;/button&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;(function() {
+    var events = [&#39;SnowStorm&#39;, &#39;COVIDOutbreak&#39;, &#39;ProtestAtCityHall&#39;, &#39;Heatwave&#39;];
+    var event = events[Math.floor(Math.random() * events.length)];
+    SugarCube.Engine.play(event);
+  })();&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="Endgame" tags="" position="800,0" size="100,100">&lt;&lt;set $finalScore = 823&gt;&gt;
 &lt;&lt;set $insights = [
   &quot;Your city reduced homeless inflow by 34% over 10 years.&quot;,
@@ -4926,129 +4934,7 @@ color: #333;
 
 &lt;canvas id=&quot;sunCanvas&quot;&gt;&lt;/canvas&gt;
 
-&lt;style&gt;
-  /* Highlight on focus/hover */
-  html[data-outlines] input:focus,
-  html[data-outlines] select:focus,
-  html[data-outlines] textarea:focus,
-  input:hover,
-  select:hover,
-  textarea:hover {
-    background-color: rgba(255,166,0,0.5) !important;
-  }
-  /* Base pastel background */
-  body, html {
-    background: #fff6dc !important;
-    transition: background 0.8s linear;
-  }
-  /* Sun canvas */
-  canvas#sunCanvas {
-    position: fixed; top: 0; left: 0;
-    width: 100vw; height: 220px;
-    z-index: 0; pointer-events: none;
-    background: transparent;
-  }
-  /* Timeline bar */
-  #timeline { background: #fff6dc !important; }
-  /* Button */
-  .button {
-    background-color: rgb(255,183,44);
-    background-image: linear-gradient(90deg,#ffc14d,#ffb94d,#ff9336);
-    border: 1px solid #ffbb2a;
-    border-radius: 12px;
-    color: #fff;
-    padding: .65rem 1rem;
-    font-size: 1rem;
-    display: block;
-    margin: .9rem auto;
-    cursor: pointer;
-    max-width: 420px;
-  }
-  .button:hover {
-    background-image: linear-gradient(90deg,#ffd17a,#ffc05e,#ffb300);
-    border-color: #ffbb2a;
-  }
-  /* Checkbox */
-  label.checkbox {
-    display: flex; align-items: center;
-    margin: .75em 0; cursor: pointer;
-    user-select: none;
-  }
-  label.checkbox input {
-    -webkit-appearance: none;
-    appearance: none;
-    margin: 0;
-    width: 1.2em; height: 1.2em;
-    border: 2px solid #e0ddca;
-    border-radius: .25rem;
-    transition: background-color .2s, border-color .2s;
-    display: inline-block;
-    outline: none;
-    position: relative;
-  }
-  label.checkbox input:checked {
-    background-color: #ffba2b;
-    border-color: #ffba2b;
-  }
-  label.checkbox input:focus {
-    border-color: #ffba2b !important;
-    box-shadow: 0 0 0 2px #ffeab7;
-  }
-  label.checkbox input:checked::after {
-    content: &quot;&quot;;
-    position: absolute;
-    top: .15em; left: .35em;
-    width: .25em; height: .6em;
-    border: solid white;
-    border-width: 0 .2em .2em 0;
-    transform: rotate(45deg);
-  }
-  label.checkbox span {
-    margin-left: .5em;
-    font-size: 1em;
-    color: #6b3700;
-  }
-  /* Impact boxes */
-  .impact-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 1.5rem;
-  }
-  .impact-box {
-    background-color: rgba(255,255,255,0.2);
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-    min-width: 110px;
-  }
-  .impact-title {
-    font-weight: bold;
-    margin-bottom: .5rem;
-  }
-  .impact-content {
-    font-size: 1.5rem;
-  }
-  #balance-meter .balance .dollar-sign {
-      color: #FDA121 !important;
-  }
-.balance-meter .balance .bar-fill,
-.balance-meter .circle.filled,
-#balance-meter .balance .unit,
-#balance-meter .balance .dollar-sign,
-\::selection {
-  color: #FDA121 !important;
-}
-  ::selection {
-        color: #FDA121 !important;
-  }
-  .impact-unit {
-    font-weight: 600 !important;
-    color: #FDA121 !important;
-  }
-  /* No-movement placeholder for tick */
-  @keyframes tick { from {} to {} }
-  .animate-number { display: inline-block; }
-&lt;/style&gt;
+
 
 &lt;div class=&quot;policy-impact-screen&quot; id=&quot;heatMetrics&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
@@ -5059,7 +4945,6 @@ color: #333;
         &lt;span class=&quot;impact-subtitle&quot;&gt;&amp;nbsp; people&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
-
     &lt;div class=&quot;impact-box&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;System Strain&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
@@ -5067,7 +4952,6 @@ color: #333;
         &lt;span class=&quot;impact-value&quot; id=&quot;metric-strain&quot;&gt;0&lt;/span&gt;
       &lt;/div&gt;
     &lt;/div&gt;
-
     &lt;div class=&quot;impact-box&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Vulnerable Reach&lt;/div&gt;
       &lt;div class=&quot;impact-content&quot;&gt;
@@ -5077,105 +4961,77 @@ color: #333;
     &lt;/div&gt;
   &lt;/div&gt;
 
-   &lt;div class=&quot;question-wrapper&quot;&gt;
-    &lt;p&gt;A heatwave is bearing down—what emergency measures will you implement?&lt;/p&gt;
-    &lt;form id=&quot;heatChoices&quot;&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt1&quot; /&gt;
-        &lt;span&gt;Open libraries and community centres as cooling shelters with extended hours&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt2&quot; /&gt;
-        &lt;span&gt;Deploy mobile cooling stations to high-risk areas&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt3&quot; /&gt;
-        &lt;span&gt;Provide portable fans and ice packs&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt4&quot; /&gt;
-        &lt;span&gt;Subsidize window.Utility bills to support increased air-conditioning use&lt;/span&gt;
-      &lt;/label&gt;
-      &lt;label class=&quot;checkbox&quot;&gt;
-        &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt5&quot; /&gt;
-        &lt;span&gt;Implement a citywide SMS heat alert and health-tip broadcast&lt;/span&gt;
-      &lt;/label&gt;
-    &lt;/form&gt;
-  &lt;/div&gt;
+ &lt;div class=&quot;question-wrapper&quot;&gt;
+  &lt;p&gt;A heatwave is bearing down—what emergency measures will you implement?&lt;/p&gt;
+  &lt;form id=&quot;heatChoices&quot;&gt;
+    &lt;label class=&quot;checkbox&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt1&quot; /&gt;
+      &lt;span&gt;Open libraries and community centres as cooling shelters with extended hours&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;checkbox&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt2&quot; /&gt;
+      &lt;span&gt;Deploy mobile cooling stations to high-risk areas&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;checkbox&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt3&quot; /&gt;
+      &lt;span&gt;Provide portable fans and ice packs&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;checkbox&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt4&quot; /&gt;
+      &lt;span&gt;Subsidize utility bills to support increased air-conditioning use&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;checkbox&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; id=&quot;heat-opt5&quot; /&gt;
+      &lt;span&gt;Implement a citywide SMS heat alert and health-tip broadcast&lt;/span&gt;
+    &lt;/label&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+
 
   &lt;div id=&quot;warning&quot; style=&quot;display: none; color: #b91c1c; margin-top: 1em&quot;&gt;
     ⚠️ You must choose at least one response before continuing.
   &lt;/div&gt;
-  &lt;button class=&quot;button&quot; onclick=&quot;handleContinue()&quot;&gt;Continue&lt;/button&gt;
+  &lt;button class=&quot;button&quot; onclick=&quot;handleHeatwaveContinue()&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;
 
 &lt;&lt;script&gt;&gt;
-// Sun glow &amp; background animation
 setTimeout(function(){
-  const canvas = document.getElementById(&#39;sunCanvas&#39;),
-        ctx = canvas.getContext(&#39;2d&#39;);
-  canvas.width = window.innerWidth;
-  canvas.height = 220;
-  const cx = canvas.width/2, cy = 110, baseR = 68;
-  let t = 0;
-
+  // Sun animation (as before)
+  const canvas = document.getElementById(&#39;sunCanvas&#39;), ctx = canvas.getContext(&#39;2d&#39;);
+  canvas.width = window.innerWidth; canvas.height = 220;
+  const cx = canvas.width/2, cy = 110, baseR = 68; let t = 0;
   function pastel(h) { return `hsl(${h},92%,94%)`; }
-
   function drawSun(time){
     const hue = 45 + Math.sin(time/2400)*10;
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    // Glow
     const grad = ctx.createRadialGradient(cx,cy,15,cx,cy,baseR*1.8);
     grad.addColorStop(0,   `hsl(${hue},98%,60%)`);
     grad.addColorStop(0.15,`hsl(${hue},98%,80%)`);
     grad.addColorStop(0.5, `hsla(${hue},98%,70%,.22)`);
     grad.addColorStop(1,   `hsla(${hue},98%,97%,0)`);
-    ctx.beginPath();
-    ctx.arc(cx,cy,baseR*1.6,0,2*Math.PI);
-    ctx.fillStyle = grad; ctx.fill();
-    // Core
-    ctx.beginPath();
-    ctx.arc(cx,cy,baseR,0,2*Math.PI);
-    ctx.fillStyle = `hsl(${hue},98%,56%)`;
-    ctx.shadowColor = `hsl(${hue},98%,70%)`;
-    ctx.shadowBlur = 40;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    // BG
+    ctx.beginPath(); ctx.arc(cx,cy,baseR*1.6,0,2*Math.PI); ctx.fillStyle = grad; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,baseR,0,2*Math.PI);
+    ctx.fillStyle = `hsl(${hue},98%,56%)`; ctx.shadowColor = `hsl(${hue},98%,70%)`; ctx.shadowBlur = 40; ctx.fill(); ctx.shadowBlur = 0;
     document.body.style.background = pastel(hue);
-    const tl = document.getElementById(&#39;timeline&#39;);
-    if(tl) tl.style.background = pastel(hue);
+    const tl = document.getElementById(&#39;timeline&#39;); if(tl) tl.style.background = pastel(hue);
   }
+  function animateFrame(){ t += 16; drawSun(t); requestAnimationFrame(animateFrame); }
+  animateFrame(); window.addEventListener(&#39;resize&#39;, ()=&gt; canvas.width = window.innerWidth);
 
-  function animateFrame(){
-    t += 16;
-    drawSun(t);
-    requestAnimationFrame(animateFrame);
-  }
-  animateFrame();
-  window.addEventListener(&#39;resize&#39;, ()=&gt; canvas.width = window.innerWidth);
-
-  // Number-tick helper
   function animateNumber(el, start, end){
     if(start===end){ el.textContent = end; return; }
     let cur = start;
-    const step = end&gt;start?1:-1,
-          dur  = 500,
-          iv   = Math.max(Math.floor(dur/Math.abs(end-start)),16);
+    const step = end&gt;start?1:-1, dur = 500, iv = Math.max(Math.floor(dur/Math.abs(end-start)),16);
     el.classList.add(&#39;animate-number&#39;);
     const timer = setInterval(()=&gt;{
       cur += step;
       el.textContent = cur;
-      if(cur===end){
-        clearInterval(timer);
-        el.classList.remove(&#39;animate-number&#39;);
-      }
+      if(cur===end){ clearInterval(timer); el.classList.remove(&#39;animate-number&#39;); }
     }, iv);
   }
 
-  // Heatwave impacts
   const heatImpacts = {
-   &quot;heat-opt1&quot;: { lives: 60, strain: 35, reach: 45 },
+    &quot;heat-opt1&quot;: { lives: 60, strain: 35, reach: 45 },
     &quot;heat-opt2&quot;: { lives: 50, strain: 35, reach: 55 },
     &quot;heat-opt3&quot;: { lives: 25, strain: 20, reach: 35 },
     &quot;heat-opt4&quot;: { lives: 30, strain: 15, reach: 30 },
@@ -5192,52 +5048,54 @@ setTimeout(function(){
     let tL=0, tS=0, tR=0;
     Object.entries(heatImpacts).forEach(([id,imp])=&gt;{
       if(document.getElementById(id).checked){
-        tL += imp.lives;
-        tS += imp.strain;
-        tR += imp.reach;
+        tL += imp.lives; tS += imp.strain; tR += imp.reach;
       }
     });
-    tS = Math.min(tS,100);
-    tR = Math.min(Math.max(tR,0),100);
-
-    animateNumber(eL,pL,tL);
-    animateNumber(eS,pS,tS);
-    animateNumber(eR,pR,tR);
-
+    tS = Math.min(tS,100); tR = Math.min(Math.max(tR,0),100);
+    animateNumber(eL,pL,tL); animateNumber(eS,pS,tS); animateNumber(eR,pR,tR);
     document.querySelector(&#39;#metric-strain&#39;).nextElementSibling.textContent = &#39; %&#39;;
     document.querySelector(&#39;#metric-reach&#39;).nextElementSibling.textContent = &#39; %&#39;;
   }
 
-  // Hook checkbox changes
   document.querySelectorAll(&#39;#heatChoices input[type=checkbox]&#39;).forEach(cb=&gt;{
     cb.addEventListener(&#39;change&#39;, e=&gt;{
-      const w = document.getElementById(&#39;warning&#39;);
-      w.style.display = &#39;none&#39;;
+      const w = document.getElementById(&#39;warning&#39;); w.style.display = &#39;none&#39;;
       if(document.querySelectorAll(&#39;#heatChoices input:checked&#39;).length &gt; 3){
         e.target.checked = false;
-        w.textContent = &#39;⚠️ You can only select up to 3 options.&#39;;
-        w.style.display = &#39;block&#39;;
+        w.textContent = &#39;⚠️ You can only select up to 3 options.&#39;; w.style.display = &#39;block&#39;;
         setTimeout(()=&gt;w.style.display=&#39;none&#39;,3000);
       }
       updateHeatMetrics();
     });
   });
-
-  // Initial tick
   updateHeatMetrics();
 
-  // Continue logic
-  window.handleContinue = function(){
+  window.handleHeatwaveContinue = function(){
+    const checked = document.querySelectorAll(&#39;#heatChoices input:checked&#39;);
     const w = document.getElementById(&#39;warning&#39;);
-    if(!document.querySelectorAll(&#39;#heatChoices input:checked&#39;).length){
+    if(!checked.length){
       w.style.display = &#39;block&#39;;
-    } else {
-      SugarCube.Engine.play(&#39;Heatwave_Response_Centres&#39;);
+      return;
     }
-  };
+    // Calculate and apply effects directly, then go to next passage
+    let totalLives=0, totalStrain=0, totalReach=0;
+    Array.from(checked).forEach(cb =&gt; {
+      const effect = heatImpacts[cb.id];
+      if (!effect) return;
+      totalLives  += effect.lives;
+      totalStrain += effect.strain;
+      totalReach  += effect.reach;
+    });
+    // Apply simulation changes: same logic as snowstorm
+    State.variables.systemCapacity += Math.floor(totalLives / 4);
+    State.variables.budget -= Math.floor(totalStrain / 15);
+    State.variables.publicOpinion += Math.floor(totalReach / 10);
 
+    SugarCube.Engine.play(&#39;Bill6&#39;);
+  };
 }, 0);
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="HeatwaveInfo" tags="" position="825,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="22" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;&lt;/script&gt;&gt;
+//bleh</tw-passagedata><tw-passagedata pid="21" name="HeatwaveInfo" tags="" position="825,1600" size="100,100">history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.</tw-passagedata><tw-passagedata pid="22" name="InfoTemplate" tags="" position="100,200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Affordable Housing&lt;/div&gt;
@@ -9039,7 +8897,249 @@ body {
   }
 &lt;/style&gt;
 
-history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="44" name="Start" tags="" position="600,0" size="100,100">&lt;&lt;set $history = []&gt;&gt;
+history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?</tw-passagedata><tw-passagedata pid="44" name="COVIDOutbreak" tags="" position="800,1800" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; id=&quot;covidMetrics&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Budget Impact&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-budget&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;impact-subtitle&quot;&gt;M&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Public Opinion&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-opinion&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;impact-subtitle&quot;&gt;%&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;System Strain&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;% &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-strain&quot;&gt;0&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;question-wrapper&quot;&gt;
+    &lt;p&gt;A COVID outbreak hits a downtown shelter cluster. How do you respond?&lt;/p&gt;
+    &lt;form id=&quot;covidChoices&quot;&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;covid-opt1&quot; /&gt;&lt;span&gt;Rent hotel rooms to isolate infected individuals&lt;/span&gt;&lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;covid-opt2&quot; /&gt;&lt;span&gt;Launch emergency mobile testing units&lt;/span&gt;&lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;covid-opt3&quot; /&gt;&lt;span&gt;Distribute masks, hygiene kits, and sanitation stations&lt;/span&gt;&lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;covid-opt4&quot; /&gt;&lt;span&gt;Limit shelter intake to reduce transmission&lt;/span&gt;&lt;/label&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+
+  &lt;div id=&quot;warning&quot; style=&quot;display: none; color: #b91c1c; margin-top: 1em&quot;&gt;
+    ⚠️ You must choose at least one response before continuing.
+  &lt;/div&gt;
+  &lt;button class=&quot;button&quot; onclick=&quot;handleCOVIDContinue()&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  #timeline { background: #f5f5f5 !important; }
+  .button { background-color: rgb(32,117,202); background-image: linear-gradient(rgb(41,122,202), rgb(30,104,178)); border: 1px solid rgb(38,111,185); border-radius: 12px; color: #fff; padding: 0.65rem 1rem; font-size: 1rem; display: block; margin: 0.9rem auto; cursor: pointer; max-width: 420px; }
+  .button:hover { background-image: linear-gradient(rgb(51,130,210), rgb(39,121,202)); }
+  label.checkbox { display: flex; align-items: center; cursor: pointer; margin: 0.75em 0; user-select: none; }
+  label.checkbox input { appearance: none; width: 1.2em; height: 1.2em; border: 2px solid #cbd5e1; border-radius: 0.25rem; position: relative; transition: background-color 0.2s, border-color 0.2s; }
+  label.checkbox input:checked { background-color: #3b82f6; border-color: #3b82f6; }
+  label.checkbox input:checked::after { content: &quot;&quot;; position: absolute; top: 0.15em; left: 0.35em; width: 0.25em; height: 0.6em; border: solid white; border-width: 0 0.2em 0.2em 0; transform: rotate(45deg); }
+  label.checkbox span { margin-left: 0.5em; font-size: 1em; color: #1f2937; }
+  .impact-box { background-color: rgba(255,255,255,0.6); }
+  .impact-unit { font-weight: 700 !important; }
+  .question-wrapper { background: rgba(255,255,255,0.6); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
+&lt;/style&gt;
+
+&lt;&lt;script&gt;&gt;
+setTimeout(function () {
+  const covidImpacts = {
+    &quot;covid-opt1&quot;: { budget: -12, opinion: 5, strain: -2 },
+    &quot;covid-opt2&quot;: { budget: -4,  opinion: 3, strain: -1 },
+    &quot;covid-opt3&quot;: { budget: -3,  opinion: 2, strain: 0 },
+    &quot;covid-opt4&quot;: { budget: 0,   opinion: -5, strain: 10 }
+  };
+
+  // Limit: up to 3 choices
+  document.querySelectorAll(&#39;#covidChoices input[type=checkbox]&#39;).forEach(cb =&gt; {
+    cb.addEventListener(&#39;change&#39;, function (e) {
+      document.getElementById(&#39;warning&#39;).style.display = &#39;none&#39;;
+      const checked = document.querySelectorAll(&#39;#covidChoices input:checked&#39;);
+      if (checked.length &gt; 3) {
+        e.target.checked = false;
+        const w = document.getElementById(&#39;warning&#39;);
+        w.textContent = &#39;⚠️ You can only select up to 3 options.&#39;;
+        w.style.display = &#39;block&#39;;
+        setTimeout(() =&gt; w.style.display = &#39;none&#39;, 2500);
+      }
+      updateCOVIDMetrics();
+    });
+  });
+
+  function updateCOVIDMetrics() {
+    let b = 0, o = 0, s = 0;
+    Object.entries(covidImpacts).forEach(([id, effect]) =&gt; {
+      const cb = document.getElementById(id);
+      if (cb &amp;&amp; cb.checked) {
+        b += effect.budget;
+        o += effect.opinion;
+        s += effect.strain;
+      }
+    });
+    document.getElementById(&#39;metric-budget&#39;).textContent = b;
+    document.getElementById(&#39;metric-opinion&#39;).textContent = o;
+    document.getElementById(&#39;metric-strain&#39;).textContent = s;
+  }
+  updateCOVIDMetrics();
+
+  // Continue handler: update sim variables and move forward
+  window.handleCOVIDContinue = function () {
+    const selected = Array.from(document.querySelectorAll(&#39;#covidChoices input:checked&#39;)).map(cb =&gt; cb.id);
+    const warning = document.getElementById(&#39;warning&#39;);
+    if (selected.length === 0) {
+      warning.textContent = &#39;⚠️ You must choose at least one response before continuing.&#39;;
+      warning.style.display = &#39;block&#39;;
+      return;
+    }
+
+    // Save to State.temporary if needed for later
+    State.temporary.covidSelected = selected;
+
+    // Calculate totals and update simulation state
+    let totalBudget = 0, totalOpinion = 0, totalStrain = 0;
+    selected.forEach(id =&gt; {
+      const impact = covidImpacts[id];
+      if (!impact) return;
+      totalBudget += impact.budget;
+      totalOpinion += impact.opinion;
+      totalStrain += impact.strain;
+    });
+
+    State.variables.budget += totalBudget;
+    State.variables.publicOpinion += totalOpinion;
+    State.variables.publicOpinion = Math.max(0, Math.min(100, State.variables.publicOpinion));
+    State.variables.systemCapacity += totalStrain; // or use another metric as needed
+
+    SugarCube.Engine.play(&#39;Bill6&#39;);
+  };
+}, 0);
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="45" name="ProtestAtCityHall" tags="" position="700,1700" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; id=&quot;protestMetrics&quot;&gt;
+  &lt;div class=&quot;impact-container&quot;&gt;
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;Public Support Shift&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-opinion&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;impact-subtitle&quot;&gt;%&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;impact-box&quot;&gt;
+      &lt;div class=&quot;impact-title&quot;&gt;System Strain&lt;/div&gt;
+      &lt;div class=&quot;impact-content&quot;&gt;
+        &lt;span class=&quot;impact-unit&quot;&gt;% &amp;nbsp;&lt;/span&gt;
+        &lt;span class=&quot;impact-value&quot; id=&quot;metric-strain&quot;&gt;0&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;question-wrapper&quot;&gt;
+    &lt;p&gt;A grassroots protest has erupted at City Hall over inaction on homelessness. How do you respond?&lt;/p&gt;
+    &lt;form id=&quot;protestChoices&quot;&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;protest-opt1&quot; /&gt;&lt;span&gt;Attend and speak at the protest&lt;/span&gt;&lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;protest-opt2&quot; /&gt;&lt;span&gt;Hold a closed-door meeting with organizers&lt;/span&gt;&lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;protest-opt3&quot; /&gt;&lt;span&gt;Deploy additional police to monitor the area&lt;/span&gt;&lt;/label&gt;
+      &lt;label class=&quot;checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;protest-opt4&quot; /&gt;&lt;span&gt;Ignore it and release a statement later&lt;/span&gt;&lt;/label&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+
+  &lt;div id=&quot;warning&quot; style=&quot;display: none; color: #b91c1c; margin-top: 1em&quot;&gt;
+    ⚠️ You must choose at least one response before continuing.
+  &lt;/div&gt;
+  &lt;button class=&quot;button&quot; onclick=&quot;handleProtestContinue()&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  #timeline { background: #f7f7f7 !important; }
+  .button { background-color: rgb(32, 117, 202); background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178)); border: 1px solid rgb(38, 111, 185); border-radius: 12px; color: #fff; padding: 0.65rem 1rem; font-size: 1rem; display: block; margin: 0.9rem auto; cursor: pointer; max-width: 420px; }
+  .button:hover { background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202)); }
+  label.checkbox { display: flex; align-items: center; cursor: pointer; margin: 0.75em 0; user-select: none; }
+  label.checkbox input { appearance: none; width: 1.2em; height: 1.2em; border: 2px solid #cbd5e1; border-radius: 0.25rem; position: relative; transition: background-color 0.2s, border-color 0.2s; }
+  label.checkbox input:checked { background-color: #3b82f6; border-color: #3b82f6; }
+  label.checkbox input:checked::after { content: &quot;&quot;; position: absolute; top: 0.15em; left: 0.35em; width: 0.25em; height: 0.6em; border: solid white; border-width: 0 0.2em 0.2em 0; transform: rotate(45deg); }
+  label.checkbox span { margin-left: 0.5em; font-size: 1em; color: #1f2937; }
+  .impact-box { background-color: rgba(255, 255, 255, 0.6); }
+  .impact-unit { font-weight: 700 !important; }
+  .question-wrapper { background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
+  .animate-number { display: inline-block; }
+&lt;/style&gt;
+
+&lt;&lt;script&gt;&gt;
+setTimeout(function () {
+  const protestImpacts = {
+    &quot;protest-opt1&quot;: { opinion: 10, strain: 5 },
+    &quot;protest-opt2&quot;: { opinion: 6,  strain: 3 },
+    &quot;protest-opt3&quot;: { opinion: -8, strain: 15 },
+    &quot;protest-opt4&quot;: { opinion: -4, strain: 0 }
+  };
+//bleh
+  // Limit: up to 3 choices
+  document.querySelectorAll(&#39;#protestChoices input[type=checkbox]&#39;).forEach(cb =&gt; {
+    cb.addEventListener(&#39;change&#39;, function (e) {
+      document.getElementById(&#39;warning&#39;).style.display = &#39;none&#39;;
+      const checked = document.querySelectorAll(&#39;#protestChoices input:checked&#39;);
+      if (checked.length &gt; 3) {
+        e.target.checked = false;
+        const w = document.getElementById(&#39;warning&#39;);
+        w.textContent = &#39;⚠️ You can only select up to 3 options.&#39;;
+        w.style.display = &#39;block&#39;;
+        setTimeout(() =&gt; w.style.display = &#39;none&#39;, 2500);
+      }
+      updateProtestMetrics();
+    });
+  });
+
+  function updateProtestMetrics() {
+    let opinion = 0, strain = 0;
+    Object.entries(protestImpacts).forEach(([id, effect]) =&gt; {
+      const cb = document.getElementById(id);
+      if (cb &amp;&amp; cb.checked) {
+        opinion += effect.opinion;
+        strain += effect.strain;
+      }
+    });
+    document.getElementById(&#39;metric-opinion&#39;).textContent = opinion;
+    document.getElementById(&#39;metric-strain&#39;).textContent = strain;
+  }
+  updateProtestMetrics();
+
+  window.handleProtestContinue = function () {
+    const selected = Array.from(document.querySelectorAll(&#39;#protestChoices input:checked&#39;)).map(cb =&gt; cb.id);
+    const warning = document.getElementById(&#39;warning&#39;);
+    if (selected.length === 0) {
+      warning.textContent = &#39;⚠️ You must choose at least one response before continuing.&#39;;
+      warning.style.display = &#39;block&#39;;
+      return;
+    }
+    // Save for later, if needed
+    State.temporary.protestSelected = selected;
+
+    // Calculate totals and update simulation variables
+    let totalOpinion = 0, totalStrain = 0;
+    selected.forEach(id =&gt; {
+      const impact = protestImpacts[id];
+      if (!impact) return;
+      totalOpinion += impact.opinion;
+      totalStrain += impact.strain;
+    });
+
+    State.variables.publicOpinion += totalOpinion;
+    State.variables.publicOpinion = Math.max(0, Math.min(100, State.variables.publicOpinion));
+    State.variables.systemCapacity += Math.floor(totalStrain / 5); // Scale strain as appropriate
+
+    SugarCube.Engine.play(&#39;Bill6&#39;);
+  };
+}, 0);
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="46" name="Start" tags="" position="600,0" size="100,100">&lt;&lt;set $history = []&gt;&gt;
 
 
 &lt;&lt;set $turn = 1&gt;&gt;
@@ -9130,7 +9230,7 @@ history of snow storms in canadian cities. what impact do they have on homeless 
     politicalCapital: v.politicalCapital
   };
   v.history.push(initialSnapshot);
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="45" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="47" name="Starter" tags="" position="600,500" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
 &lt;div class=&quot;impact-title&quot; style=&quot;white-space: nowrap; display: inline;&quot;&gt;Housing Supply&lt;/div&gt;
@@ -9165,7 +9265,7 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PreServiceFunding&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="46" name="StoryInterface" tags="" position="1100,200" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="48" name="StoryInterface" tags="" position="1100,200" size="100,100">&lt;!--  =====  PERSISTENT UI  =====  --&gt;
 
 &lt;div id=&quot;spent-ui&quot;&gt;
   &lt;div id=&quot;passages&quot;&gt;
@@ -9287,7 +9387,7 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
     &lt;/div&gt;
   &lt;/div&gt;
 
-  &lt;!--  =====  END UI  =====  --&gt;</tw-passagedata><tw-passagedata pid="47" name="SupportiveOffice" tags="" position="500,1300" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;!--  =====  END UI  =====  --&gt;</tw-passagedata><tw-passagedata pid="49" name="SupportiveOffice" tags="" position="500,1300" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Clients&lt;/div&gt;
@@ -9319,8 +9419,12 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 &lt;/p&gt;
 
 &lt;div class=&quot;centered-btn&quot;&gt;
-  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;SnowStorm&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="48" name="UBIPilot" tags="" position="500,2200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+  &lt;button class=&quot;continue-button&quot; onclick=&quot;(function() {
+    var events = [&#39;SnowStorm&#39;, &#39;COVIDOutbreak&#39;, &#39;ProtestAtCityHall&#39;, &#39;Heatwave&#39;];
+    var event = events[Math.floor(Math.random() * events.length)];
+    SugarCube.Engine.play(event);
+  })();&quot;&gt;Continue&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="50" name="UBIPilot" tags="" position="500,2200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;0&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Unsheltered Inflow&lt;/div&gt;
@@ -9352,7 +9456,7 @@ The Universal Basic Income pilot provides $1,000/month to 1,000 households uncon
 &lt;/p&gt;
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PIT2&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="49" name="VacancyTax" tags="" position="600,2200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="51" name="VacancyTax" tags="" position="600,2200" size="100,100">&lt;div class=&quot;policy-impact-screen&quot;&gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;0&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Housing Supply&lt;/div&gt;
@@ -9386,7 +9490,7 @@ The city raises its vacancy and speculation tax to 5% and launches an Empty Home
 &lt;/p&gt;
 &lt;div class=&quot;centered-btn&quot;&gt;
   &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PIT2&#39;);&quot;&gt;Continue&lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="50" name="Zoning" tags="" position="600,2000" size="100,100">&lt;style&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="52" name="Zoning" tags="" position="600,2000" size="100,100">&lt;style&gt;
   html,
   body {
     margin: 0;
@@ -9594,7 +9698,7 @@ The city raises its vacancy and speculation tax to 5% and launches an Empty Home
       SugarCube.Engine.play(&quot;Pilots&quot;);
     });
   });
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="51" name="metricsscreen" tags="" position="100,400" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="53" name="metricsscreen" tags="" position="100,400" size="100,100">&lt;div class=&quot;policy-impact-screen&quot; &gt;
   &lt;div class=&quot;impact-container&quot;&gt;
     &lt;div class=&quot;impact-box&quot; data-index=&quot;1&quot;&gt;
       &lt;div class=&quot;impact-title&quot;&gt;Economic Growth&lt;/div&gt;
@@ -9721,7 +9825,7 @@ The vote marked a rare instance where councillors pushed back against a staff re
   font-size: 2em;
   line-height: 1;
 }
-&lt;/style&gt;</tw-passagedata><tw-passagedata pid="52" name="oldpit" tags="" position="875,925" size="100,100">&lt;!-- —————————————————————————————————————————————
+&lt;/style&gt;</tw-passagedata><tw-passagedata pid="54" name="oldpit" tags="" position="875,925" size="100,100">&lt;!-- —————————————————————————————————————————————
      CHART AREA (replace your current .chart-section block)
      ————————————————————————————————————————————— --&gt;
 &lt;div class=&quot;chart-section&quot;&gt;
