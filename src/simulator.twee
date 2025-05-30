@@ -128,6 +128,12 @@ PolicyManager.register({
 
 
 :: Bill6 {"position":"600,1700","size":"100,100"}
+<<set $turn += 1>>
+<<set $year += 1>>
+<<set $turn += 1>>
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
 <<script>>
   // run on *every* time this passage finishes displaying
   $(document).on(':passagedisplay', function (ev) {
@@ -1393,7 +1399,7 @@ zoom: 1.1;
 <div class="break"> </div>
 
 <div class="centered-btn">
-  <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
+  <button class="continue-button" onclick="SugarCube.Engine.play('PIT1');">Continue</button>
 </div>
 
 
@@ -2747,7 +2753,7 @@ $(document).on(':passagedisplay', function () {
 </style>
 
 
-:: Event1 {"position":"600,1000","size":"100,100"}
+:: Event1 {"position":"600,1100","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -3133,7 +3139,7 @@ color: #333;
 
       </div>
     <</if>>
- <button class="button" onclick="SugarCube.Engine.play('PIT1');">Continue</button>
+ <button class="button" onclick="SugarCube.Engine.play('ChooseProjectProposal1');">Continue</button>
   </div>
 </div>
 
@@ -3247,6 +3253,9 @@ color: #333;
 
 
 :: Heatwave {"position":"700,1500","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
 <canvas id="sunCanvas"></canvas>
 
 <style>
@@ -4042,162 +4051,373 @@ PolicyManager.register({
 </div>
 
 
-:: PIT1 {"position":"600,1100","size":"100,100"}
+:: PIT1 {"position":"600,1000","size":"100,100"}
 <<set $turn += 1>>
 <<set $year += 1>>
 <<set $budget += 215>>
+<!-- —————————————————————————————————————————————
+     ————————————————————————————————————————————— -->
+<div class="chart-section">
+  <h3>Housing Status Change</h3>
+  <canvas id="housingStackedBar" height="160"></canvas>
+</div>
 
-  <div class="passage-content">
+<div class="chart-section">
+  <h3>Homelessness Trend</h3>
+  <canvas id="homelessLineChart" height="160"></canvas>
+</div>
 
-  <div class="chart-section">
-    <h3>Housing Status Change</h3>
-    <canvas id="housingStackedBar" height="150"></canvas>
+<div class="chart-section">
+  <h3>Identity Demographics</h3>
+</div>
+
+<div class="chart-section">
+  <div class="demo-nav">
+    <button id="prevDemo">◀</button>
+    <canvas id="demoBarChart" height="160"></canvas>
+    <button id="nextDemo">▶</button>
   </div>
+</div>
 
-  <div class="chart-section">
-    <h3>Homelessness Trend</h3>
-    <canvas id="homelessLineChart" height="150"></canvas>
-  </div>
+<style>
+  .chart-section canvas{padding:12px!important;}
+  /* make nav buttons line up with the bar chart nicely */
+  .demo-nav{
+    display:flex;align-items:center;gap:0.5em;justify-content:center;
+  }
+  .demo-nav button{
+    font-size:1.2em;border:none;border-radius:4px;padding:0.2em 0.5em;
+    background-color: #06C;
+    color: #fff;
+  }
+</style>
 
-  <div class="chart-section">
-    <h3>Identity Demographics</h3>
-    <div id="identityMetrics"></div>
-  </div>
+<<script>>
+// Global font settings for all charts
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 16;
+Chart.defaults.font.style = 'normal';
+Chart.defaults.font.weight = 'normal';
+Chart.defaults.font.lineHeight = 1.5;
+/*  ─────────────────────────────────────────────
+    1. build or update CHARTS after each passage
+    ───────────────────────────────────────────── */
+$(document).one(':passagedisplay', function(){
+  const V      = State.variables;
+  const hist   = V.history || [];
+  const before = hist[0];
+  const after  = hist[1] ?? null;
 
-  <<script>>
-  $(document).one(':passagedisplay', function(ev) {
-    const V = State.variables;
-    const hist = V.history || [];
+  /* -------------------------
+     HOUSING‑STATUS  STACKED BAR
+     (absolute counts this time)
+     ------------------------- */
+ /* -------------------------
+   HOUSING‑STATUS  STACKED BAR (year → year)
+   ------------------------- */
+(function(){
+  const ctx  = document.getElementById('housingStackedBar').getContext('2d');
+  const cats = ['unsheltered','sheltered','transitional','institutional'];
+  const colours=['#FF6384','#36A2EB','#FFCE56','#4BC0C0'];
 
-    if (!hist.length) {
-      return;
+  // take the LAST snapshot for each year, only for years >= 0
+  const byYear = Array.from(
+    new Map(hist.filter(s => s.year >= 0).map(s => [s.year, s])).values()
+  );
+  const before = byYear[0];
+  const after  = byYear[byYear.length-1];
+  const labels = byYear.map((s, i) => `Year ${i + 1}`);
+
+  const datasets = cats.map((k,i)=>({
+    label : k.charAt(0).toUpperCase()+k.slice(1),
+    data  : [before.pop[k]],
+    backgroundColor: colours[i]
+  }));
+  if(after !== before){
+    cats.forEach((k,i)=>datasets[i].data.push(after.pop[k]));
+  }
+
+  new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets},
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}
     }
-
-    // — pick snapshots —
-    const before = hist[0];
-    const after  = hist[1] || null;
-    console.log("▶️ before snapshot:", before);
-    if (after) console.log("▶️ after snapshot:", after);
-
-    // — 1. Stacked Bar for Housing Status —
-    (function() {
-      const ctx = document.getElementById('housingStackedBar').getContext('2d');
-      const cats = ['unsheltered','sheltered','transitional','institutional'];
-      const colors = ['#FF6384','#36A2EB','#FFCE56','#4BC0C0'];
-
-      // dynamically build labels
-      const labels = [`Year ${before.year}`];
-      if (after) labels.push(`Year ${after.year}`);
-
-      // build datasets
-      const datasets = cats.map((key,i) => {
-        const arr = [ before.pop[key]/before.homelessTotal ];
-        if (after) arr.push(after.pop[key]/after.homelessTotal);
-        return {
-          label: key.charAt(0).toUpperCase()+key.slice(1),
-          data: arr,
-          backgroundColor: colors[i]
-        };
-      });
-
-
-      new Chart(ctx, {
-        type: 'bar',
-        data: { labels, datasets },
-        options: {
-          responsive: true,
-          scales: {
-            x: { stacked: true },
-            y: {
-              stacked: true,
-              ticks: { callback: v => (v*100).toFixed(0) + '%' }
-            }
-          },
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: ctx => `${ctx.dataset.label}: ${(ctx.parsed.y*100).toFixed(1)}%`
-              }
-            }
-          }
-        }
-      });
-    })();
-
-    // — 2. Line Chart for Total Homeless Trend —
-    (function() {
-      const ctx = document.getElementById('homelessLineChart').getContext('2d');
-      const labels = hist.map(s => `Year ${s.year}`);
-      const data   = hist.map(s => s.homelessTotal);
-
-
-
-      // gradient
-      const grad = ctx.createLinearGradient(0,0,0,300);
-      grad.addColorStop(0, 'rgba(54,162,235,0.5)');
-      grad.addColorStop(1, 'rgba(54,162,235,0)');
-
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Total Homeless',
-            data,
-            fill: true,
-            backgroundColor: grad,
-            borderColor: 'rgba(54,162,235,1)',
-            tension: 0.4,
-            pointRadius: 3
-          }]
-        },
-        options: {
-          responsive: true,
-          animation: { duration: 1500 }
-        }
-      });
-    })();
-
-    // — 3. Identity Demographics with Arrows —
-    (function() {
-      const container = document.getElementById('identityMetrics');
-      container.innerHTML = '';
-      const keys = [
-        'male','female','transNB','lgbq','lgbtqYouth',
-        'age25to49','racialized','indigenous','veteran','immigrant'
-      ];
-
-      keys.forEach(key => {
-        const bShare = before.pop[key]/before.homelessTotal;
-        const aShare = after ? after.pop[key]/after.homelessTotal : bShare;
-        const arrow  = after
-          ? aShare > bShare ? '↑'
-            : aShare < bShare ? '↓'
-            : '→'
-          : '';
-        console.log(` ${key}: before ${(bShare*100).toFixed(1)}%, after ${(aShare*100).toFixed(1)}%, arrow ${arrow}`);
-
-        const label = key === 'transNB' ? 'Trans & NB'
-          : key.charAt(0).toUpperCase() + key.slice(1);
-
-        const p = document.createElement('p');
-        p.textContent = `${label}: ${(aShare*100).toFixed(1)}% ${arrow}`;
-        container.appendChild(p);
-      });
-    })();
-
   });
-  <</script>>
+})();
+
+/* -------------------------
+   HOMELESS TOTAL LINE (turn → turn, unchanged)
+   ------------------------- */
+(function(){
+  const ctx    = document.getElementById('homelessLineChart').getContext('2d');
+  const labels = hist.map(s=>`Turn ${s.turn}`);
+  const data   = hist.map(s=>s.homelessTotal);
+
+  const grad=ctx.createLinearGradient(0,0,0,200);
+  grad.addColorStop(0,'rgba(0,102,204,0.5)');
+  grad.addColorStop(1,'rgba(0,102,204,0)');
+
+  new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'Total Homeless',
+      data,fill:true,backgroundColor:grad,
+      borderColor:'rgba(0,102,204,1)',tension:0.4,pointRadius:3
+    }]},
+    options:{responsive:true,layout:{padding:16}}
+  });
+})();
+
+/* -------------------------
+   CYCLABLE DEMOGRAPHIC BAR (year → year, colour #06C)
+   ------------------------- */
+(function(){
+  const ctx      = document.getElementById('demoBarChart').getContext('2d');
+  const groups   = [
+    {key:'male',       label:'Male'},
+    {key:'female',     label:'Female'},
+    {key:'transNB',    label:'Trans & NB'},
+    {key:'lgbq',       label:'LGBTQ'},
+    {key:'lgbtqYouth', label:'LGBTQ Youth'},
+    {key:'age25to49',  label:'Ages 25‑49'},
+    {key:'racialized', label:'Racialized'},
+    {key:'indigenous', label:'Indigenous'},
+    {key:'veteran',    label:'Veteran'},
+    {key:'immigrant',  label:'Immigrant'}
+  ];
+  let index = 0;
+
+  // unique years (take last snapshot from each, only for years >= 0)
+  const yearly = Array.from(
+    new Map(hist.filter(s => s.year >= 0).map(s => [s.year, s])).values()
+  );
+  const labels = yearly.map((s, i) => `Year ${i + 1}`);
+  const makeDataset = g => yearly.map(s=>s.pop[g.key]);
+
+  const chart = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:groups[0].label,
+        data :makeDataset(groups[0]),
+        backgroundColor:'#06C'
+      }]
+    },
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+
+  function updateChart(dir){
+    index = (index+dir+groups.length)%groups.length;
+    const g = groups[index];
+    chart.data.datasets[0].label = g.label;
+    chart.data.datasets[0].data  = makeDataset(g);
+    chart.update();
+  }
+  $('#prevDemo').on('click',()=>updateChart(-1));
+  $('#nextDemo').on('click',()=>updateChart(+1));
+})();
+});
+<</script>>
 
 <div class="centered-btn">
- <button class="continue-button" onclick="SugarCube.Engine.play('ChooseProjectProposal1');">Continue</button>
+
+ <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
 </div>
+
+
+
+:: PIT2 {"position":"600,2300","size":"100,100"}
+<<set $turn += 1>>
+<!-- —————————————————————————————————————————————
+     ————————————————————————————————————————————— -->
+<div class="chart-section">
+  <h3>Housing Status Change</h3>
+  <canvas id="housingStackedBar" height="160"></canvas>
 </div>
+
+<div class="chart-section">
+  <h3>Homelessness Trend</h3>
+  <canvas id="homelessLineChart" height="160"></canvas>
+</div>
+
+<div class="chart-section">
+  <h3>Identity Demographics</h3>
+</div>
+
+<div class="chart-section">
+  <div class="demo-nav">
+    <button id="prevDemo">◀</button>
+    <canvas id="demoBarChart" height="160"></canvas>
+    <button id="nextDemo">▶</button>
+  </div>
+</div>
+
+<style>
+  .chart-section canvas{padding:12px!important;}
+  /* make nav buttons line up with the bar chart nicely */
+  .demo-nav{
+    display:flex;align-items:center;gap:0.5em;justify-content:center;
+  }
+  .demo-nav button{
+    font-size:1.2em;border:none;border-radius:4px;padding:0.2em 0.5em;
+    background-color: #06C;
+    color: #fff;
+  }
+</style>
+
+<<script>>
+// Global font settings for all charts
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 16;
+Chart.defaults.font.style = 'normal';
+Chart.defaults.font.weight = 'normal';
+Chart.defaults.font.lineHeight = 1.5;
+
+// Utility: get first snapshot per year
+function snapshotsByYear(history) {
+  const out = [];
+  const seen = new Set();
+  history.forEach(s => {
+    if (s.year >= 0 && !seen.has(s.year)) {
+      out.push(s);
+      seen.add(s.year);
+    }
+  });
+  return out;
+}
+/*  ─────────────────────────────────────────────
+    1. build or update CHARTS after each passage
+    ───────────────────────────────────────────── */
+$(document).one(':passagedisplay', function(){
+  const V      = State.variables;
+  const hist   = V.history || [];
+  const before = hist[0];
+  const after  = hist[1] ?? null;
+
+  /* -------------------------
+     HOUSING‑STATUS  STACKED BAR
+     (absolute counts this time)
+     ------------------------- */
+ /* -------------------------
+   HOUSING‑STATUS  STACKED BAR (year → year)
+   ------------------------- */
+(function(){
+  const ctx  = document.getElementById('housingStackedBar').getContext('2d');
+  const cats = ['unsheltered','sheltered','transitional','institutional'];
+  const colours=['#FF6384','#36A2EB','#FFCE56','#4BC0C0'];
+  const byYear = snapshotsByYear(hist);
+  const labels = byYear.map((s, i) => `Year ${i + 1}`);
+
+  const datasets = cats.map((k, i) => ({
+    label: k.charAt(0).toUpperCase() + k.slice(1),
+    data: byYear.map(y => y.pop[k] ?? 0),   // one value per year
+    backgroundColor: colours[i]
+  }));
+
+  new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets},
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}
+    }
+  });
+})();
+
+/* -------------------------
+   HOMELESS TOTAL LINE (turn → turn, unchanged)
+   ------------------------- */
+(function(){
+  const ctx    = document.getElementById('homelessLineChart').getContext('2d');
+  const labels = hist.map(s=>`Turn ${s.turn}`);
+  const data   = hist.map(s=>s.homelessTotal);
+
+  const grad=ctx.createLinearGradient(0,0,0,200);
+  grad.addColorStop(0,'rgba(0,102,204,0.5)');
+  grad.addColorStop(1,'rgba(0,102,204,0)');
+
+  new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'Total Homeless',
+      data,fill:true,backgroundColor:grad,
+      borderColor:'rgba(0,102,204,1)',tension:0.4,pointRadius:3
+    }]},
+    options:{responsive:true,layout:{padding:16}}
+  });
+})();
+
+/* -------------------------
+   CYCLABLE DEMOGRAPHIC BAR (year → year, colour #06C)
+   ------------------------- */
+(function(){
+  const ctx      = document.getElementById('demoBarChart').getContext('2d');
+  const groups   = [
+    {key:'male',       label:'Male'},
+    {key:'female',     label:'Female'},
+    {key:'transNB',    label:'Trans & NB'},
+    {key:'lgbq',       label:'LGBTQ'},
+    {key:'lgbtqYouth', label:'LGBTQ Youth'},
+    {key:'age25to49',  label:'Ages 25‑49'},
+    {key:'racialized', label:'Racialized'},
+    {key:'indigenous', label:'Indigenous'},
+    {key:'veteran',    label:'Veteran'},
+    {key:'immigrant',  label:'Immigrant'}
+  ];
+  let index = 0;
+  const yearly = snapshotsByYear(hist);
+  const labels = yearly.map((s, i) => `Year ${i + 1}`);
+  const makeDataset = g => yearly.map(s=>s.pop[g.key]);
+
+  const chart = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:groups[0].label,
+        data :makeDataset(groups[0]),
+        backgroundColor:'#06C'
+      }]
+    },
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+
+  function updateChart(dir){
+    index = (index+dir+groups.length)%groups.length;
+    const g = groups[index];
+    chart.data.datasets[0].label = g.label;
+    chart.data.datasets[0].data  = makeDataset(g);
+    chart.update();
+  }
+  $('#prevDemo').on('click',()=>updateChart(-1));
+  $('#nextDemo').on('click',()=>updateChart(+1));
+})();
+});
+<</script>>
+
+<div class="centered-btn">
+
+ <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
+</div>
+
 
 
 :: Pilots {"position":"600,2100","size":"100,100"}
 <<set $turn += 1>>
-  <<script>>window.PolicyManager.tick();<</script>>
+<<script>>window.PolicyManager.tick();<</script>>
   
   <!-- CSS Styling -->
   <style>
@@ -4686,7 +4906,7 @@ PolicyManager.register({
 Now when rental properties are listed for sale, the city of Ottawa or a local tenant coop get 60 days to match offers. In its first year, its estimated 75 at-risk units will be secured under nonprofit or city ownership, reducing unsheltered inflow by around 5%. 
 </p>
 <div class="centered-btn">
-  <button class="continue-button" onclick="SugarCube.Engine.play('ROFR');">Continue</button>
+  <button class="continue-button" onclick="SugarCube.Engine.play('PIT2');">Continue</button>
 </div>
 
 
@@ -6867,6 +7087,9 @@ PolicyManager.register({
 
 
 :: SnowStorm {"position":"500,1500","size":"100,100"}
+<<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
 <canvas id="snowCanvas"></canvas>
 
 <style>
@@ -7556,7 +7779,7 @@ PolicyManager.register({
 The Universal Basic Income pilot provides $1,000/month to 1,000 households unconditionally. Proponents highlight its immediate impact on rental arrears and eviction risk; critics caution about long-term budget pressures. 
 </p>
 <div class="centered-btn">
-  <button class="continue-button" onclick="SugarCube.Engine.play('UBIPilot');">Continue</button>
+  <button class="continue-button" onclick="SugarCube.Engine.play('PIT2');">Continue</button>
 </div>
 
 
@@ -7613,7 +7836,7 @@ PolicyManager.register({
 The city raises its vacancy and speculation tax to 5% and launches an Empty Homes Registry. In the first year, roughly 50 vacant units were returned to the rental market while generating about $2.5M in revenue. While it eases supply pressures, some homeowners argue it unfairly penalizes secondary residences. 
 </p>
 <div class="centered-btn">
-  <button class="continue-button" onclick="SugarCube.Engine.play('VacancyTax');">Continue</button>
+  <button class="continue-button" onclick="SugarCube.Engine.play('PIT2');">Continue</button>
 </div>
 
 
@@ -7655,7 +7878,7 @@ The city raises its vacancy and speculation tax to 5% and launches an Empty Home
 
   #menu {
     position: absolute;
-    top: 0.5rem;              /* pulled up from 1rem */
+    top: 0.5rem;              
     left: 1rem;
     z-index: 2;
     background: #fff;
@@ -7665,13 +7888,15 @@ The city raises its vacancy and speculation tax to 5% and launches an Empty Home
     display: flex;
     flex-direction: column;
   }
-
+ .mapboxgl-ctrl-bottom-right{
+ 	display: none;
+ }
   /* New Continue button style */
   #continue-zoning {
-    margin-top: 0.75rem;      /* small gap from checkboxes */
+    margin-top: 0.75rem;   
     padding: 0.5rem;
-    background: #111827;      /* dark active color */
-    color: #fff;
+    background: #111827 !important;
+    color: #fff !important;
     border: none;
     border-radius: 0.375rem;
     font-size: 0.875rem;
@@ -7940,38 +8165,217 @@ The vote marked a rare instance where councillors pushed back against a staff re
 </style>
 
 
+:: oldpit {"position":"875,925","size":"100,100"}
+<!-- —————————————————————————————————————————————
+     CHART AREA (replace your current .chart-section block)
+     ————————————————————————————————————————————— -->
+<div class="chart-section">
+  <h3>Housing Status Change</h3>
+  <canvas id="housingStackedBar" height="160"></canvas>
+</div>
+
+<div class="chart-section">
+  <h3>Homelessness Trend</h3>
+  <canvas id="homelessLineChart" height="160"></canvas>
+</div>
+
+<div class="chart-section">
+  <h3>Identity Demographics</h3>
+</div>
+
+<div class="chart-section">
+  <div class="demo-nav">
+    <button id="prevDemo">◀</button>
+    <canvas id="demoBarChart" height="160"></canvas>
+    <button id="nextDemo">▶</button>
+  </div>
+</div>
+
+<style>
+  /* 👀 A little breathing‑room around each canvas */
+  .chart-section canvas{padding:12px!important;}
+  /* make nav buttons line up with the bar chart nicely */
+  .demo-nav{
+    display:flex;align-items:center;gap:0.5em;justify-content:center;
+  }
+  .demo-nav button{
+    font-size:1.2em;border:none;border-radius:4px;padding:0.2em 0.5em;
+    background-color: #06C;
+    color: #fff;
+  }
+</style>
+
+<<script>>
+// Global font settings for all charts
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 16;
+Chart.defaults.font.style = 'normal';
+Chart.defaults.font.weight = 'normal';
+Chart.defaults.font.lineHeight = 1.5;
+/*  ─────────────────────────────────────────────
+    1. build or update CHARTS after each passage
+    ───────────────────────────────────────────── */
+$(document).one(':passagedisplay', function(){
+  const V      = State.variables;
+  const hist   = V.history || [];
+  const before = hist[0];
+  const after  = hist[1] ?? null;
+
+  /* -------------------------
+     HOUSING‑STATUS  STACKED BAR
+     (absolute counts this time)
+     ------------------------- */
+ /* -------------------------
+   HOUSING‑STATUS  STACKED BAR (year → year)
+   ------------------------- */
+(function(){
+  const ctx  = document.getElementById('housingStackedBar').getContext('2d');
+  const cats = ['unsheltered','sheltered','transitional','institutional'];
+  const colours=['#FF6384','#36A2EB','#FFCE56','#4BC0C0'];
+
+  // take the LAST snapshot for each year, only for years >= 0
+  const byYear = Array.from(
+    new Map(hist.filter(s => s.year >= 0).map(s => [s.year, s])).values()
+  );
+  const before = byYear[0];
+  const after  = byYear[byYear.length-1];
+  const labels = byYear.map((s, i) => `Year ${i + 1}`);
+
+  const datasets = cats.map((k,i)=>({
+    label : k.charAt(0).toUpperCase()+k.slice(1),
+    data  : [before.pop[k]],
+    backgroundColor: colours[i]
+  }));
+  if(after !== before){
+    cats.forEach((k,i)=>datasets[i].data.push(after.pop[k]));
+  }
+
+  new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets},
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}
+    }
+  });
+})();
+
+/* -------------------------
+   HOMELESS TOTAL LINE (turn → turn, unchanged)
+   ------------------------- */
+(function(){
+  const ctx    = document.getElementById('homelessLineChart').getContext('2d');
+  const labels = hist.map(s=>`Turn ${s.turn}`);
+  const data   = hist.map(s=>s.homelessTotal);
+
+  const grad=ctx.createLinearGradient(0,0,0,200);
+  grad.addColorStop(0,'rgba(0,102,204,0.5)');
+  grad.addColorStop(1,'rgba(0,102,204,0)');
+
+  new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'Total Homeless',
+      data,fill:true,backgroundColor:grad,
+      borderColor:'rgba(0,102,204,1)',tension:0.4,pointRadius:3
+    }]},
+    options:{responsive:true,layout:{padding:16}}
+  });
+})();
+
+/* -------------------------
+   CYCLABLE DEMOGRAPHIC BAR (year → year, colour #06C)
+   ------------------------- */
+(function(){
+  const ctx      = document.getElementById('demoBarChart').getContext('2d');
+  const groups   = [
+    {key:'male',       label:'Male'},
+    {key:'female',     label:'Female'},
+    {key:'transNB',    label:'Trans & NB'},
+    {key:'lgbq',       label:'Lgbq'},
+    {key:'lgbtqYouth', label:'LgbtqYouth'},
+    {key:'age25to49',  label:'Age25‑49'},
+    {key:'racialized', label:'Racialized'},
+    {key:'indigenous', label:'Indigenous'},
+    {key:'veteran',    label:'Veteran'},
+    {key:'immigrant',  label:'Immigrant'}
+  ];
+  let index = 0;
+
+  // unique years (take last snapshot from each, only for years >= 0)
+  const yearly = Array.from(
+    new Map(hist.filter(s => s.year >= 0).map(s => [s.year, s])).values()
+  );
+  const labels = yearly.map((s, i) => `Year ${i + 1}`);
+  const makeDataset = g => yearly.map(s=>s.pop[g.key]);
+
+  const chart = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:groups[0].label,
+        data :makeDataset(groups[0]),
+        backgroundColor:'#06C'
+      }]
+    },
+    options:{
+      responsive:true,
+      layout:{padding:16},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+
+  function updateChart(dir){
+    index = (index+dir+groups.length)%groups.length;
+    const g = groups[index];
+    chart.data.datasets[0].label = g.label;
+    chart.data.datasets[0].data  = makeDataset(g);
+    chart.update();
+  }
+  $('#prevDemo').on('click',()=>updateChart(-1));
+  $('#nextDemo').on('click',()=>updateChart(+1));
+})();
+});
+<</script>>
+
+
 :: StoryScript [script]
 importScripts(
-"https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
+  "https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js",
   "https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js",
   "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
   {
-		type : "module",
-		src  :  "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/drawer/drawer.js"
-	},
+    type: "module",
+    src: "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/components/drawer/drawer.js",
+  },
   "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js",
-  "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js",
+  "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.umd.js"
 );
-
 
 /* === 🧠 UTILITIES & POLICY LOGIC === */
 window.Util = {
   renorm(obj) {
-    const total = Object.values(obj).reduce((a,b)=>a+b,0);
-    Object.keys(obj).forEach(k => obj[k] = +(obj[k]/total).toFixed(4));
+    const total = Object.values(obj).reduce((a, b) => a + b, 0);
+    if (total === 0) return obj; // Prevent divide-by-zero
+    Object.keys(obj).forEach((k) => (obj[k] = +(obj[k] / total).toFixed(4)));
   },
   exitPeople(n, shares = null, filterFn = () => true) {
     const v = State.variables;
     let remaining = n;
     const eligible = Object.entries(v.pop)
-      .filter(([k,c]) => filterFn(k) && c > 0)
-      .reduce((o,[k,c]) => (o[k] = c, o), {});
+      .filter(([k, c]) => filterFn(k) && c > 0)
+      .reduce((o, [k, c]) => ((o[k] = c), o), {});
     if (!shares) shares = { ...eligible };
-    else Object.keys(shares).forEach(k => { if (!eligible[k]) delete shares[k]; });
+    else
+      Object.keys(shares).forEach((k) => {
+        if (!eligible[k]) delete shares[k];
+      });
 
-    const totalPop = Object.values(eligible).reduce((a,b) => a + b, 0);
+    const totalPop = Object.values(eligible).reduce((a, b) => a + b, 0);
     const weighted = {};
-    Object.entries(eligible).forEach(([k,c]) => {
+    Object.entries(eligible).forEach(([k, c]) => {
       weighted[k] = (c / totalPop) * (shares[k] ?? 1);
     });
     this.renorm(weighted);
@@ -7983,31 +8387,34 @@ window.Util = {
       v.homelessTotal -= actual;
       remaining -= actual;
     });
-  }
+  },
 };
 
 window.PolicyManager = {
   active: [],
   has(name) {
-    return this.active.some(p => p.name === name);
+    return this.active.some((p) => p.name === name);
   },
   register(cfg) {
-    const p = Object.assign({
-      age: 0,
-      duration: Infinity,
-      costUpfront: 0,
-      costPerTurn: 0,
-      immediate() {},
-      tick() {},
-    }, cfg);
+    const p = Object.assign(
+      {
+        age: 0,
+        duration: Infinity,
+        costUpfront: 0,
+        costPerTurn: 0,
+        immediate() {},
+        tick() {},
+      },
+      cfg
+    );
     State.variables.budget -= p.costUpfront;
     p.immediate(State.variables, Util);
     this.active.push(p);
-    if (typeof updateUI === 'function') updateUI();
+    if (typeof updateUI === "function") updateUI();
   },
   tick() {
     const v = State.variables;
-    this.active = this.active.filter(p => {
+    this.active = this.active.filter((p) => {
       p.age++;
       v.budget -= p.costPerTurn;
       p.tick(v, Util, p.age);
@@ -8020,18 +8427,18 @@ window.PolicyManager = {
       v.pop[demo] = (v.pop[demo] || 0) + num;
       v.homelessTotal += num;
     }
-    
+
     if (!Array.isArray(v.history)) {
       // console.warn("PolicyManager.tick(): Initializing v.history as it was not an array."); // Optional: for debugging
       v.history = [];
     }
-    
-// Deep copy $pop for the snapshot
+
+    // Deep copy $pop for the snapshot
     const popSnapshot = {};
     for (const key in v.pop) {
-        if (Object.prototype.hasOwnProperty.call(v.pop, key)) {
-            popSnapshot[key] = v.pop[key];
-        }
+      if (Object.prototype.hasOwnProperty.call(v.pop, key)) {
+        popSnapshot[key] = v.pop[key];
+      }
     }
     const snapshot = {
       year: v.year, // Current year value after any increments for this period
@@ -8042,103 +8449,104 @@ window.PolicyManager = {
       publicOpinion: v.publicOpinion,
       serviceCoordination: v.serviceCoordination,
       systemCapacity: v.systemCapacity,
-      politicalCapital: v.politicalCapital
+      politicalCapital: v.politicalCapital,
     };
     v.history.push(snapshot);
     // === HISTORY SNAPSHOT END ===
-    if (typeof updateUI === 'function') updateUI();
-  }
+    if (typeof updateUI === "function") updateUI();
+  },
 };
 function updateTimeline() {
   const v = State.variables;
 
   // 1️⃣ Map your logical year index → real year
-  const yearIndex  = v.year || (v.year = 1);        // 1-based
-  const displayYear = v.year;       // e.g. 1 → 2024
+  const yearIndex = v.year || (v.year = 1); // 1-based
+  const displayYear = v.year; // e.g. 1 → 2024
 
   // 2️⃣ Highlight the current year
-  $('#timeline .year').removeClass('active');
-  $(`#year_${displayYear}`).addClass('active');
+  $("#timeline .year").removeClass("active");
+  $(`#year_${displayYear}`).addClass("active");
 
   // 3️⃣ Move the date marker
   const $t = $(`#year_${displayYear}`);
   if ($t.length) {
-    $('#date-marker').css({
-      top:  $t.position().top,
-      left: $t.position().left
+    $("#date-marker").css({
+      top: $t.position().top,
+      left: $t.position().left,
     });
   }
 
   // 4️⃣ Update the text
-  $('.date-meter .date').text(displayYear);
+  $(".date-meter .date").text(displayYear);
 
   // 5️⃣ Compute fractional progress through the year
-  const turnsPerYear = 5;                          // 1/5th per turn
-  const turn        = v.turn || 1;                 // assume v.turn increments
-  const turnInYear  = (turn - 1) % turnsPerYear;    // 0,1,2,3,4
-  const fraction    = turnInYear / turnsPerYear;    // 0.0 → 0.8
+  const turnsPerYear = 5; // 1/5th per turn
+  const turn = v.turn || 1; // assume v.turn increments
+  const turnInYear = (turn - 1) % turnsPerYear; // 0,1,2,3,4
+  const fraction = turnInYear / turnsPerYear; // 0.0 → 0.8
 
   // 6️⃣ Compute total fractional years since 2024
-  const minYear     = 2024;
-  const maxYear     = 2034;
-  const totalYears  = maxYear - minYear;           // e.g. 10
-  const yearsOffset = (yearIndex - 1) + fraction;   // e.g. 2.4 years into plan
+  const minYear = 2024;
+  const maxYear = 2034;
+  const totalYears = maxYear - minYear; // e.g. 10
+  const yearsOffset = yearIndex - 1 + fraction; // e.g. 2.4 years into plan
 
   // 7️⃣ Convert to percentage
   let pct = (yearsOffset / totalYears) * 100;
-  pct = Math.min(100, pct);                         // clamp at 100%
+  pct = Math.min(100, pct); // clamp at 100%
 
   // 8️⃣ Apply to CSS variable
-  const el = document.getElementById('timeline');
+  const el = document.getElementById("timeline");
   if (el) {
-    el.style.setProperty('--tl-progress', pct + '%');
+    el.style.setProperty("--tl-progress", pct + "%");
   }
 }
-$(window).on('load', updateTimeline);
-$(document).on(':passagestart :passagedisplay', updateTimeline);
+$(window).on("load", updateTimeline);
+$(document).on(":passagestart :passagedisplay", updateTimeline);
 updateTimeline();
 
 function pickOpinionFace(val) {
-  if (val < 20)      return 'ヽ(ಠ‸ಠ)ﾉ';   // super-mad
-  else if (val < 40) return '•`_´•';     // mad
-  else if (val < 60) return '•_•';       // neutral
-  else if (val < 80) return '^_^';       // happy
-  else               return 'ᕕ(ᐛ)ᕗ';  // very happy
+  if (val < 20) return "ヽ(ಠ‸ಠ)ﾉ"; // super-mad
+  else if (val < 40) return "•`_´•"; // mad
+  else if (val < 60) return "•_•"; // neutral
+  else if (val < 80) return "^_^"; // happy
+  else return "ᕕ(ᐛ)ᕗ"; // very happy
 }
-
-
 
 /* === 📊 UI METRIC UPDATER (STATIC + ANIMATED) === */
 function staticUIUpdater() {
   const v = State.variables;
 
   // 💸 Budget
-  document.getElementById('budget-val').textContent = (v.budget || 0).toLocaleString();
+  document.getElementById("budget-val").textContent = (
+    v.budget || 0
+  ).toLocaleString();
 
   // 🔋 System Capacity
-  document.getElementById('capacity-val').textContent = v.systemCapacity ?? '--';
+  document.getElementById("capacity-val").textContent =
+    v.systemCapacity ?? "--";
 
   // 📊 Service Coordination Bar
-  const bar = document.getElementById('coordination-bar');
+  const bar = document.getElementById("coordination-bar");
   const pct = Math.max(0, Math.min(v.serviceCoordination || 0, 100));
   if (window.innerWidth <= 979) {
-    bar.style.height = pct + '%';
-    bar.style.width  = '100%';
+    bar.style.height = pct + "%";
+    bar.style.width = "100%";
   } else {
-    bar.style.width  = pct + '%';
-    bar.style.height = '100%';
+    bar.style.width = pct + "%";
+    bar.style.height = "100%";
   }
 
-    const popVal = v.publicOpinion || 0;
+  const popVal = v.publicOpinion || 0;
 
-    document.getElementById('public-opinion-emoji').textContent = pickOpinionFace(popVal);
+  document.getElementById("public-opinion-emoji").textContent =
+    pickOpinionFace(popVal);
 
-  
   // 🟢 Political Capital Dots
   const pc = v.politicalCapital || 0;
-  document.querySelectorAll('.balance-meter .circle').forEach(circle => {
+  document.querySelectorAll(".balance-meter .circle").forEach((circle) => {
     const i = parseInt(circle.dataset.index, 10);
-    circle.classList.toggle('filled', i <= pc);
+    circle.classList.toggle("filled", i <= pc);
   });
 }
 
@@ -8149,156 +8557,174 @@ function updateUI() {
   else staticUIUpdater();
 }
 
- /* === 🏃‍♂️ Impact‑box number animation === */
-function animateImpactValues () {
-    // Grab every .impact-value inside .impact-box
-    document.querySelectorAll('.impact-box .impact-value').forEach(el => {
+/* === 🏃‍♂️ Impact‑box number animation === */
+function animateImpactValues() {
+  // Grab every .impact-value inside .impact-box
+  document.querySelectorAll(".impact-box .impact-value").forEach((el) => {
+    /* ── 1️⃣ Work out the target number ───────────────────────────── */
+    // Strip out everything that isn’t 0‑9 or “.”
+    const target = parseFloat(el.textContent.replace(/[^0-9.]/g, ""));
+    if (isNaN(target)) return; // ignore boxes without a number
 
-      /* ── 1️⃣ Work out the target number ───────────────────────────── */
-      // Strip out everything that isn’t 0‑9 or “.”
-      const target = parseFloat(el.textContent.replace(/[^0-9.]/g, ''));
-      if (isNaN(target)) return;           // ignore boxes without a number
+    /* ── 2️⃣ If there’s a subtitle ( ‘ M / year’ etc.), park it ───── */
+    const subtitle = el.querySelector(".impact-subtitle");
+    if (subtitle) subtitle.remove(); // temporarily take it out
+    el.textContent = "0"; // start counting from 0
+    if (subtitle) el.appendChild(subtitle); // put subtitle back after “0”
 
-      /* ── 2️⃣ If there’s a subtitle ( ‘ M / year’ etc.), park it ───── */
-      const subtitle = el.querySelector('.impact-subtitle');
-      if (subtitle) subtitle.remove();     // temporarily take it out
-      el.textContent = '0';                // start counting from 0
-      if (subtitle) el.appendChild(subtitle); // put subtitle back after “0”
-
-      /* ── 3️⃣ Animate 0 → target with Motion.animate ───────────────── */
-      Motion.animate(0, target, {
-        duration : 0.8,
-        ease     : 'circOut',
-        onUpdate (x) {
-          /* round big numbers, keep one decimal for small ones */
-          const value = Number.isInteger(target) ? Math.round(x) : x.toFixed(1);
-          el.firstChild.textContent = value;
-        }
-      });
+    /* ── 3️⃣ Animate 0 → target with Motion.animate ───────────────── */
+    Motion.animate(0, target, {
+      duration: 0.8,
+      ease: "circOut",
+      onUpdate(x) {
+        /* round big numbers, keep one decimal for small ones */
+        const value = Number.isInteger(target) ? Math.round(x) : x.toFixed(1);
+        el.firstChild.textContent = value;
+      },
     });
-  }
+  });
+}
 
-$(window).on('load', updateUI);
-$(document).on(':passagestart :passagedisplay', () => setTimeout(updateUI, 0));
-$(window).on('resize', updateUI);
-
+$(window).on("load", updateUI);
+$(document).on(":passagestart :passagedisplay", () => setTimeout(updateUI, 0));
+$(window).on("resize", updateUI);
 
 /* === ⚡ ANIMATE UI METRICS WITH MOTION.JS === */
-$.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
+$.getScript("https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js")
   .done(() => {
     const animate = Motion.animate;
 
- 
-    animateUIUpdater = function() {
+    animateUIUpdater = function () {
       const v = State.variables;
 
       // 💸 Budget
-      const elB = document.getElementById('budget-val');
-      const oldB = parseInt(elB.textContent.replace(/,/g,''), 10) || 0;
+      const elB = document.getElementById("budget-val");
+      const oldB = parseInt(elB.textContent.replace(/,/g, ""), 10) || 0;
       const newB = v.budget || 0;
       animate(oldB, newB, {
-        duration: 0.5, ease: 'circOut',
+        duration: 0.5,
+        ease: "circOut",
         onUpdate(x) {
           elB.textContent = Math.round(x).toLocaleString();
-        }
+        },
       });
 
       // 🔋 System Capacity
-      const elC = document.getElementById('capacity-val');
+      const elC = document.getElementById("capacity-val");
       const oldC = parseInt(elC.textContent, 10) || 0;
       const newC = v.systemCapacity || 0;
       animate(oldC, newC, {
-        duration: 0.5, ease: 'circOut',
+        duration: 0.5,
+        ease: "circOut",
         onUpdate(x) {
           elC.textContent = Math.round(x);
-        }
+        },
       });
 
       const popVal = v.publicOpinion || 0;
 
-    document.getElementById('public-opinion-emoji').textContent = pickOpinionFace(popVal);
-      
+      document.getElementById("public-opinion-emoji").textContent =
+        pickOpinionFace(popVal);
+
       // 📊 Service Coordination Bar (responsive)
-      const bar = document.getElementById('coordination-bar');
+      const bar = document.getElementById("coordination-bar");
       const isMobile = window.innerWidth <= 979;
-      const prop     = isMobile ? 'height' : 'width';
-      const oldPct   = parseFloat(bar.style[prop]) || 0;
-      const pct      = Math.max(0, Math.min(v.serviceCoordination || 0, 100));
+      const prop = isMobile ? "height" : "width";
+      const oldPct = parseFloat(bar.style[prop]) || 0;
+      const pct = Math.max(0, Math.min(v.serviceCoordination || 0, 100));
 
       animate(oldPct, pct, {
         duration: 0.5,
         onUpdate(x) {
           if (isMobile) {
-            bar.style.height = x + '%';
-            bar.style.width  = '100%';
+            bar.style.height = x + "%";
+            bar.style.width = "100%";
           } else {
-            bar.style.width  = x + '%';
-            bar.style.height = '100%';
+            bar.style.width = x + "%";
+            bar.style.height = "100%";
           }
-        }
+        },
       });
 
       // 🟢 Political Capital (non-animated)
       const pc = v.politicalCapital || 0;
-      document.querySelectorAll('.balance-meter .circle').forEach(circle => {
+      document.querySelectorAll(".balance-meter .circle").forEach((circle) => {
         const i = parseInt(circle.dataset.index, 10);
-        circle.classList.toggle('filled', i <= pc);
+        circle.classList.toggle("filled", i <= pc);
       });
     };
 
-  
     updateUI(); // initial animated run
   })
   .fail(() => {
-    console.warn('⚠️ Motion.js failed to load. Falling back to static UI updates.');
+    console.warn(
+      "⚠️ Motion.js failed to load. Falling back to static UI updates."
+    );
   });
 
-$.getScript('https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js')
+$.getScript("https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js")
   .done(() => {
-    $(document).on(':passagedisplay', () => {
-      document.querySelectorAll('.animated-box').forEach(box => {
+    $(document).on(":passagedisplay", () => {
+      document.querySelectorAll(".animated-box").forEach((box) => {
         // Initial style for animation
         Object.assign(box.style, {
-          backgroundColor: '#3498db',
-          color:           '#fff',
-          borderRadius:    '12px',
-          padding:         '1em',
-          display:         'inline-block',
-          opacity:         '0',
-          transform:       'scale(0.8)',
+          backgroundColor: "#3498db",
+          color: "#fff",
+          borderRadius: "12px",
+          padding: "1em",
+          display: "inline-block",
+          opacity: "0",
+          transform: "scale(0.8)",
         });
 
         // Animate in
         Motion.animate(
           box,
           { opacity: [0, 1], scale: [0.8, 1] },
-          { duration: 0.6, easing: 'ease-in-out' }
+          { duration: 0.6, easing: "ease-in-out" }
         );
       });
     });
   })
   .fail(() => {
-    console.warn('⚠️ Motion.js failed to load.');
+    console.warn("⚠️ Motion.js failed to load.");
   });
 
-$(document).on(':passagedisplay', (ev) => {
-    animateImpactValues();
+$(document).on(":passagedisplay", (ev) => {
+  animateImpactValues();
 });
 
 /* === 📱 MOBILE TOOLTIP SUPPORT === */
-$(function() {
-  $(document).on('click', '.balance-meter', function() {
+$(function () {
+  $(document).on("click", ".balance-meter", function () {
     if (window.innerWidth > 979) return;
-    const $m = $(this), name = $m.find('.title').text().trim();
-    $m.find('.tooltip').remove();
+    const $m = $(this),
+      name = $m.find(".title").text().trim();
+    $m.find(".tooltip").remove();
     const $tip = $('<div class="tooltip"></div>').text(name).appendTo($m);
-    requestAnimationFrame(() => $tip.css({ opacity: 1, pointerEvents: 'auto' }));
+    requestAnimationFrame(() =>
+      $tip.css({ opacity: 1, pointerEvents: "auto" })
+    );
     setTimeout(() => {
-      $tip.css('opacity', 0);
+      $tip.css("opacity", 0);
       setTimeout(() => $tip.remove(), 250);
     }, 2500);
   });
 });
+
+// Utility: Get first snapshot for each year from history
+function snapshotsByYear(history) {
+  const out = [];
+  const seen = new Set();
+  history.forEach((s) => {
+    if (s.year >= 0 && !seen.has(s.year)) {
+      out.push(s);
+      seen.add(s.year);
+    }
+  });
+  return out;
+}
+
 
 :: StoryStylesheet [stylesheet]
 @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
