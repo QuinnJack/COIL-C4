@@ -1847,7 +1847,7 @@ zoom: 1.1;
 }>>
 
 <!-- INFLOW system -->
-<<set $inflowBase = 50>> <!-- Number of new homeless per turn -->
+<<set $inflowBase = 80>> <!-- Number of new homeless per turn -->
 
 <!-- Percentage distribution of INCOMING new homelessness cases -->
 <<set $inflowShare = {
@@ -4308,6 +4308,8 @@ $(document).one(':passagedisplay', function(){
 
 :: PIT2 {"position":"600,2300","size":"100,100"}
 <<set $turn += 1>>
+<<script>>window.PolicyManager.tick();<</script>>
+
 <!-- —————————————————————————————————————————————
      ————————————————————————————————————————————— -->
 <div class="chart-section">
@@ -4491,7 +4493,7 @@ $(document).one(':passagedisplay', function(){
 
 <div class="centered-btn">
 
- <button class="continue-button" onclick="SugarCube.Engine.play('Event1');">Continue</button>
+ <button class="continue-button" onclick="SugarCube.Engine.play('PIT2');">Continue</button>
 </div>
 
 
