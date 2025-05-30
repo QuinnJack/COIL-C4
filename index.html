@@ -5279,7 +5279,7 @@ PolicyManager.register({
   costPerTurn: 0.5,
   duration: 999999,
 
-  immediate(v, window.Util) { // Added window.Util
+  immediate(v) { // Added window.Util
     v.publicOpinion += 5;
     if (v.systemCapacity &lt; 180) v.systemCapacity += 10;
 
