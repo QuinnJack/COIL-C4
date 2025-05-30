@@ -3487,7 +3487,7 @@ zoom: 1.1;
 }&gt;&gt;
 
 &lt;!-- INFLOW system --&gt;
-&lt;&lt;set $inflowBase = 50&gt;&gt; &lt;!-- Number of new homeless per turn --&gt;
+&lt;&lt;set $inflowBase = 80&gt;&gt; &lt;!-- Number of new homeless per turn --&gt;
 
 &lt;!-- Percentage distribution of INCOMING new homelessness cases --&gt;
 &lt;&lt;set $inflowShare = {
@@ -5876,6 +5876,8 @@ $(document).one(&#39;:passagedisplay&#39;, function(){
 
  &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;Event1&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="30" name="PIT2" tags="" position="600,2300" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
+&lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
+
 &lt;!-- —————————————————————————————————————————————
      ————————————————————————————————————————————— --&gt;
 &lt;div class=&quot;chart-section&quot;&gt;
@@ -6059,7 +6061,7 @@ $(document).one(&#39;:passagedisplay&#39;, function(){
 
 &lt;div class=&quot;centered-btn&quot;&gt;
 
- &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;Event1&#39;);&quot;&gt;Continue&lt;/button&gt;
+ &lt;button class=&quot;continue-button&quot; onclick=&quot;SugarCube.Engine.play(&#39;PIT2&#39;);&quot;&gt;Continue&lt;/button&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="31" name="Pilots" tags="" position="600,2100" size="100,100">&lt;&lt;set $turn += 1&gt;&gt;
 &lt;&lt;script&gt;&gt;window.PolicyManager.tick();&lt;&lt;/script&gt;&gt;
   
