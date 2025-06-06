@@ -13,73 +13,74 @@ simulator
 
 
 :: AcquisitionFund {"position":"700,300","size":"100,100"}
-<<script>>
-PolicyManager.register({
-  name: "Affordable Housing Acquisition Fund Program",
-  costUpfront: 20,
-  duration: 999999,
+  <<script>>
+  PolicyManager.register({
+    name: "Affordable Housing Acquisition Fund Program",
+    costUpfront: 40,
+      costPerTurn: 5,
+    duration: 999999,
 
-  immediate(v) {
-    v.publicOpinion -= 15;
-     v.inflowBase = Math.max(0, v.inflowBase - 10); // Represents about 40 people/year prevented from homelessness
-    v.unitsPreserved = (v.unitsPreserved || 0) + 300; // Track preserved units
-  },
+    immediate(v) {
+      v.publicOpinion -= 15;
+       v.inflowBase = Math.max(0, v.inflowBase - 15); // Represents about 40 people/year prevented from homelessness
+      v.unitsPreserved = (v.unitsPreserved || 0) + 300; // Track preserved units
+    },
 
-  tick(v,  age) {
+    tick(v,  age) {
 
-    if (age >= 5) {
-        v.budget += 1;
+      if (age >= 5) {
+          v.budget += 2;
+      }
+
+      // Ongoing small reduction in certain vulnerable inflow categories due to stable housing from fund.
+      if (age > 0 && age % 4 === 0) { // Annually
+          v.inflowShare.withChildren = Math.max(0.01, v.inflowShare.withChildren - 0.005);
+          v.inflowShare.racialized = Math.max(0.01, v.inflowShare.racialized - 0.005);
+          window.Util.renorm(v.inflowShare);
+          v.publicOpinion += 1; // Sustained positive effect of visible action
+      }
     }
-
-    // Ongoing small reduction in certain vulnerable inflow categories due to stable housing from fund.
-    if (age > 0 && age % 4 === 0) { // Annually
-        v.inflowShare.withChildren = Math.max(0.01, v.inflowShare.withChildren - 0.005);
-        v.inflowShare.racialized = Math.max(0.01, v.inflowShare.racialized - 0.005);
-        window.Util.renorm(v.inflowShare);
-        v.publicOpinion += 1; // Sustained positive effect of visible action
-    }
-  }
-});
-<</script>>
+  });
+  <</script>>
 
 
-<div class="policy-impact-screen">
-  <div class="impact-container">
-    <div class="impact-box" data-index="0">
-      <div class="impact-title">Units Preserved</div>
-      <div class="impact-content">
-        <span class="impact-icon">↑&nbsp;</span>
-        <span class="impact-value">300</span>
-        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;units</span>
+  <div class="policy-impact-screen">
+    <div class="impact-container">
+      <div class="impact-box" data-index="0">
+        <div class="impact-title">Units Preserved</div>
+        <div class="impact-content">
+          <span class="impact-icon">↑&nbsp;</span>
+          <span class="impact-value">300</span>
+          <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;units</span>
+        </div>
       </div>
-    </div>
-    <div class="impact-box" data-index="1">
-      <div class="impact-title">Long-Term Savings</div>
-      <div class="impact-content">
-        <span class="impact-unit">$&nbsp;</span>
-        <span class="impact-value">4</span>
-        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M / year</span>
+      <div class="impact-box" data-index="1">
+        <div class="impact-title">Long-Term Savings</div>
+        <div class="impact-content">
+          <span class="impact-unit">$&nbsp;</span>
+          <span class="impact-value">4</span>
+          <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M / year</span>
+        </div>
       </div>
-    </div>
-    <div class="impact-box" data-index="2">
-      <div class="impact-title">Upfront Cost</div>
-      <div class="impact-content">
-        <span class="impact-unit">$&nbsp;</span>
-        <span class="impact-value">20</span>
-        <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M</span>
+      <div class="impact-box" data-index="2">
+        <div class="impact-title">Upfront Cost</div>
+        <div class="impact-content">
+          <span class="impact-unit">$&nbsp;</span>
+          <span class="impact-value">20</span>
+          <span class="impact-subtitle" style="font-size: 1.4em; margin-bottom: -3px;">&nbsp;M</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<p style="padding:0 6rem;font-size:1.1em">
-  In November 2024, Ottawa City Council voted down a proposal to create an Affordable Housing Acquisition Fund. The plan would have redirected Vacant Unit Tax revenue to help non-profits purchase aging rentals and preserve affordability. By enacting the the policy, you perserve around 300 units and save an estimated $4 M annually in redevelopment costs, though it requires a $20 M up‑front investment.
-</p>
-</p>
+  <p style="padding:0 6rem;font-size:1.1em">
+    In November 2024, Ottawa City Council voted down a proposal to create an Affordable Housing Acquisition Fund. The plan would have redirected Vacant Unit Tax revenue to help non-profits purchase aging rentals and preserve affordability. By enacting the the policy, you perserve around 300 units and save an estimated $4 M annually in redevelopment costs, though it requires a $20 M up‑front investment.
+  </p>
+  </p>
 
-<div class="centered-btn">
- <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
-</div>
+  <div class="centered-btn">
+   <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
+  </div>
 
 
 :: Affordable {"position":"500,500","size":"100,100"}
@@ -121,10 +122,7 @@ PolicyManager.register({
 </div>
 
 
-:: Bill6 {"position":"600,1700","size":"100,100"}
-<<set $turn += 1>>
-<<set $year += 1>>
-<<set $turn += 1>>
+:: Bill6 {"position":"600,1925","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -532,7 +530,7 @@ PolicyManager.register({
 </script>
 
 
-:: Bill6_Comply {"position":"500,1800","size":"100,100"}
+:: Bill6_Comply {"position":"500,2025","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -570,7 +568,7 @@ PolicyManager.register({
 </div>
 
 
-:: Bill6_Delay {"position":"600,1800","size":"100,100"}
+:: Bill6_Delay {"position":"600,2025","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -608,7 +606,7 @@ PolicyManager.register({
 </div>
 
 
-:: Bill6_Oppose {"position":"700,1800","size":"100,100"}
+:: Bill6_Oppose {"position":"700,2025","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -1311,7 +1309,8 @@ zoom: 1.1;
     function buildAffordable() {
       PolicyManager.register({
         name: "Build City Affordable Housing (Mid-Rise Densification)",
-        costUpfront: 10,
+        costUpfront: 20,
+         costPerTurn: 3,
         duration: 999999,
         immediate(v) { v.publicOpinion -= 10; },
         tick(v,  age) {
@@ -1340,6 +1339,7 @@ zoom: 1.1;
       PolicyManager.register({
         name: "Starter Homes Expansion (Suburban)",
         costUpfront: 10,
+         costPerTurn: 10,
         duration: 999999,
         immediate(v) { },
         tick(v,  age) {
@@ -1365,7 +1365,8 @@ zoom: 1.1;
     function buildModular() {
       PolicyManager.register({
         name: "Modular Housing & Office Conversions",
-        costUpfront: 5,
+        costUpfront: 30,
+         costPerTurn: 5,
         duration: 999999,
         immediate(v) {
           v.publicOpinion += 2;
@@ -1392,40 +1393,254 @@ zoom: 1.1;
   </script>
 
 
-:: C4Project1 {"position":"500,900","size":"100,100"}
-<div class="policy-impact-screen" >
+:: C4Project1 {"position":"425,1100","size":"100,100"}
+<!-- ███► In Person Fundraiser – COIL Project Metrics  ◄███ -->
+
+<div class="policy-impact-screen">
   <div class="impact-container">
-    <div class="impact-box" data-index="1">
-      <div class="impact-title">Economic Growth</div>
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Funds Raised</div>
       <div class="impact-content">
-        <div id="impact-chart-1" class="impact-graph"></div>
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">15</span>
+        <span class="impact-subtitle" style="font-size:1.2em;">&nbsp;$ K</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Volunteers Engaged</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">120</span>
       </div>
     </div>
     <div class="impact-box" data-index="2">
-      <div class="impact-title">Public Opinion</div>
+      <div class="impact-title">Operating Cost</div>
       <div class="impact-content">
-        <span class="impact-number">+5%</span>
-      </div>
-    </div>
-    <div class="impact-box" data-index="3">
-      <div class="impact-title">Service Coordination</div>
-      <div class="impact-content">
-        <div class="impact-widget">★ ★ ★ ☆ ☆</div>
+        <span class="impact-unit">$ </span>
+        <span class="impact-value">2<span class="impact-subtitle">&nbsp;K</span></span>
       </div>
     </div>
   </div>
 </div>
-<p style="padding: 0 6rem;">
-  C4 Project Impact short description. TODO: source from groups
+
+<p style="padding:0 6rem;font-size:1.1em">
+  Students partner with local nonprofits to host a live fundraising event, combining performances, guest speakers, and a local artisan market. By mobilizing 120 volunteers, the fundraiser aims to collect \$15 K in direct donations for community shelters—covering operational needs and emergency supplies for three months.
 </p>
-<div class="break"> </div>
 
 <div class="centered-btn">
   <button class="continue-button" onclick="SugarCube.Engine.play('PIT1');">Continue</button>
 </div>
 
 
-:: ChoiceTemplate {"position":"100,100","size":"100,100"}
+:: C4Project2 {"position":"725,1100","size":"100,100"}
+<!-- ███► Climate Crisis Backpack Kit – COIL Project Metrics  ◄███ -->
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Kits Distributed</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">250</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Community Engagement</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">800</span>
+        <span class="impact-subtitle" style="font-size:1.2em;">&nbsp;Contacts</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Kit Production Cost</div>
+      <div class="impact-content">
+        <span class="impact-unit">$ </span>
+        <span class="impact-value">5<span class="impact-subtitle">&nbsp;K</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+  This project assembles 250 “Climate Crisis Backpack Kits” filled with reusable water bottles, hygiene supplies, weather-safe clothing, and informational leaflets about heat-wave and cold-snap preparedness. Outreach events engage 800 community members over four weekends—building resilience and distributing essential items to those at risk of weather-related housing emergencies.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('PIT1');">Continue</button>
+</div>
+
+
+:: C4Project3 {"position":"575,1100","size":"100,100"}
+<!-- ███► Farmer Product Connection – COIL Project Metrics  ◄███ -->
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Farmers Supported</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">35</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Households Served</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑ </span>
+        <span class="impact-value">200</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Operating Cost</div>
+      <div class="impact-content">
+        <span class="impact-unit">$ </span>
+        <span class="impact-value">3<span class="impact-subtitle">&nbsp;K</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+  Through a partnership with local farmers’ markets, students create a platform that connects 35 small-scale farmers to 200 low-income households each week. Fresh produce boxes are sold at subsidized rates, improving nutrition security for residents and guaranteeing fair revenue for growers—at an estimated \$3 K in coordination costs for the term.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('PIT1');">Continue</button>
+</div>
+
+
+:: COVIDOutbreak {"position":"800,2025","size":"100,100"}
+<div class="policy-impact-screen" id="covidMetrics">
+  <div class="impact-container">
+    <div class="impact-box">
+      <div class="impact-title">Budget Impact</div>
+      <div class="impact-content">
+        <span class="impact-value" id="metric-budget">0</span>
+        <span class="impact-subtitle">M</span>
+      </div>
+    </div>
+    <div class="impact-box">
+      <div class="impact-title">Public Opinion</div>
+      <div class="impact-content">
+        <span class="impact-value" id="metric-opinion">0</span>
+        <span class="impact-subtitle">%</span>
+      </div>
+    </div>
+    <div class="impact-box">
+      <div class="impact-title">System Strain</div>
+      <div class="impact-content">
+        <span class="impact-unit">% &nbsp;</span>
+        <span class="impact-value" id="metric-strain">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="question-wrapper">
+    <p>A COVID outbreak hits a downtown shelter cluster. How do you respond?</p>
+    <form id="covidChoices">
+      <label class="checkbox"><input type="checkbox" id="covid-opt1" /><span>Rent hotel rooms to isolate infected individuals</span></label>
+      <label class="checkbox"><input type="checkbox" id="covid-opt2" /><span>Launch emergency mobile testing units</span></label>
+      <label class="checkbox"><input type="checkbox" id="covid-opt3" /><span>Distribute masks, hygiene kits, and sanitation stations</span></label>
+      <label class="checkbox"><input type="checkbox" id="covid-opt4" /><span>Limit shelter intake to reduce transmission</span></label>
+    </form>
+  </div>
+
+  <div id="warning" style="display: none; color: #b91c1c; margin-top: 1em">
+    ⚠️ You must choose at least one response before continuing.
+  </div>
+  <button class="button" onclick="handleCOVIDContinue()">Continue</button>
+</div>
+
+<style>
+  #timeline { background: #f5f5f5 !important; }
+  .button { background-color: rgb(32,117,202); background-image: linear-gradient(rgb(41,122,202), rgb(30,104,178)); border: 1px solid rgb(38,111,185); border-radius: 12px; color: #fff; padding: 0.65rem 1rem; font-size: 1rem; display: block; margin: 0.9rem auto; cursor: pointer; max-width: 420px; }
+  .button:hover { background-image: linear-gradient(rgb(51,130,210), rgb(39,121,202)); }
+  label.checkbox { display: flex; align-items: center; cursor: pointer; margin: 0.75em 0; user-select: none; }
+  label.checkbox input { appearance: none; width: 1.2em; height: 1.2em; border: 2px solid #cbd5e1; border-radius: 0.25rem; position: relative; transition: background-color 0.2s, border-color 0.2s; }
+  label.checkbox input:checked { background-color: #3b82f6; border-color: #3b82f6; }
+  label.checkbox input:checked::after { content: ""; position: absolute; top: 0.15em; left: 0.35em; width: 0.25em; height: 0.6em; border: solid white; border-width: 0 0.2em 0.2em 0; transform: rotate(45deg); }
+  label.checkbox span { margin-left: 0.5em; font-size: 1em; color: #1f2937; }
+  .impact-box { background-color: rgba(255,255,255,0.6); }
+  .impact-unit { font-weight: 700 !important; }
+  .question-wrapper { background: rgba(255,255,255,0.6); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
+</style>
+
+<<script>>
+setTimeout(function () {
+  const covidImpacts = {
+    "covid-opt1": { budget: -12, opinion: 5, strain: -2 },
+    "covid-opt2": { budget: -4,  opinion: 3, strain: -1 },
+    "covid-opt3": { budget: -3,  opinion: 2, strain: 0 },
+    "covid-opt4": { budget: 0,   opinion: -5, strain: 10 }
+  };
+
+  // Limit: up to 3 choices
+  document.querySelectorAll('#covidChoices input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', function (e) {
+      document.getElementById('warning').style.display = 'none';
+      const checked = document.querySelectorAll('#covidChoices input:checked');
+      if (checked.length > 3) {
+        e.target.checked = false;
+        const w = document.getElementById('warning');
+        w.textContent = '⚠️ You can only select up to 3 options.';
+        w.style.display = 'block';
+        setTimeout(() => w.style.display = 'none', 2500);
+      }
+      updateCOVIDMetrics();
+    });
+  });
+
+  function updateCOVIDMetrics() {
+    let b = 0, o = 0, s = 0;
+    Object.entries(covidImpacts).forEach(([id, effect]) => {
+      const cb = document.getElementById(id);
+      if (cb && cb.checked) {
+        b += effect.budget;
+        o += effect.opinion;
+        s += effect.strain;
+      }
+    });
+    document.getElementById('metric-budget').textContent = b;
+    document.getElementById('metric-opinion').textContent = o;
+    document.getElementById('metric-strain').textContent = s;
+  }
+  updateCOVIDMetrics();
+
+  // Continue handler: update sim variables and move forward
+  window.handleCOVIDContinue = function () {
+    const selected = Array.from(document.querySelectorAll('#covidChoices input:checked')).map(cb => cb.id);
+    const warning = document.getElementById('warning');
+    if (selected.length === 0) {
+      warning.textContent = '⚠️ You must choose at least one response before continuing.';
+      warning.style.display = 'block';
+      return;
+    }
+
+    // Save to State.temporary if needed for later
+    State.temporary.covidSelected = selected;
+
+    // Calculate totals and update simulation state
+    let totalBudget = 0, totalOpinion = 0, totalStrain = 0;
+    selected.forEach(id => {
+      const impact = covidImpacts[id];
+      if (!impact) return;
+      totalBudget += impact.budget;
+      totalOpinion += impact.opinion;
+      totalStrain += impact.strain;
+    });
+
+    State.variables.budget += totalBudget;
+    State.variables.publicOpinion += totalOpinion;
+    State.variables.publicOpinion = Math.max(0, Math.min(100, State.variables.publicOpinion));
+    State.variables.systemCapacity += totalStrain; // or use another metric as needed
+
+    SugarCube.Engine.play('Bill6');
+  };
+}, 0);
+<</script>>
+
+
+:: ChoiceTemplate {"position":"25,100","size":"100,100"}
 <<set $turn += 1>>
   <<script>>window.PolicyManager.tick();<</script>>
   
@@ -1706,7 +1921,7 @@ zoom: 1.1;
   </script>
 
 
-:: ChooseC4Project1 {"position":"600,800","size":"100,100"}
+:: ChooseC4Project {"position":"600,1000","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -1794,19 +2009,12 @@ zoom: 1.1;
       Each project offers a different approach, grounded, collaborative, and designed for tangible real-world impact. You’ve been invited to support one. Which project do you choose to enact in your city?
     </p>
 
-    <!-- Buttons with individual project policy activation -->
-    <button class="button" onclick="project1();">In Person Fundraiser</button>
-    <button class="button" onclick="project1();">Climate Crisis Backpack Kit </button>
-    <button class="button" onclick="project1();">Farmer Product Connection</button>
+<button class="button" onclick="SugarCube.Engine.play('C4Project1');">In Person Fundraiser</button>
+<button class="button" onclick="SugarCube.Engine.play('C4Project2');">Climate Crisis Backpack Kit</button>
+<button class="button" onclick="SugarCube.Engine.play('C4Project3');">Farmer Product Connection</button>
   </div>
 
-  <!-- Project Scripts -->
-  <script>
-   function project1() {
 
-    SugarCube.Engine.play("C4Project1");
-  }
-  </script>
 </div>
 
 
@@ -1864,7 +2072,7 @@ zoom: 1.1;
   male: 0.56,
   female: 0.36,
   transNB: 0.02,
-  lgbtqYouth: 0.21,
+  lgbtqYouth: 0.021,
   age25to49: 0.58,
   lgbq: 0.11,
   racialized: 0.56,
@@ -1877,7 +2085,7 @@ zoom: 1.1;
 <!-- System + policy levers -->
 <<set $publicOpinion = 50>>
 <<set $serviceCoordination = 60>>
-<<set $systemCapacity = 100>>
+<<set $systemCapacity = 80>>
 <<set $politicalCapital = 3>>
 <<set $unitsPreserved = 0>>
 
@@ -2290,7 +2498,7 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
     </div>
 
 
-:: ChooseProjectProposal1 {"position":"600,1200","size":"100,100"}
+:: ChooseProjectProposal1 {"position":"600,1425","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -2534,7 +2742,7 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 <</script>>
 
 
-:: DataLab {"position":"600,1300","size":"100,100"}
+:: DataLab {"position":"600,1525","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -2567,7 +2775,7 @@ Whereas unprecedented shelter demand has forced the use of recreation centres as
 
 <div class="centered-btn">
   <button class="continue-button" onclick="(function() {
-    var events = ['SnowStorm', 'COVIDOutbreak', 'ProtestAtCityHall', 'Heatwave'];
+    var events = ['SnowStorm', 'SnowStorm', 'SnowStorm', 'SnowStorm'];
     var event = events[Math.floor(Math.random() * events.length)];
     SugarCube.Engine.play(event);
   })();">Continue</button>
@@ -2654,7 +2862,7 @@ $(document).on(':passagedisplay', function () {
 <</script>>
 
 
-:: EncampmentTaskForce {"position":"700,1300","size":"100,100"}
+:: EncampmentTaskForce {"position":"700,1525","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -2687,30 +2895,118 @@ $(document).on(':passagedisplay', function () {
 
 <div class="centered-btn">
   <button class="continue-button" onclick="(function() {
-    var events = ['SnowStorm', 'COVIDOutbreak', 'ProtestAtCityHall', 'Heatwave'];
+    var events = ['SnowStorm', 'SnowStorm', 'SnowStorm', 'SnowStorm'];
     var event = events[Math.floor(Math.random() * events.length)];
     SugarCube.Engine.play(event);
   })();">Continue</button>
 </div>
 
 
-:: Endgame {"position":"800,0","size":"100,100"}
-<<set $finalScore = 823>>
-<<set $insights = [
-  "Your city reduced homeless inflow by 34% over 10 years.",
-  "You met 5 of 8 targeted SDGs, including Clean Water, Affordable Housing, and Reduced Inequalities.",
-  "Homeless population dropped from 8,500 to 2,800.",
-  "Public trust in government rose after early setbacks.",
-  "Infrastructure investments helped unlock rapid housing construction."
-]>>
+:: End {"position":"850,2500","size":"100,100"}
+<<silently>>
+  /* --- 1. GATHER INITIAL & FINAL STATE DATA --- */
+  /* We use the first entry in history to get the starting state. */
+  <<set _initialState to State.variables.history[0]>>
+  <<set _finalState to State.variables>>
 
-<<set $leaderboard = [
-  { rank: 1, name: "Quinn", score: 923 },
-  { rank: 2, name: "Natasha", score: 894 },
-  { rank: 3, name: "YOU", score: $finalScore },
-  { rank: 4, name: "zzz", score: 820 },
-  { rank: 5, name: "yyy", score: 791 }
-]>>
+  /* Key metrics for scoring */
+  <<set _initialHomeless to _initialState.homelessTotal>>
+  <<set _finalHomeless to _finalState.homelessTotal>>
+  <<set _initialInflow to 80>> /* This was the hardcoded starting value */
+  <<set _finalInflow to _finalState.inflowBase>>
+
+  /* --- 2. CALCULATE THE FINAL SCORE --- */
+  /* The score is based on the percentage reduction of the homeless population and inflow rate. */
+  <<set _homelessReductionPercent to (_initialHomeless - _finalHomeless) / _initialHomeless>>
+  <<set _inflowReductionPercent to (_initialInflow - _finalInflow) / _initialInflow>>
+
+  /* Calculate base score from positive results (600 points for homelessness, 400 for inflow) */
+  <<set $finalScore to 0>>
+  <<if _homelessReductionPercent > 0>>
+    <<set $finalScore += _homelessReductionPercent * 600>>
+  <</if>>
+  <<if _inflowReductionPercent > 0>>
+    <<set $finalScore += _inflowReductionPercent * 400>>
+  <</if>>
+
+  /* Apply penalties if the situation worsened */
+  <<if _homelessReductionPercent < 0>>
+    <<set $finalScore += _homelessReductionPercent * 300>> /* Harsh penalty for increasing population */
+  <</if>>
+  <<if _inflowReductionPercent < 0>>
+     <<set $finalScore += _inflowReductionPercent * 150>> /* Penalty for increasing inflow */
+  <</if>>
+
+  /* Round the final score and cap it between 0 and 1000 */
+  <<set $finalScore to Math.round(Math.max(0, Math.min(1000, $finalScore)))>>
+
+
+  /* --- 3. GENERATE DYNAMIC INSIGHTS BASED ON PERFORMANCE --- */
+  <<set $insights to []>>
+
+  /* Insight: Homeless Population Change */
+  <<if _homelessReductionPercent > 0.01>>
+    <<set $insights.push("Your policies successfully reduced the total homeless population by " + Math.round(_homelessReductionPercent * 100) + "%, from " + _initialHomeless.toLocaleString() + " to " + _finalHomeless.toLocaleString() + ".")>>
+  <<elseif _homelessReductionPercent < -0.01>>
+    <<set $insights.push("The homeless population grew by " + Math.round(Math.abs(_homelessReductionPercent) * 100) + "% during your term.")>>
+  <<else>>
+    <<set $insights.push("Despite your efforts, the total homeless population remained largely unchanged.")>>
+  <</if>>
+
+  /* Insight: Inflow Change */
+  <<if _inflowReductionPercent > 0.01>>
+    <<set $insights.push("You effectively curbed the rate of new people entering homelessness by " + Math.round(_inflowReductionPercent * 100) + "%.")>>
+  <<else>>
+    <<set $insights.push("Preventing new cases of homelessness proved to be a major challenge.")>>
+  <</if>>
+
+  /* Insight: System & Social Metrics */
+  <<if _finalState.serviceCoordination > 85>>
+    <<set $insights.push("Achieved excellent service coordination (" + _finalState.serviceCoordination + "%), creating a highly efficient and integrated support system.")>>
+  <</if>>
+  <<if _finalState.publicOpinion > 75>>
+    <<set $insights.push("You finished your term with strong public support (" + _finalState.publicOpinion + " approval) due to popular policies.")>>
+  <<elseif _finalState.publicOpinion < 40>>
+    <<set $insights.push("Your focus on difficult but necessary changes resulted in low public opinion (" + _finalState.publicOpinion + " approval).")>>
+  <</if>>
+
+  /* Insight: Specific Policy Choices */
+  <<if PolicyManager.has("Build City Affordable Housing (Mid-Rise Densification)")>>
+    <<set $insights.push("Your strategic investment in urban densification created a long-term pipeline for affordable housing.")>>
+  <<elseif PolicyManager.has("Starter Homes Expansion (Suburban)")>>
+    <<set $insights.push("Expanding starter homes helped families enter the market but contributed to urban sprawl.")>>
+  <<elseif PolicyManager.has("Modular Housing & Office Conversions")>>
+    <<set $insights.push("Your bet on modular construction paid off, providing a rapid and flexible housing solution.")>>
+  <</if>>
+
+  <<if PolicyManager.has("Anti-Renoviction Bylaw")>>
+    <<set $insights.push("The anti-renoviction bylaw was a key preventative measure, protecting countless at-risk tenants from losing their homes.")>>
+  <</if>>
+
+  <<if _finalState.budget < 0>>
+    <<set $insights.push("While your strategy had an impact, it concluded with a significant budget deficit of $" + Math.abs(_finalState.budget).toLocaleString() + "M.")>>
+  <</if>>
+
+
+  /* --- 4. UPDATE AND SORT THE LEADERBOARD --- */
+  <<set $leaderboard to [
+    { rank: 1, name: "Quinn", score: 923 },
+    { rank: 2, name: "Natasha", score: 894 },
+    { rank: 3, name: "YOU", score: 0 }, /* Your score will be inserted here */
+    { rank: 4, name: "Leo", score: 710 },
+    { rank: 5, name: "Maria", score: 652 }
+  ]>>
+
+  /* Find 'YOU' in the array and update the score */
+  <<run for (const entry of State.variables.leaderboard) { if (entry.name === "YOU") { entry.score = State.variables.finalScore; break; } }>>
+
+  /* Sort the leaderboard by score in descending order */
+  <<run State.variables.leaderboard.sort((a, b) => b.score - a.score)>>
+
+  /* After sorting, re-assign the rank numbers */
+  <<run for (let i = 0; i < State.variables.leaderboard.length; i++) { State.variables.leaderboard[i].rank = i + 1; }>>
+
+<</silently>>
 
 <div class="endgame-screen">
   <div class="your-score">
@@ -2735,7 +3031,7 @@ $(document).on(':passagedisplay', function () {
       </thead>
       <tbody>
         <<for _entry range $leaderboard>>
-          <tr>
+          <tr class="<<if _entry.name is 'YOU'>>player-row<</if>>">
             <td><<= _entry.rank >></td>
             <td><<= _entry.name >></td>
             <td><<= _entry.score >></td>
@@ -2744,10 +3040,14 @@ $(document).on(':passagedisplay', function () {
       </tbody>
     </table>
   </div>
-
-  <button class="button" onclick="SugarCube.Engine.play('MainMenu')">Back to Menu</button>
 </div>
+
 <style>
+/* Make sure the page has a clean background */
+#timeline::after {
+  height: 100% !important
+}
+
 /* Container */
 .endgame-screen {
   max-width: 800px;
@@ -2761,9 +3061,7 @@ $(document).on(':passagedisplay', function () {
 }
 
 /* Sections */
-.your-score,
-.insights,
-.leaderboard {
+.your-score, .insights, .leaderboard {
   margin-bottom: 2rem;
 }
 
@@ -2772,6 +3070,8 @@ $(document).on(':passagedisplay', function () {
   font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 1.25em;
+  text-align: center;
+  color: #4a5568;
 }
 .score-value {
   font-family: "Spectral", serif;
@@ -2790,14 +3090,19 @@ $(document).on(':passagedisplay', function () {
   letter-spacing: 0.05em;
   border-bottom: 1px dotted rgba(0,0,0,0.8);
   padding-bottom: 0.25em;
+  margin-bottom: 1em;
 }
 
 /* Insights list */
 .insights ul {
-  list-style-type: disc;
+  list-style-type: '✔ '; /* Use a checkmark for the bullet */
   padding-left: 1.5em;
   font-family: "Inter", sans-serif;
-  line-height: 1.4;
+  line-height: 1.6;
+}
+.insights li {
+  padding-left: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 /* Leaderboard table */
@@ -2806,8 +3111,7 @@ $(document).on(':passagedisplay', function () {
   border-collapse: collapse;
   font-family: "Inter", sans-serif;
 }
-.leaderboard th,
-.leaderboard td {
+.leaderboard th, .leaderboard td {
   padding: 0.75em;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
@@ -2816,13 +3120,210 @@ $(document).on(':passagedisplay', function () {
   background: #f9fafb;
   font-weight: 600;
 }
-
-/* “Back to Menu” button reuses your .button style */
+/* Highlight the player's row */
+.leaderboard tr.player-row {
+  background-color: #ebf8ff;
+  font-weight: bold;
+}
 </style>
 
 
-:: Event1 {"position":"600,1100","size":"100,100"}
-<<set $turn += 1>>
+:: Endgame {"position":"600,2625","size":"100,100"}
+\:: EndGame [passage]
+<<silently>>
+
+/* ------------------------------------------------------------------
+ * 0.  UTILS  (polyfill & helpers)
+ * ----------------------------------------------------------------*/
+<<run
+    /* clamp(x,min,max) for older SugarCube builds */
+    if(!Math.clamp){ Math.clamp = (x,min,max)=>Math.min(max,Math.max(min,x)); }
+
+    /* global helpers attached to window --------------------------*/
+    window.hasPolicy     = n => typeof PolicyManager!=="undefined" && PolicyManager.has(n);
+    window.addInsightIf  = (pol,text)=>{
+        if(window.hasPolicy && window.hasPolicy(pol)){
+            State.variables.insights.push(text);
+        }
+    };
+>>
+
+/* ------------------------------------------------------------------
+ * 1.  BASELINES — first & last snapshots
+ * ----------------------------------------------------------------*/
+<<set _start = State.variables.history?.[0] || {
+        homelessTotal      : 0,
+        inflowBase         : 80,
+        publicOpinion      : 50,
+        serviceCoordination: 50,
+        systemCapacity     : 0
+}>>
+<<set _end   = State.variables>>
+
+/* ------------------------------------------------------------------
+ * 2.  DELTAS & SCORE  (homelessness 60 % | inflow 40 %)
+ * ----------------------------------------------------------------*/
+<<set _homelessDelta = (_start.homelessTotal - _end.homelessTotal) / Math.max(1,_start.homelessTotal)>>
+<<set _inflowDelta   = (80 - _end.inflowBase) / 80>>
+
+<<set $finalScore = Math.round(
+        Math.clamp((_homelessDelta*600) + (_inflowDelta*400),0,1000)
+)>>
+
+
+/* ------------------------------------------------------------------
+ * 3.  INSIGHTS
+ * ----------------------------------------------------------------*/
+<<set $insights = []>>
+
+/* big‑picture numbers */
+<<run
+    if   (_homelessDelta >  0.005) $insights.push(`You reduced homelessness by ${Math.round(_homelessDelta*100)} % — from ${_start.homelessTotal.toLocaleString()} to ${_end.homelessTotal.toLocaleString()}.`);
+    else if (_homelessDelta < -0.005) $insights.push(`Homelessness rose ${Math.abs(Math.round(_homelessDelta*100))} % despite your efforts.`);
+    else $insights.push("Despite bold moves, total homelessness held steady.");
+
+    if   (_inflowDelta >  0.005) $insights.push(`New entries into homelessness fell ${Math.round(_inflowDelta*100)} %, easing long‑term pressure.`);
+    else if (_inflowDelta < -0.005) $insights.push("Inflow climbed, signalling prevention gaps.");
+>>
+
+<<if _end.serviceCoordination - _start.serviceCoordination >= 5>>
+    <<set $insights.push("Service‑coordination improved to " + _end.serviceCoordination + "%, giving providers a common playbook.")>>
+<</if>>
+
+<<if _end.publicOpinion - _start.publicOpinion >= 10>>
+    <<set $insights.push("Public approval climbed " + (_end.publicOpinion-_start.publicOpinion) + " pts, smoothing the path for future reforms.")>>
+<<elseif _end.publicOpinion - _start.publicOpinion <= -10>>
+    <<set $insights.push("Tough choices cost you " + Math.abs(_end.publicOpinion-_start.publicOpinion) + " pts in approval — but the data show they worked.")>>
+<</if>>
+
+/* policy‑specific lines ( ALL preserved ) */
+<<run
+    addInsightIf("Permit Shelters in All Urban Zones",
+        "Universal shelter zoning unblocked dozens of new sites, nudging unsheltered inflow downward.");
+
+    addInsightIf("Anti-Renoviction Bylaw",
+        "The anti‑renoviction by‑law preserved affordable stock and proved a crowd‑pleaser.");
+
+    addInsightIf("Affordable Housing Acquisition Fund Program",
+        "Your acquisition fund locked in " + (_end.unitsPreserved||0) + " nonprofit units.");
+
+    addInsightIf("Modular Housing & Office Conversions",
+        "Modular conversions demonstrated how speed and quality can coexist.");
+>>
+
+/* build‑path flavour */
+<<if hasPolicy("Build City Affordable Housing (Mid-Rise Densification)")>>
+    <<set $insights.push("Focused densification near transit is paying climate and equity dividends.")>>
+<<elseif hasPolicy("Starter Homes Expansion (Suburban)")>>
+    <<set $insights.push("Starter‑home expansion boosted ownership but stoked sprawl debates.")>>
+<<elseif hasPolicy("Modular Housing & Office Conversions")>>
+    <<set $insights.push("Factory‑built units delivered record‑fast move‑ins.")>>
+<</if>>
+
+/* equity programs */
+<<run
+    addInsightIf("Indigenous-Led Housing & Wellness Hubs",
+        "Indigenous‑led hubs paired cultural healing with housing, cutting Indigenous homelessness 20 % overnight.");
+
+    addInsightIf("Operation Home Base",
+        "Operation Home Base became a national model, re‑housing veterans while slashing PTSD‑related shelter stays.");
+
+    addInsightIf("LGBTQ2S+ Youth Sanctuaries & Support Network",
+        "Two LGBTQ2S+ sanctuaries drove a 5 % annual drop in youth inflow and set new standards for inclusive care.");
+
+    addInsightIf("Equitable Housing Access Program",
+        "Anti‑discrimination audits and rent‑bank supports steadied housing for racialized residents.");
+
+    addInsightIf("Welcome Home Ottawa",
+        "‘Welcome Home Ottawa’ merged temporary lodging with tenancy training, freeing shelter beds and lowering immigrant inflow 5 %.");
+>>
+
+/* fiscal / prevention extras */
+<<run
+    addInsightIf("UBI Pilot Program",
+        "The UBI pilot prevented hundreds of eviction filings—but left council debating long‑term affordability.");
+
+    addInsightIf("Vacancy & Speculation Tax Increase",
+        "A steeper vacancy tax nudged 50 idle homes back onto the market while raising $2.5 M for housing projects.");
+
+    addInsightIf("Right of First Refusal Program",
+        "Your right‑of‑first‑refusal rule preserved 75 at‑risk rentals in year one.");
+>>
+
+/* budget deficit note */
+<<if _end.budget < 0>>
+    <<set $insights.push("You finished with a budget deficit of $" + Math.abs(_end.budget).toLocaleString() + " M.")>>
+<</if>>
+
+/* ------------------------------------------------------------------
+ * 4.  LEADERBOARD
+ * ----------------------------------------------------------------*/
+<<set $leaderboard = $leaderboard || [
+    {name:"Quinn",   score:923},
+    {name:"Natasha", score:894},
+    {name:"Leo",     score:710},
+    {name:"Maria",   score:652}
+]>>
+
+<<run
+    let you = $leaderboard.find(e=>e.name==="YOU");
+    if(!you){ you = {name:"YOU",score:$finalScore}; $leaderboard.push(you); }
+    else    { you.score = $finalScore; }
+
+    $leaderboard.sort((a,b)=>b.score-a.score)
+                .forEach((e,i)=>e.rank = i+1);
+>>
+
+<</silently>>
+
+<!-- ─────────────────────── 5.  RENDER ─────────────────────── -->
+<div class="endgame-screen">
+    <div class="your-score">
+        <div class="score-label">FINAL&nbsp;SCORE</div>
+        <div class="score-value"><<=$finalScore>></div>
+    </div>
+
+    <div class="insights">
+        <div class="section-title">Highlights From Your Term</div>
+        <ul>
+            <<for _l range $insights>>
+                <li><<= _l >></li>
+            <</for>>
+        </ul>
+    </div>
+
+    <div class="leaderboard">
+        <div class="section-title">Leaderboard</div>
+        <table>
+            <thead><tr><th>Rank</th><th>City</th><th>Score</th></tr></thead>
+            <tbody>
+                <<for _e range $leaderboard>>
+                    <tr class="<<if _e.name is 'YOU'>>player-row<</if>>">
+                        <td><<= _e.rank >></td>
+                        <td><<= _e.name >></td>
+                        <td><<= _e.score >></td>
+                    </tr>
+                <</for>>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style role="stylesheet">
+.endgame-screen{max-width:800px;margin:5vh auto;padding:2rem;background:#fff;border:1px solid #e2e8f0;border-radius:12px;font-family:"Inter",sans-serif;box-sizing:border-box;}
+.your-score{text-align:center;margin-bottom:2rem}
+.score-label{font-size:1.25em;color:#4a5568}
+.score-value{font-family:"Spectral",serif;font-size:4em;color:#0066cc}
+.section-title{font-size:1.1em;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px dotted rgba(0,0,0,.7);margin-bottom:1em}
+.insights ul{list-style:'✔ ';padding-left:1.5em;line-height:1.5}
+.leaderboard th,.leaderboard td{padding:.6em;border-bottom:1px solid #e2e8f0;text-align:left}
+.leaderboard th{background:#f8fafc}
+.player-row{background:#ebf8ff;font-weight:700}
+</style>
+
+
+:: Event1 {"position":"600,1325","size":"100,100"}
+<<set $turn += 2>>
 <<script>>window.PolicyManager.tick();<</script>>
 
 <<script>>
@@ -3320,7 +3821,7 @@ color: #333;
 <</script>>
 
 
-:: Heatwave {"position":"700,1500","size":"100,100"}
+:: Heatwave {"position":"700,1700","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -3489,11 +3990,372 @@ setTimeout(function(){
 <</script>>
 
 
-:: HeatwaveInfo {"position":"825,1600","size":"100,100"}
+:: HeatwaveInfo {"position":"950,1650","size":"100,100"}
 history of heatwaves in canadian cities. what impact do they have on people who are currently unsheltered. what measures have various cities taken and their effectivness.
 
 
-:: InfoTemplate {"position":"100,200","size":"100,100"}
+:: Impact_IndigenousLedSolutions {"position":"500,900","size":"100,100"}
+
+<<script>>
+PolicyManager.register({
+  name: "Indigenous-Led Housing & Wellness Hubs",
+  costUpfront: 10,
+  costPerTurn: 15,
+  duration: 999999,
+
+  immediate(v) {
+    v.politicalCapital -= 1;
+    v.publicOpinion += 2;
+    v.systemCapacity += 30;  // culturally safe units + respite beds
+    v.serviceCoordination += 6;
+
+    /* Shift Indigenous unsheltered into hubs */
+    const hubs = 60;
+    const moved = Math.min(v.pop.unsheltered, hubs);
+    v.pop.unsheltered -= moved;
+    v.pop.sheltered += moved;
+
+    // === EXIT 20% of (pre-policy) Indigenous count ===
+    const originalIndigenous = v.pop.indigenous;
+    const indigenousToExit = Math.round(originalIndigenous * 0.20);
+
+    // 1) Remove from pop.indigenous
+    v.pop.indigenous = Math.max(0, originalIndigenous - indigenousToExit);
+
+    // 2) Also reduce the overall homeless total
+    v.homelessTotal = Math.max(0, v.homelessTotal - indigenousToExit);
+
+    /* Cut Indigenous inflow */
+    v.inflowShare.indigenous = Math.max(0.05, v.inflowShare.indigenous - 0.05);
+    window.Util.renorm(v.inflowShare);
+  },
+
+  tick(v, age) {
+    /* Every 6 months elders help permanent exits */
+    if (age > 0 && age % 6 === 0) {
+      const exits = Math.min(v.pop.sheltered, 8);
+      window.Util.exitPeople(exits, { sheltered: 1.0 });
+    }
+    /* Small boost to service coordination over time */
+    if (age > 0 && age % 12 === 0 && v.serviceCoordination < 95) {
+      v.serviceCoordination += 1;
+    }
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Culturally-Safe Units</div>
+      <div class="impact-content"><span class="impact-icon">↑ </span><span class="impact-value">30</span></div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Indigenous Inflow ↓</div>
+      <div class="impact-content"><span class="impact-value">5 % / yr</span></div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Operating Cost</div>
+      <div class="impact-content"><span class="impact-unit">$ </span><span class="impact-value">0.8<span class="impact-subtitle"> M / yr</span></span></div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+  Minwaashin Lodge and Tungasuvvingat Inuit co-lead two holistic hubs that blend housing, healing space, and elder-guided programming—cutting Indigenous homelessness by 20 % immediately and lowering inflow by ~5 % per year, while freeing emergency-shelter beds city-wide.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('ChooseC4Project');">Continue</button>
+</div>
+
+
+:: Impact_LGBTQYouthProgram {"position":"600,900","size":"100,100"}
+
+<<script>>
+PolicyManager.register({
+  name: "LGBTQ2S+ Youth Sanctuaries & Support Network",
+  costUpfront: 10,
+  costPerTurn: 15,
+  duration: 999999,
+
+  immediate(v) {
+    v.politicalCapital -= 1;
+    v.publicOpinion += 4;          // widely supported
+    v.systemCapacity += 25;        // new sanctuary beds
+
+    /* Move 40 youth out of unsheltered/sheltered into safe beds */
+    const toMove = 40;
+    const moved = Math.min(v.pop.unsheltered, Math.round(toMove * 0.55));
+    v.pop.unsheltered -= moved;
+    v.pop.transitional += moved;
+    v.pop.sheltered -= (toMove - moved);
+    v.pop.transitional += (toMove - moved);
+
+	// Inside immediate(v) of LGBTQ2S+ Youth program:
+    const originalLGBTQ = v.pop.lgbtqYouth;
+    const lgbtqToExit  = Math.round(originalLGBTQ * 0.15);
+
+    // 1) Remove from the LGBTQ youth count
+    v.pop.lgbtqYouth = Math.max(0, originalLGBTQ - lgbtqToExit);
+
+    // 2) Also reduce the overall total
+    v.homelessTotal = Math.max(0, v.homelessTotal - lgbtqToExit);
+    /* Lower inflow among LGBTQ youth */
+    v.inflowShare.lgbtqYouth = Math.max(0.01, v.inflowShare.lgbtqYouth - 0.05);
+    v.inflowBase = Math.max(0, v.inflowBase - 5);   // fewer new entries overall
+    window.Util.renorm(v.inflowShare);
+  },
+
+  tick(v, age) {
+    /* Every quarter: small exits to permanent housing */
+    if (age > 0 && age % 4 === 0) {
+      const exits = Math.min(v.pop.transitional, 6);
+      window.Util.exitPeople(exits, { transitional: 1.0 });
+    }
+
+    /* Annual public‑opinion boost as program shows results */
+    if (age > 0 && age % 12 === 0 && v.publicOpinion < 85) {
+      v.publicOpinion += 1;
+    }
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Sanctuary Beds</div>
+      <div class="impact-content"><span class="impact-icon">↑&nbsp;</span><span class="impact-value">25</span></div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Youth Inflow ↓</div>
+      <div class="impact-content"><span class="impact-value">5&nbsp;% / yr</span></div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Operating Cost</div>
+      <div class="impact-content"><span class="impact-unit">$ </span><span class="impact-value">0.7<span class="impact-subtitle">&nbsp;M / yr</span></span></div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+  Ottawa partners with Kind Space and YSB to open two 24‑hour sanctuaries, each offering 25 affirming beds, peer mentors, and on‑site mental‑health care. Early data show a 5 % drop in LGBTQ2S+ youth entering homelessness within the first year.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('ChooseC4Project');">Continue</button>
+</div>
+
+
+:: Impact_NewcomerHousingProject {"position":"800,900","size":"100,100"}
+
+<<script>>
+PolicyManager.register({
+  name: "Welcome Home Ottawa",
+  costUpfront: 10,
+  costPerTurn: 15,
+  duration: 999999,
+
+  immediate(v) {
+    v.serviceCoordination += 5;
+    v.publicOpinion += 2;
+
+    /* Temporary accommodation frees shelter beds */
+    v.systemCapacity += 20;
+
+    // === EXIT 15% of (pre-policy) immigrant count ===
+    const originalImmigrants = v.pop.immigrant;
+    const immigrantsToExit  = Math.round(originalImmigrants * 0.15);
+
+    // 1) Remove from pop.immigrant
+    v.pop.immigrant = Math.max(0, originalImmigrants - immigrantsToExit);
+
+    // 2) Also reduce the overall homeless total
+    v.homelessTotal  = Math.max(0, v.homelessTotal - immigrantsToExit);
+
+    /* Lower immigrant inflow */
+    v.inflowShare.immigrant = Math.max(0.15, v.inflowShare.immigrant - 0.05);
+    v.inflowBase = Math.max(0, v.inflowBase - 4);
+    window.Util.renorm(v.inflowShare);
+  },
+
+  tick(v, age) {
+    /* Language / tenancy workshops each quarter */
+    if (age > 0 && age % 4 === 0 && v.serviceCoordination < 90) {
+      v.serviceCoordination += 1;
+    }
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Beds Added</div>
+      <div class="impact-content">
+        <span class="impact-icon">↑&nbsp;</span>
+        <span class="impact-value">20</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Immigrant Inflow ↓</div>
+      <div class="impact-content">
+        <span class="impact-value">5&nbsp;% / yr</span>
+      </div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Operating Cost</div>
+      <div class="impact-content">
+        <span class="impact-unit">$ </span>
+        <span class="impact-value">0.6<span class="impact-subtitle">&nbsp;M / yr</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+  The city leases a former motel for newcomer families, pairing it with OCISO-run housing navigation, tenancy-rights workshops, and rapid credential-recognition pathways. Within months, 15 % of current immigrant clients are quickly housed and exited, and inflow among immigrants and refugees drops by roughly 5 %.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('ChooseC4Project');">Continue</button>
+</div>
+
+
+:: Impact_RacializedHousingInitiative {"position":"700,900","size":"100,100"}
+<!-- ███► “Equitable Housing Access” for Racialized Communities  ◄███ -->
+
+<<script>>
+PolicyManager.register({
+  name: "Equitable Housing Access Program",
+  costUpfront: 10,
+  costPerTurn: 15,
+  duration: 999999,
+
+  immediate(v) {
+    v.publicOpinion += 3;
+    v.serviceCoordination += 4;
+    v.politicalCapital -= 1;
+  // Inside immediate(v) of Equitable Housing Access program:
+  const originalRacialized = v.pop.racialized;
+  const racializedToExit  = Math.round(originalRacialized * 0.15);
+
+  v.pop.racialized   = Math.max(0, originalRacialized - racializedToExit);
+  v.homelessTotal    = Math.max(0, v.homelessTotal - racializedToExit);
+
+    /* Dedicated rent subsidies stop eviction/inflow */
+    v.inflowShare.racialized = Math.max(0.01, v.inflowShare.racialized - 0.04);
+    v.inflowBase = Math.max(0, v.inflowBase - 6);
+    window.Util.renorm(v.inflowShare);
+  },
+
+  tick(v, age) {
+    /* Quarterly anti‑discrimination audits nudge inflow downward */
+    if (age > 0 && age % 4 === 0) {
+      v.inflowShare.racialized = Math.max(0.01, v.inflowShare.racialized - 0.01);
+      window.Util.renorm(v.inflowShare);
+    }
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Inflow (Racialized)</div>
+      <div class="impact-content"><span class="impact-icon">↓&nbsp;</span><span class="impact-value">4&nbsp;% / yr</span></div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Service Coordination</div>
+      <div class="impact-content"><span class="impact-icon">↑&nbsp;</span><span class="impact-value">4&nbsp;%</span></div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Operating Cost</div>
+      <div class="impact-content"><span class="impact-unit">$ </span><span class="impact-value">0.5<span class="impact-subtitle">&nbsp;M / yr</span></span></div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+  Working with the Anti‑Racism Secretariat and OCISO, the city funds culturally‑specific housing navigators and a rent‑bank for racialized tenants. Targeted supports and anti‑discrimination audits cut inflow for these communities by roughly 4 % in year one.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('ChooseC4Project');">Continue</button>
+</div>
+
+
+:: Impact_VeteranSupportProgram {"position":"400,900","size":"100,100"}
+<!-- ███► “Operation Home Base” – Veteran Re‑housing & Support  ◄███ -->
+
+<<script>>
+PolicyManager.register({
+  name: "Operation Home Base",
+  costUpfront: 10,
+  costPerTurn: 15,
+  duration: 999999,
+
+  immediate(v) {
+    v.publicOpinion += 6;        // strong public support
+    v.systemCapacity += 15;
+    v.serviceCoordination += 3;
+
+    /* Rapidly re‑house 40 veterans */
+    const vets = Math.min(v.pop.unsheltered, 10);
+    v.pop.unsheltered -= vets;
+    v.pop.sheltered += vets;
+    v.pop.transitional += (40 - vets);
+    const originalVets    = v.pop.veteran;
+    const veteransToExit  = Math.round(originalVets * 0.25);
+
+    // 1) Remove from the veteran‐count field
+    v.pop.veteran = Math.max(0, originalVets - veteransToExit);
+
+    // 2) Also remove from the overall homeless total
+    v.homelessTotal = Math.max(0, v.homelessTotal - veteransToExit);
+    /* Cut veteran inflow */
+    v.inflowShare.veteran = Math.max(0.01, v.inflowShare.veteran - 0.025);
+    window.Util.renorm(v.inflowShare);
+  },
+
+  tick(v, age) {
+    /* Case‑management exits each year */
+    if (age > 0 && age % 12 === 0) {
+      const exits = Math.min(v.pop.transitional, 5);
+      window.Util.exitPeople(exits, { transitional: 1.0 });
+    }
+  }
+});
+<</script>>
+
+<div class="policy-impact-screen">
+  <div class="impact-container">
+    <div class="impact-box" data-index="0">
+      <div class="impact-title">Veterans Re‑housed</div>
+      <div class="impact-content"><span class="impact-icon">↑&nbsp;</span><span class="impact-value">20</span></div>
+    </div>
+    <div class="impact-box" data-index="1">
+      <div class="impact-title">Veteran Inflow ↓</div>
+      <div class="impact-content"><span class="impact-value">1.5&nbsp;% / yr</span></div>
+    </div>
+    <div class="impact-box" data-index="2">
+      <div class="impact-title">Operating Cost</div>
+      <div class="impact-content"><span class="impact-unit">$ </span><span class="impact-value">0.4<span class="impact-subtitle">&nbsp;M / yr</span></span></div>
+    </div>
+  </div>
+</div>
+
+<p style="padding:0 6rem;font-size:1.1em">
+  In partnership with VAC and VETS Canada, “Operation Home Base” secures 20 dedicated units, on‑site PTSD treatment, and peer support. Intake teams now flag at‑risk veterans before discharge, reducing veteran homelessness inflow by ~1.5 % annually.
+</p>
+
+<div class="centered-btn">
+  <button class="continue-button" onclick="SugarCube.Engine.play('ChooseC4Project');">Continue</button>
+</div>
+
+
+:: InfoTemplate {"position":"25,200","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -3537,7 +4399,7 @@ history of heatwaves in canadian cities. what impact do they have on people who 
 PolicyManager.register({
   name: "Office Conversion to Transitional Housing",
   costUpfront: 6,
-  costPerTurn: 0.5,
+  costPerTurn: 5,
   duration: 999999,
 
   immediate(v) { // Added window.Util
@@ -3983,10 +4845,12 @@ PolicyManager.register({
 </div>
 
 
-:: PIT1 {"position":"600,1000","size":"100,100"}
-<<set $turn += 1>>
-<!-- —————————————————————————————————————————————
-     ————————————————————————————————————————————— -->
+:: PIT1 {"position":"600,1225","size":"100,100"}
+<<set $year += 1>>
+<<set $budget += 215>>
+<<script>>window.PolicyManager.tick();<</script>>
+
+
 <div class="chart-section">
   <h3>Housing Status Change</h3>
   <canvas id="housingStackedBar" height="160"></canvas>
@@ -4163,8 +5027,12 @@ $(document).one(':passagedisplay', function(){
 </div>
 
 
-:: PIT2 {"position":"600,2300","size":"100,100"}
+:: PIT2 {"position":"600,2525","size":"100,100"}
 <<set $turn += 1>>
+<<set $turn += 1>>
+<<set $turn += 1>>
+<<set $year += 1>>
+
 <<script>>window.PolicyManager.tick();<</script>>
 
 <!-- —————————————————————————————————————————————
@@ -4350,11 +5218,16 @@ $(document).one(':passagedisplay', function(){
 
 <div class="centered-btn">
 
- <button class="continue-button" onclick="SugarCube.Engine.play('PIT2');">Continue</button>
+<<if $year == 10>>
+		<button class="continue-button" onclick="SugarCube.Engine.play('Endgame')">Continue</button>
+<<else>>
+	<button class="continue-button" onclick="SugarCube.Engine.play('PIT2')">Continue</button>
+<</if>>
+
 </div>
 
 
-:: Pilots {"position":"600,2100","size":"100,100"}
+:: Pilots {"position":"600,2325","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
   
@@ -4699,8 +5572,10 @@ $(document).one(':passagedisplay', function(){
 </div>
 
 
-:: PreZoning {"position":"600,1900","size":"100,100"}
-<<set $turn += 1>>
+:: PreZoning {"position":"600,2125","size":"100,100"}
+<<set $year += 1>>
+<<set $budget += 215>>
+<<set $turn += 2>>
 <<script>>window.PolicyManager.tick();<</script>>
 <!-- CSS Styling -->
 <style>
@@ -4745,6 +5620,125 @@ $(document).one(':passagedisplay', function(){
     <button class="button" onclick="SugarCube.Engine.play('Zoning')">Update Zoning</button>
   </div>
 </div>
+
+
+:: ProtestAtCityHall {"position":"225,1650","size":"100,100"}
+<div class="policy-impact-screen" id="protestMetrics">
+  <div class="impact-container">
+    <div class="impact-box">
+      <div class="impact-title">Public Support Shift</div>
+      <div class="impact-content">
+        <span class="impact-value" id="metric-opinion">0</span>
+        <span class="impact-subtitle">%</span>
+      </div>
+    </div>
+    <div class="impact-box">
+      <div class="impact-title">System Strain</div>
+      <div class="impact-content">
+        <span class="impact-unit">% &nbsp;</span>
+        <span class="impact-value" id="metric-strain">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="question-wrapper">
+    <p>A grassroots protest has erupted at City Hall over inaction on homelessness. How do you respond?</p>
+    <form id="protestChoices">
+      <label class="checkbox"><input type="checkbox" id="protest-opt1" /><span>Attend and speak at the protest</span></label>
+      <label class="checkbox"><input type="checkbox" id="protest-opt2" /><span>Hold a closed-door meeting with organizers</span></label>
+      <label class="checkbox"><input type="checkbox" id="protest-opt3" /><span>Deploy additional police to monitor the area</span></label>
+      <label class="checkbox"><input type="checkbox" id="protest-opt4" /><span>Ignore it and release a statement later</span></label>
+    </form>
+  </div>
+
+  <div id="warning" style="display: none; color: #b91c1c; margin-top: 1em">
+    ⚠️ You must choose at least one response before continuing.
+  </div>
+  <button class="button" onclick="handleProtestContinue()">Continue</button>
+</div>
+
+<style>
+  #timeline { background: #f7f7f7 !important; }
+  .button { background-color: rgb(32, 117, 202); background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178)); border: 1px solid rgb(38, 111, 185); border-radius: 12px; color: #fff; padding: 0.65rem 1rem; font-size: 1rem; display: block; margin: 0.9rem auto; cursor: pointer; max-width: 420px; }
+  .button:hover { background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202)); }
+  label.checkbox { display: flex; align-items: center; cursor: pointer; margin: 0.75em 0; user-select: none; }
+  label.checkbox input { appearance: none; width: 1.2em; height: 1.2em; border: 2px solid #cbd5e1; border-radius: 0.25rem; position: relative; transition: background-color 0.2s, border-color 0.2s; }
+  label.checkbox input:checked { background-color: #3b82f6; border-color: #3b82f6; }
+  label.checkbox input:checked::after { content: ""; position: absolute; top: 0.15em; left: 0.35em; width: 0.25em; height: 0.6em; border: solid white; border-width: 0 0.2em 0.2em 0; transform: rotate(45deg); }
+  label.checkbox span { margin-left: 0.5em; font-size: 1em; color: #1f2937; }
+  .impact-box { background-color: rgba(255, 255, 255, 0.6); }
+  .impact-unit { font-weight: 700 !important; }
+  .question-wrapper { background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
+  .animate-number { display: inline-block; }
+</style>
+
+<<script>>
+setTimeout(function () {
+  const protestImpacts = {
+    "protest-opt1": { opinion: 10, strain: 5 },
+    "protest-opt2": { opinion: 6,  strain: 3 },
+    "protest-opt3": { opinion: -8, strain: 15 },
+    "protest-opt4": { opinion: -4, strain: 0 }
+  };
+//bleh
+  // Limit: up to 3 choices
+  document.querySelectorAll('#protestChoices input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', function (e) {
+      document.getElementById('warning').style.display = 'none';
+      const checked = document.querySelectorAll('#protestChoices input:checked');
+      if (checked.length > 3) {
+        e.target.checked = false;
+        const w = document.getElementById('warning');
+        w.textContent = '⚠️ You can only select up to 3 options.';
+        w.style.display = 'block';
+        setTimeout(() => w.style.display = 'none', 2500);
+      }
+      updateProtestMetrics();
+    });
+  });
+
+  function updateProtestMetrics() {
+    let opinion = 0, strain = 0;
+    Object.entries(protestImpacts).forEach(([id, effect]) => {
+      const cb = document.getElementById(id);
+      if (cb && cb.checked) {
+        opinion += effect.opinion;
+        strain += effect.strain;
+      }
+    });
+    document.getElementById('metric-opinion').textContent = opinion;
+    document.getElementById('metric-strain').textContent = strain;
+  }
+  updateProtestMetrics();
+
+  window.handleProtestContinue = function () {
+    const selected = Array.from(document.querySelectorAll('#protestChoices input:checked')).map(cb => cb.id);
+    const warning = document.getElementById('warning');
+    if (selected.length === 0) {
+      warning.textContent = '⚠️ You must choose at least one response before continuing.';
+      warning.style.display = 'block';
+      return;
+    }
+    // Save for later, if needed
+    State.temporary.protestSelected = selected;
+
+    // Calculate totals and update simulation variables
+    let totalOpinion = 0, totalStrain = 0;
+    selected.forEach(id => {
+      const impact = protestImpacts[id];
+      if (!impact) return;
+      totalOpinion += impact.opinion;
+      totalStrain += impact.strain;
+    });
+
+    State.variables.publicOpinion += totalOpinion;
+    State.variables.publicOpinion = Math.max(0, Math.min(100, State.variables.publicOpinion));
+    State.variables.systemCapacity += Math.floor(totalStrain / 5); // Scale strain as appropriate
+
+    SugarCube.Engine.play('Bill6');
+  };
+}, 0);
+<</script>>
 
 
 :: QuarterFour {"position":"1500,1125","size":"100,100"}
@@ -4820,9 +5814,7 @@ $(document).one(':passagedisplay', function(){
 </div>
 
 
-:: ROFR {"position":"700,2200","size":"100,100"}
-
-
+:: ROFR {"position":"700,2425","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="0">
@@ -4887,8 +5879,8 @@ PolicyManager.register({
 <<script>>
 PolicyManager.register({
   name: "Anti-Renoviction Bylaw",
-  costUpfront: 1,
-  costPerTurn: 1,
+  costUpfront: 3,
+  costPerTurn: 3,
   duration: 999999,
   immediate(v) {
     if (v.publicOpinion < 90) v.publicOpinion += 8;
@@ -6782,7 +7774,7 @@ $(document).on("click", "#submit-button", function () {
       duration: 1, 
     });
 
-    Engine.play("ChooseC4Project1");
+    Engine.play("TargettedPrograms");
 });
 
   <</script>>
@@ -6974,11 +7966,11 @@ body {
 PolicyManager.register({
   name: "Permit Shelters in All Urban Zones",
   costUpfront: 2,
-  costPerTurn: 0, // Small ongoing admin/monitoring cost
+  costPerTurn: 2, // Small ongoing admin/monitoring cost
   duration: 999999,
   immediate(v) {
     if (v.publicOpinion > 15) v.publicOpinion -= 5;
-    if (v.systemCapacity < 180) v.systemCapacity += 15;
+    if (v.systemCapacity < 180) v.systemCapacity += 2;
     v.budget += 8;
     v.politicalCapital -=1;
   },
@@ -7038,10 +8030,10 @@ PolicyManager.register({
 <p style="padding:0 6rem;font-size:1.1em">In February 2025, Ottawa City Council passed a motion permitting shelters in all urban zones, removing zoning barriers that had delayed new sites for months. This expands system capacity, speeds up approvals, and unlocks access to new provincial and federal funds. Advocates welcome the change, though some warn it must be paired with long-term housing investments to avoid deepening reliance on temporary shelter. </p>
 <div class="centered-btn">
  <button class="continue-button" onclick="SugarCube.Engine.play('BuildCanadaHomes');">Continue</button>
-</div>
+</div> h 
 
 
-:: SnowStorm {"position":"500,1500","size":"100,100"}
+:: SnowStorm {"position":"500,1700","size":"100,100"}
 <<set $turn += 1>>
 <<script>>window.PolicyManager.tick();<</script>>
 
@@ -7372,7 +8364,7 @@ PolicyManager.register({
 <</script>>
 
 
-:: SnowstormInfo {"position":"350,1575","size":"100,100"}
+:: SnowstormInfo {"position":"350,1800","size":"100,100"}
 <style>
 body {
     background: #e5f5ff;
@@ -7383,261 +8375,6 @@ body {
 </style>
 
 history of snow storms in canadian cities. what impact do they have on homeless populations. what measures have various cities taken and their effectivness. why might people take their chances outside?
-
-
-:: COVIDOutbreak {"position":"800,1800","size":"100,100"}
-
-<div class="policy-impact-screen" id="covidMetrics">
-  <div class="impact-container">
-    <div class="impact-box">
-      <div class="impact-title">Budget Impact</div>
-      <div class="impact-content">
-        <span class="impact-value" id="metric-budget">0</span>
-        <span class="impact-subtitle">M</span>
-      </div>
-    </div>
-    <div class="impact-box">
-      <div class="impact-title">Public Opinion</div>
-      <div class="impact-content">
-        <span class="impact-value" id="metric-opinion">0</span>
-        <span class="impact-subtitle">%</span>
-      </div>
-    </div>
-    <div class="impact-box">
-      <div class="impact-title">System Strain</div>
-      <div class="impact-content">
-        <span class="impact-unit">% &nbsp;</span>
-        <span class="impact-value" id="metric-strain">0</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="question-wrapper">
-    <p>A COVID outbreak hits a downtown shelter cluster. How do you respond?</p>
-    <form id="covidChoices">
-      <label class="checkbox"><input type="checkbox" id="covid-opt1" /><span>Rent hotel rooms to isolate infected individuals</span></label>
-      <label class="checkbox"><input type="checkbox" id="covid-opt2" /><span>Launch emergency mobile testing units</span></label>
-      <label class="checkbox"><input type="checkbox" id="covid-opt3" /><span>Distribute masks, hygiene kits, and sanitation stations</span></label>
-      <label class="checkbox"><input type="checkbox" id="covid-opt4" /><span>Limit shelter intake to reduce transmission</span></label>
-    </form>
-  </div>
-
-  <div id="warning" style="display: none; color: #b91c1c; margin-top: 1em">
-    ⚠️ You must choose at least one response before continuing.
-  </div>
-  <button class="button" onclick="handleCOVIDContinue()">Continue</button>
-</div>
-
-<style>
-  #timeline { background: #f5f5f5 !important; }
-  .button { background-color: rgb(32,117,202); background-image: linear-gradient(rgb(41,122,202), rgb(30,104,178)); border: 1px solid rgb(38,111,185); border-radius: 12px; color: #fff; padding: 0.65rem 1rem; font-size: 1rem; display: block; margin: 0.9rem auto; cursor: pointer; max-width: 420px; }
-  .button:hover { background-image: linear-gradient(rgb(51,130,210), rgb(39,121,202)); }
-  label.checkbox { display: flex; align-items: center; cursor: pointer; margin: 0.75em 0; user-select: none; }
-  label.checkbox input { appearance: none; width: 1.2em; height: 1.2em; border: 2px solid #cbd5e1; border-radius: 0.25rem; position: relative; transition: background-color 0.2s, border-color 0.2s; }
-  label.checkbox input:checked { background-color: #3b82f6; border-color: #3b82f6; }
-  label.checkbox input:checked::after { content: ""; position: absolute; top: 0.15em; left: 0.35em; width: 0.25em; height: 0.6em; border: solid white; border-width: 0 0.2em 0.2em 0; transform: rotate(45deg); }
-  label.checkbox span { margin-left: 0.5em; font-size: 1em; color: #1f2937; }
-  .impact-box { background-color: rgba(255,255,255,0.6); }
-  .impact-unit { font-weight: 700 !important; }
-  .question-wrapper { background: rgba(255,255,255,0.6); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
-</style>
-
-<<script>>
-setTimeout(function () {
-  const covidImpacts = {
-    "covid-opt1": { budget: -12, opinion: 5, strain: -2 },
-    "covid-opt2": { budget: -4,  opinion: 3, strain: -1 },
-    "covid-opt3": { budget: -3,  opinion: 2, strain: 0 },
-    "covid-opt4": { budget: 0,   opinion: -5, strain: 10 }
-  };
-
-  // Limit: up to 3 choices
-  document.querySelectorAll('#covidChoices input[type=checkbox]').forEach(cb => {
-    cb.addEventListener('change', function (e) {
-      document.getElementById('warning').style.display = 'none';
-      const checked = document.querySelectorAll('#covidChoices input:checked');
-      if (checked.length > 3) {
-        e.target.checked = false;
-        const w = document.getElementById('warning');
-        w.textContent = '⚠️ You can only select up to 3 options.';
-        w.style.display = 'block';
-        setTimeout(() => w.style.display = 'none', 2500);
-      }
-      updateCOVIDMetrics();
-    });
-  });
-
-  function updateCOVIDMetrics() {
-    let b = 0, o = 0, s = 0;
-    Object.entries(covidImpacts).forEach(([id, effect]) => {
-      const cb = document.getElementById(id);
-      if (cb && cb.checked) {
-        b += effect.budget;
-        o += effect.opinion;
-        s += effect.strain;
-      }
-    });
-    document.getElementById('metric-budget').textContent = b;
-    document.getElementById('metric-opinion').textContent = o;
-    document.getElementById('metric-strain').textContent = s;
-  }
-  updateCOVIDMetrics();
-
-  // Continue handler: update sim variables and move forward
-  window.handleCOVIDContinue = function () {
-    const selected = Array.from(document.querySelectorAll('#covidChoices input:checked')).map(cb => cb.id);
-    const warning = document.getElementById('warning');
-    if (selected.length === 0) {
-      warning.textContent = '⚠️ You must choose at least one response before continuing.';
-      warning.style.display = 'block';
-      return;
-    }
-
-    // Save to State.temporary if needed for later
-    State.temporary.covidSelected = selected;
-
-    // Calculate totals and update simulation state
-    let totalBudget = 0, totalOpinion = 0, totalStrain = 0;
-    selected.forEach(id => {
-      const impact = covidImpacts[id];
-      if (!impact) return;
-      totalBudget += impact.budget;
-      totalOpinion += impact.opinion;
-      totalStrain += impact.strain;
-    });
-
-    State.variables.budget += totalBudget;
-    State.variables.publicOpinion += totalOpinion;
-    State.variables.publicOpinion = Math.max(0, Math.min(100, State.variables.publicOpinion));
-    State.variables.systemCapacity += totalStrain; // or use another metric as needed
-
-    SugarCube.Engine.play('Bill6');
-  };
-}, 0);
-<</script>>
-
-:: ProtestAtCityHall {"position":"700,1700","size":"100,100"}
-
-<div class="policy-impact-screen" id="protestMetrics">
-  <div class="impact-container">
-    <div class="impact-box">
-      <div class="impact-title">Public Support Shift</div>
-      <div class="impact-content">
-        <span class="impact-value" id="metric-opinion">0</span>
-        <span class="impact-subtitle">%</span>
-      </div>
-    </div>
-    <div class="impact-box">
-      <div class="impact-title">System Strain</div>
-      <div class="impact-content">
-        <span class="impact-unit">% &nbsp;</span>
-        <span class="impact-value" id="metric-strain">0</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="question-wrapper">
-    <p>A grassroots protest has erupted at City Hall over inaction on homelessness. How do you respond?</p>
-    <form id="protestChoices">
-      <label class="checkbox"><input type="checkbox" id="protest-opt1" /><span>Attend and speak at the protest</span></label>
-      <label class="checkbox"><input type="checkbox" id="protest-opt2" /><span>Hold a closed-door meeting with organizers</span></label>
-      <label class="checkbox"><input type="checkbox" id="protest-opt3" /><span>Deploy additional police to monitor the area</span></label>
-      <label class="checkbox"><input type="checkbox" id="protest-opt4" /><span>Ignore it and release a statement later</span></label>
-    </form>
-  </div>
-
-  <div id="warning" style="display: none; color: #b91c1c; margin-top: 1em">
-    ⚠️ You must choose at least one response before continuing.
-  </div>
-  <button class="button" onclick="handleProtestContinue()">Continue</button>
-</div>
-
-<style>
-  #timeline { background: #f7f7f7 !important; }
-  .button { background-color: rgb(32, 117, 202); background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178)); border: 1px solid rgb(38, 111, 185); border-radius: 12px; color: #fff; padding: 0.65rem 1rem; font-size: 1rem; display: block; margin: 0.9rem auto; cursor: pointer; max-width: 420px; }
-  .button:hover { background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202)); }
-  label.checkbox { display: flex; align-items: center; cursor: pointer; margin: 0.75em 0; user-select: none; }
-  label.checkbox input { appearance: none; width: 1.2em; height: 1.2em; border: 2px solid #cbd5e1; border-radius: 0.25rem; position: relative; transition: background-color 0.2s, border-color 0.2s; }
-  label.checkbox input:checked { background-color: #3b82f6; border-color: #3b82f6; }
-  label.checkbox input:checked::after { content: ""; position: absolute; top: 0.15em; left: 0.35em; width: 0.25em; height: 0.6em; border: solid white; border-width: 0 0.2em 0.2em 0; transform: rotate(45deg); }
-  label.checkbox span { margin-left: 0.5em; font-size: 1em; color: #1f2937; }
-  .impact-box { background-color: rgba(255, 255, 255, 0.6); }
-  .impact-unit { font-weight: 700 !important; }
-  .question-wrapper { background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
-  .animate-number { display: inline-block; }
-</style>
-
-<<script>>
-setTimeout(function () {
-  const protestImpacts = {
-    "protest-opt1": { opinion: 10, strain: 5 },
-    "protest-opt2": { opinion: 6,  strain: 3 },
-    "protest-opt3": { opinion: -8, strain: 15 },
-    "protest-opt4": { opinion: -4, strain: 0 }
-  };
-//bleh
-  // Limit: up to 3 choices
-  document.querySelectorAll('#protestChoices input[type=checkbox]').forEach(cb => {
-    cb.addEventListener('change', function (e) {
-      document.getElementById('warning').style.display = 'none';
-      const checked = document.querySelectorAll('#protestChoices input:checked');
-      if (checked.length > 3) {
-        e.target.checked = false;
-        const w = document.getElementById('warning');
-        w.textContent = '⚠️ You can only select up to 3 options.';
-        w.style.display = 'block';
-        setTimeout(() => w.style.display = 'none', 2500);
-      }
-      updateProtestMetrics();
-    });
-  });
-
-  function updateProtestMetrics() {
-    let opinion = 0, strain = 0;
-    Object.entries(protestImpacts).forEach(([id, effect]) => {
-      const cb = document.getElementById(id);
-      if (cb && cb.checked) {
-        opinion += effect.opinion;
-        strain += effect.strain;
-      }
-    });
-    document.getElementById('metric-opinion').textContent = opinion;
-    document.getElementById('metric-strain').textContent = strain;
-  }
-  updateProtestMetrics();
-
-  window.handleProtestContinue = function () {
-    const selected = Array.from(document.querySelectorAll('#protestChoices input:checked')).map(cb => cb.id);
-    const warning = document.getElementById('warning');
-    if (selected.length === 0) {
-      warning.textContent = '⚠️ You must choose at least one response before continuing.';
-      warning.style.display = 'block';
-      return;
-    }
-    // Save for later, if needed
-    State.temporary.protestSelected = selected;
-
-    // Calculate totals and update simulation variables
-    let totalOpinion = 0, totalStrain = 0;
-    selected.forEach(id => {
-      const impact = protestImpacts[id];
-      if (!impact) return;
-      totalOpinion += impact.opinion;
-      totalStrain += impact.strain;
-    });
-
-    State.variables.publicOpinion += totalOpinion;
-    State.variables.publicOpinion = Math.max(0, Math.min(100, State.variables.publicOpinion));
-    State.variables.systemCapacity += Math.floor(totalStrain / 5); // Scale strain as appropriate
-
-    SugarCube.Engine.play('Bill6');
-  };
-}, 0);
-<</script>>
-
-
- 
-
 
 
 :: Start {"position":"600,0","size":"100,100"}
@@ -7900,7 +8637,7 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
   <!--  =====  END UI  =====  -->
 
 
-:: SupportiveOffice {"position":"500,1300","size":"100,100"}
+:: SupportiveOffice {"position":"500,1525","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -7934,16 +8671,272 @@ A familiar playbook returns: low-cost, fast-track starter homes on the urban fri
 
 <div class="centered-btn">
   <button class="continue-button" onclick="(function() {
-    var events = ['SnowStorm', 'COVIDOutbreak', 'ProtestAtCityHall', 'Heatwave'];
+    var events = ['SnowStorm', 'SnowStorm', 'SnowStorm', 'SnowStorm'];
     var event = events[Math.floor(Math.random() * events.length)];
     SugarCube.Engine.play(event);
   })();">Continue</button>
 </div>
 
 
-:: UBIPilot {"position":"500,2200","size":"100,100"}
+:: TargettedPrograms {"position":"600,800","size":"100,100"}
+
+  
+  <!-- CSS Styling (Using the first CSS block you provided for choice screens) -->
+  <style>
+    .build-intro {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 5rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #1c1c1e;
+    }
+    .drawer-content {
+     padding: 10px;
+      padding-left: 25%;
+      padding-right: 25%;
+    }
+    .button-wrapper {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      max-width: 450px; /* Adjusted slightly for potentially longer button text */
+      margin: 0.9rem auto;
+      position: relative;
+      top: -0.25rem;
+    }
+    .button {
+      flex: 1;
+      background-color: rgb(32, 117, 202);
+      background-image: linear-gradient(rgb(41, 122, 202), rgb(30, 104, 178));
+      border: 1px solid rgb(38, 111, 185);
+      border-radius: 12px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 0.95rem; /* Slightly smaller if text is long */
+      font-weight: 400;
+      line-height: 1.25;
+      padding: 0.65rem 1rem;
+      text-align: center;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+    .button:hover {
+      background-image: linear-gradient(rgb(51, 130, 210), rgb(39, 121, 202));
+      box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 2px;
+      border-color: rgb(44, 123, 202);
+    }
+    .button:active {
+      transform: scale(0.98);
+      box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset,
+                  rgba(0, 0, 0, 0.4) 0 1px 1px;
+      border-color: rgb(44, 123, 202);
+    }
+    .button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(58, 122, 217, 0.5);
+      border-color: rgb(44, 123, 202);
+    }
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+      border-color: #2a5a87;
+    }
+    .button:disabled:hover,
+    .button:disabled:active {
+      pointer-events: none;
+      box-shadow: none;
+    }
+    .button:first-of-type {
+      margin-top: 1rem;
+    }
+    .info-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+    .info-btn img {
+      width: 1.2rem;
+      height: 1.2rem;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+    .info-btn:hover img {
+      opacity: 1;
+    }
+  </style>
+  
+  <div class="passage-content">
+    <div class="build-intro">
+      <p>
+        Recognizing that certain communities are disproportionately affected by homelessness, the city is considering several targeted program investments. Each initiative aims to provide tailored support, increase housing stability, and reduce future homelessness for specific groups.
+        Which program will your city prioritize for immediate implementation?
+      </p>
+  
+      <!-- LGBTQ2S+ Youth Support Program -->
+      <div class="button-wrapper">
+        <button class="button" onclick="SugarCube.Engine.play('Impact_LGBTQYouthProgram');">
+          Launch LGBTQ2S+ Youth Sanctuaries & Support Network
+        </button>
+        <button id="info-lgbtq-youth" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <!-- Racialized Communities Housing Initiative -->
+      <div class="button-wrapper">
+        <button class="button" onclick="SugarCube.Engine.play('Impact_RacializedHousingInitiative');">
+          Invest in the "Equitable Housing Access" Program for Racialized Communities
+        </button>
+        <button id="info-racialized" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <!-- Indigenous-Led Housing Solutions -->
+      <div class="button-wrapper">
+        <button class="button" onclick="SugarCube.Engine.play('Impact_IndigenousLedSolutions');">
+          Fund "By Indigenous, For Indigenous" Housing & Wellness Hubs
+        </button>
+        <button id="info-indigenous" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <!-- Veterans Support & Rehousing Program -->
+      <div class="button-wrapper">
+        <button class="button" onclick="SugarCube.Engine.play('Impact_VeteranSupportProgram');">
+          Establish "Operation Home Base" for Veteran Rehousing & Support
+        </button>
+        <button id="info-veteran" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+  
+      <!-- Newcomer & Immigrant Housing Access Project -->
+      <div class="button-wrapper">
+        <button class="button" onclick="SugarCube.Engine.play('Impact_NewcomerHousingProject');">
+          Initiate "Welcome Home Ottawa" for Newcomer Housing Stability
+        </button>
+        <button id="info-immigrant" class="info-btn">
+          <img src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/icons/info.svg" alt="Info" />
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Drawers for Targeted Support Initiatives (Same as before, ensure they are linked) -->
+  <!-- drawer-lgbtq-youth -->
+  <sl-drawer placement="bottom" label="" class="drawer-lgbtq-youth">
+    <div class="drawer-content">
+      <h3>Supporting LGBTQ2S+ Youth in Ottawa</h3>
+      <p>
+        LGBTQ2S+ youth are significantly overrepresented in the homeless population, often facing family rejection, discrimination, and violence. Tailored programs offer safe, affirming housing and supports. This program focuses on creating dedicated safe spaces and a robust support network.
+      </p>
+      <h4>Key Strategies:</h4>
+      <p>
+        <strong>Dedicated Sanctuaries & Transitional Housing:</strong> Establishing safe housing explicitly for LGBTQ2S+ youth, similar to specialized services by YSB (Youth Services Bureau of Ottawa) and informed by Egale Canada's work. <div class="break"> </div>
+        <strong>Culturally Competent Wraparound Support:</strong> Services addressing unique trauma, mental health needs, identity affirmation, and connection to community resources like Kind Space. <div class="break"> </div>
+        <strong>Mentorship & Life Skills Pathways:</strong> Connecting youth with LGBTQ2S+ mentors and programs that build resilience, independent living skills, and educational/employment opportunities.
+      </p>
+      <p><em>This initiative aims to rapidly house LGBTQ2S+ youth and reduce their inflow into homelessness through early intervention and community-based support.</em></p>
+    </div>
+    <sl-button slot="footer" variant="primary" onclick="this.closest('sl-drawer').hide()">Close</sl-button>
+  </sl-drawer>
+  
+  <!-- drawer-racialized -->
+  <sl-drawer placement="bottom" label="" class="drawer-racialized">
+    <div class="drawer-content">
+      <h3>Addressing Systemic Barriers for Racialized Communities</h3>
+      <p>
+        Racialized individuals, including Black and other people of colour, face systemic discrimination in housing and employment, contributing to higher rates of homelessness. This program aims to dismantle these barriers and provide direct housing support.
+      </p>
+      <h4>Key Strategies:</h4>
+      <p>
+        <strong>Anti-Racism in Housing Policies & Navigation:</strong> Actively working with the City of Ottawa's Anti-Racism Secretariat to identify and remove discriminatory practices in housing access, alongside providing dedicated housing navigators for racialized individuals. <div class="break"> </div>
+        <strong>Culturally Appropriate Service Delivery:</strong> Ensuring housing support services, in partnership with organizations like OCISO and Somerset West CHC, are respectful and responsive to diverse cultural backgrounds. <div class="break"> </div>
+        <strong>Targeted Rent Subsidies & Housing Units:</strong> Allocating resources for rent supplements and dedicated housing units for racialized individuals and families facing discrimination.
+      </p>
+      <p><em>This initiative focuses on providing immediate housing stability and implementing measures to reduce inflow by tackling discrimination and enhancing targeted support networks.</em></p>
+    </div>
+    <sl-button slot="footer" variant="primary" onclick="this.closest('sl-drawer').hide()">Close</sl-button>
+  </sl-drawer>
+  
+  <!-- drawer-indigenous -->
+  <sl-drawer placement="bottom" label="" class="drawer-indigenous">
+    <div class="drawer-content">
+      <h3>Supporting Indigenous Self-Determination in Housing</h3>
+      <p>
+        Indigenous peoples are vastly overrepresented among those experiencing homelessness. "For Indigenous, By Indigenous" approaches are critical. This program funds Indigenous-led organizations to create and manage holistic housing and wellness hubs.
+      </p>
+      <h4>Key Strategies:</h4>
+      <p>
+        <strong>Culturally Safe Housing & Wellness Hubs:</strong> Developing integrated facilities that incorporate Indigenous worldviews, design, healing practices, and community gathering spaces, building on models like Minwaashin Lodge and Tewegan Housing for Indigenous Youth. <div class="break"> </div>
+        <strong>Holistic, Elder-Led Support Services:</strong> Integrating housing with health, mental health, cultural (e.g., via Tungasuvvingat Inuit), and employment services, guided by Elders and traditional knowledge. <div class="break"> </div>
+        <strong>Direct Funding & Partnership for Self-Determination:</strong> Providing multi-year operational and capital funding directly to Indigenous-led organizations, respecting their autonomy in alignment with the National Housing Strategy's Indigenous housing goals.
+      </p>
+      <p><em>This initiative will fund culturally appropriate housing and wellness services through Indigenous partners, aiming to significantly improve housing outcomes and reduce homelessness inflow for Indigenous peoples.</em></p>
+    </div>
+    <sl-button slot="footer" variant="primary" onclick="this.closest('sl-drawer').hide()">Close</sl-button>
+  </sl-drawer>
+  
+  <!-- drawer-veteran -->
+  <sl-drawer placement="bottom" label="" class="drawer-veteran">
+    <div class="drawer-content">
+      <h3>Honouring and Housing Veterans</h3>
+      <p>
+        "Operation Home Base" is a dedicated program for veterans facing housing instability, addressing their unique challenges in transitioning to civilian life, including service-related health issues and employment difficulties.
+      </p>
+      <h4>Key Strategies:</h4>
+      <p>
+        <strong>Veteran-Specific Housing & On-Site Support:</strong> Providing dedicated housing units with access to on-site support for mental health (PTSD, trauma), addiction services, and peer support networks, in collaboration with Veterans Affairs Canada (VAC) and groups like VETS Canada. <div class="break"> </div>
+        <strong>Comprehensive Transition & Benefits Navigation:</strong> Assisting veterans in navigating civilian systems, accessing VAC benefits, healthcare, and developing new skills, potentially co-located with Royal Canadian Legion outreach. <div class="break"> </div>
+        <strong>Proactive Outreach & Coordinated Intake:</strong> Enhanced collaboration between VAC, DND, the City of Ottawa, and community agencies to identify at-risk veterans early and offer a streamlined "no wrong door" access to support.
+      </p>
+      <p><em>This initiative aims to rapidly rehouse veterans and reduce their inflow into homelessness through proactive, coordinated support and transition services.</em></p>
+    </div>
+    <sl-button slot="footer" variant="primary" onclick="this.closest('sl-drawer').hide()">Close</sl-button>
+  </sl-drawer>
+  
+  <!-- drawer-immigrant -->
+  <sl-drawer placement="bottom" label="" class="drawer-immigrant">
+    <div class="drawer-content">
+      <h3>Supporting Newcomers in Finding Stable Homes</h3>
+      <p>
+        "Welcome Home Ottawa" is designed to assist immigrants and refugees who often face challenges like limited local networks, credential recognition issues, language barriers, and unfamiliarity with the housing market.
+      </p>
+      <h4>Key Strategies:</h4>
+      <p>
+        <strong>Enhanced Reception & Transitional Housing Options:</strong> Expanding temporary accommodation capacity and intensive settlement support upon arrival, partnering with agencies like the Catholic Centre for Immigrants Ottawa. <div class="break"> </div>
+        <strong>Dedicated Housing Navigation & Tenancy Rights Education:</strong> Offering multilingual assistance with finding permanent housing, understanding tenant rights, accessing subsidies, and financial literacy, through organizations like OCISO. <div class="break"> </div>
+        <strong>Culturally Sensitive Wraparound Services:</strong> Ensuring that all services are accessible, welcoming, and address potential trauma among refugee populations, with a focus on community integration.
+      </p>
+      <p><em>This initiative will help newcomers secure stable housing quickly and work to reduce inflow by strengthening settlement support, housing access programs, and anti-discrimination efforts.</em></p>
+    </div>
+    <sl-button slot="footer" variant="primary" onclick="this.closest('sl-drawer').hide()">Close</sl-button>
+  </sl-drawer>
+  
+  <!-- JS Wiring for Drawers -->
+  <<script>>
+    $(document).on('click', '#info-lgbtq-youth', () => document.querySelector('.drawer-lgbtq-youth').show());
+    $(document).on('click', '#info-racialized', () => document.querySelector('.drawer-racialized').show());
+    $(document).on('click', '#info-indigenous', () => document.querySelector('.drawer-indigenous').show());
+    $(document).on('click', '#info-veteran', () => document.querySelector('.drawer-veteran').show());
+    $(document).on('click', '#info-immigrant', () => document.querySelector('.drawer-immigrant').show());
+  
+  <</script>>
 
 
+:: UBIPilot {"position":"500,2425","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="0">
@@ -7979,9 +8972,7 @@ The Universal Basic Income pilot provides $1,000/month to 1,000 households uncon
 </div>
 
 
-:: VacancyTax {"position":"600,2200","size":"100,100"}
-
-
+:: VacancyTax {"position":"600,2425","size":"100,100"}
 <div class="policy-impact-screen">
   <div class="impact-container">
     <div class="impact-box" data-index="0">
@@ -8019,7 +9010,7 @@ The city raises its vacancy and speculation tax to 5% and launches an Empty Home
 </div>
 
 
-:: Zoning {"position":"600,2000","size":"100,100"}
+:: Zoning {"position":"600,2225","size":"100,100"}
 <style>
   html,
   body {
@@ -8231,7 +9222,7 @@ The city raises its vacancy and speculation tax to 5% and launches an Empty Home
 </script>
 
 
-:: metricsscreen {"position":"100,400","size":"100,100"}
+:: metricsscreen {"position":"25,375","size":"100,100"}
 <div class="policy-impact-screen" >
   <div class="impact-container">
     <div class="impact-box" data-index="1">
@@ -8362,7 +9353,7 @@ The vote marked a rare instance where councillors pushed back against a staff re
 </style>
 
 
-:: oldpit {"position":"875,925","size":"100,100"}
+:: oldpit {"position":"875,1150","size":"100,100"}
 <!-- —————————————————————————————————————————————
      CHART AREA (replace your current .chart-section block)
      ————————————————————————————————————————————— -->
@@ -8946,7 +9937,6 @@ function snapshotsByYear(history) {
   });
   return out;
 }
-
 
 :: StoryStylesheet [stylesheet]
 @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:wght@100..900&family=Spectral:wght@200;400;600;800&display=swap");
